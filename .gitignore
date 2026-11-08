@@ -1,0 +1,33 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Jupyter temporary files
+.ipynb_checkpoints/
+
+# IDE / editor files
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Streamlit local configuration / secrets
+.streamlit/secrets.toml
+
+# Temporary test/upload data
+data/*.csv
+
+# Local notebooks
+notebooks/*.ipynb
+
+# Logs
+*.log

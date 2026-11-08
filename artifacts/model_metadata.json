@@ -1,0 +1,16 @@
+{
+  "project": "Expresso Customer Churn Prediction and Retention Analytics",
+  "model_name": "LightGBM",
+  "validation_roc_auc": 0.9316996372403265,
+  "validation_split_seed": 42,
+  "best_iteration": 345,
+  "feature_count": 69,
+  "training_rows": 2154048,
+  "python_version": "3.12.16",
+  "numpy_version": "1.26.4",
+  "pandas_version": "2.3.3",
+  "scikit_learn_version": "1.8.0",
+  "lightgbm_version": "4.6.0",
+  "created_utc": "2026-11-08T13:25:27.575165+00:00",
+  "risk_thresholds_approved": false
+}
