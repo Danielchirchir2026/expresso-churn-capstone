@@ -1,342 +1,233 @@
-Expresso Customer Churn Prediction and Retention Analytics
+# 📊 Expresso Customer Churn Prediction & Retention Analytics
 
-A machine-learning and customer analytics capstone project developed to identify customers at risk of churn, understand customer behaviour, and support targeted retention strategies.
+> **A machine-learning and customer analytics capstone project for predicting customer churn, understanding customer behaviour, and supporting targeted retention strategies.**
 
+---
 
+## 🚀 Live Application
 
-Live Application
+### Live App: churn-prediction-capstone.streamlit.app
 
-Streamlit App:
+The solution is deployed on **Streamlit Community Cloud** and provides interactive churn analytics, customer segmentation, prediction, batch scoring, and management reporting.
 
-https://churn-prediction-capstone.streamlit.app
+---
 
+## 👥 Project Team
 
+### **Spartans**
 
-Project Team
+1. **Daniel Chirchir**
+2. **Daniel Tabut**
+3. **Livingstone Talel**
+4. **Sandra Bosibori**
+5. **Patrick Palex**
+6. **Immanuel Ochieng**
 
-Spartans
+---
 
-Daniel Chirchir
+## 🎯 Project Objective
 
-Daniel Tabut
+Customer churn represents a significant challenge for telecommunications businesses because customer attrition can affect:
 
-Livingstone Talel
+- Revenue
+- Customer lifetime value
+- Customer acquisition costs
+- Product adoption
+- Long-term business growth
 
-Sandra Bosibori
+The project develops a data-driven framework for:
 
-Patrick Palex
+- 🎯 Predicting individual **customer churn probability**
+- 🔍 Identifying the most important **churn drivers**
+- 👥 Segmenting customers according to **behaviour and value**
+- 🔄 Identifying customer groups requiring **retention or reactivation**
+- 📊 Supporting management decisions through **interactive analytics**
+- 📂 Generating **individual and batch churn predictions**
+- 💡 Providing segment-level **management interpretations and recommended actions**
 
-Immanuel Ochieng
+---
 
-Project Objective
+## 🤖 Machine Learning Model
 
-Customer churn represents a significant challenge for telecommunications businesses because losing existing customers affects revenue, customer lifetime value, and future growth.
+The production churn model is a **LightGBM classifier**.
 
+### Model Performance
 
+| Metric | Result |
+|---|---:|
+| **Validation ROC-AUC** | **0.9317** |
+| Training Rows | 2,154,048 |
+| Engineered Model Features | 69 |
+| Best Iteration | 345 |
+| Python Version | 3.12 |
+| LightGBM Version | 4.6.0 |
 
-This project develops a data-driven framework for:
+> **Important:** The application reports churn probabilities rather than automatically assigning customers to Low, Medium, or High churn-risk categories because formal business risk thresholds have not yet been approved.
 
+---
 
+## 🧭 Application Modules
 
-Predicting customer churn probability.
+### 1. 📈 Executive Dashboard
 
-Identifying the major factors associated with churn.
+Provides management with a portfolio-level view of:
 
-Segmenting customers according to behavioural characteristics.
+- **Total customers**
+- **Overall churn rate**
+- **Estimated churned customers**
+- Customer distribution by segment
+- Churn rate by segment
+- Revenue contribution by segment
+- Share of churners by segment
+- Major churn drivers
+- Executive management insights
 
-Identifying customer groups requiring retention or reactivation.
+### 2. 🎯 Churn Prediction
 
-Supporting management decisions through interactive analytics.
+Predicts the churn probability of an **individual customer** using:
 
-Generating individual and batch churn predictions.
+- Customer tenure and region
+- Recharge amount and frequency
+- Revenue and ARPU
+- Data usage
+- Voice usage
+- Customer activity and regularity
+- Preferred package behaviour
 
-Machine Learning Model
+The raw customer data is transformed into the **69 engineered features** required by the LightGBM model.
 
-The deployed churn model is a LightGBM classifier.
+### 3. 👥 Customer Segmentation
 
+Interactive behavioural segmentation containing:
 
+1. **Silent / Inactive**
+2. **High-Value Active**
+3. **Data-Engaged**
+4. **Light Active**
+5. **Low-Engagement**
 
-Metric	Result
+#### Interactive functionality
 
-Validation ROC-AUC	0.9317
+- Two independently selectable customer segments
+- Side-by-side segment KPIs
+- Interactive metric comparison
+- Portfolio benchmarking
+- Dynamic management interpretation
+- Segment-specific recommended actions
 
-Training Rows	2,154,048
+### 4. 🤖 Model Performance
 
-Engineered Model Features	69
+Provides transparency into:
 
-Best Iteration	345
+- Validation ROC-AUC
+- Training observations
+- Feature count
+- Best iteration
+- Feature importance
+- Deployment environment
 
-The application reports churn probabilities rather than automatically assigning Low, Medium, or High risk categories because business risk thresholds have not been formally approved.
+### 5. 📂 Batch Prediction
 
+1. Upload customer data in CSV format.
+2. Validate required model columns.
+3. Preview customer data.
+4. Generate churn probabilities.
+5. Review summary statistics.
+6. Download prediction results.
 
+### 6. 📑 Reports
 
-Application Modules
+Provides downloadable:
 
-1\. Executive Dashboard
+- Model metadata
+- Customer segment profiles
+- Model feature list
+- Deployment summary
 
-Provides management with an overall view of the customer portfolio, including:
+---
 
+## 📊 Portfolio Insights
 
+| Portfolio Measure | Result |
+|---|---:|
+| **Customers Analysed** | **2,154,048** |
+| **Overall Churn Rate** | **18.75%** |
+| **Estimated Churned Customers** | **403,986** |
+| **Validation ROC-AUC** | **0.9317** |
 
-Total customers
+### Key Observed Patterns
 
-Overall churn rate
+- **Silent / Inactive** customers show the highest churn exposure.
+- **High-Value Active** customers contribute approximately **63% of portfolio revenue** while recording very low observed churn.
+- Customer regularity, usage behaviour, recharge patterns, and revenue characteristics are important churn predictors.
+- Customer retention strategies should therefore differ materially across behavioural segments.
 
-Estimated churned customers
+---
 
-Model ROC-AUC
+## 🧩 Segment Management Strategies
 
-Customer distribution by segment
+| Customer Segment | Primary Management Focus |
+|---|---|
+| **Silent / Inactive** | Reactivation campaigns and investigation of inactivity drivers |
+| **High-Value Active** | Revenue protection, loyalty and proactive retention |
+| **Data-Engaged** | Data-bundle retention, digital engagement and cross-selling |
+| **Light Active** | Increase engagement, recharge frequency and product migration |
+| **Low-Engagement** | Early retention intervention before complete inactivity |
 
-Churn rate by segment
+### Management Decision Support
 
-Revenue contribution by segment
+The Customer Segmentation module compares each selected segment against portfolio benchmarks covering:
 
-Share of churners by segment
+- Churn rate
+- Customer activity
+- Data adoption
+- Revenue contribution
+- Customer share
 
-Major churn drivers
+Segments performing materially worse than portfolio benchmarks can be prioritized for **retention or reactivation**, while high-value segments with strong retention can be prioritized for **value protection**.
 
-Executive management insights
+---
 
-2\. Churn Prediction
+## 🔍 Leading Churn Drivers
 
-Predicts churn probability for an individual customer using customer account, recharge, revenue, usage, and activity information.
+The deployed LightGBM model identifies the following among the leading churn drivers:
 
+1. **REGULARITY**
+2. **ON_NET**
+3. **DATA_VOLUME**
+4. **REVENUE_PER_RECHARGE**
+5. **ORANGE**
+6. **DATA_SHARE**
+7. **MONTANT**
+8. **FREQUENCE**
+9. **TIGO**
+10. **REVENUE**
 
+---
 
-The application transforms the raw customer inputs into the engineered features required by the deployed LightGBM model.
+## 🛠️ Technology Stack
 
+### Machine Learning & Analytics
 
+- **Python 3.12**
+- **LightGBM 4.6.0**
+- **Scikit-learn**
+- **Pandas**
+- **NumPy**
+- **Joblib**
 
-3\. Customer Segmentation
+### Application
 
-Provides an interactive analysis of behavioural customer groups.
+- **Streamlit**
 
+### Version Control & Collaboration
 
+- **Git**
+- **GitHub**
 
-The deployed segmentation analysis contains:
+### Deployment
 
+- **Streamlit Community Cloud**
 
-
-Silent / Inactive
-
-High-Value Active
-
-Data-Engaged
-
-Light Active
-
-Low-Engagement
-
-The page includes:
-
-
-
-Side-by-side segment comparison
-
-Interactive metric comparison
-
-Portfolio benchmarking
-
-Dynamic management interpretation
-
-Segment-specific management recommendations
-
-4\. Model Performance
-
-Provides information about the deployed machine-learning model, including:
-
-
-
-Validation ROC-AUC
-
-Training observations
-
-Model feature count
-
-Best LightGBM iteration
-
-Feature importance
-
-Deployment environment information
-
-5\. Batch Prediction
-
-Allows users to upload customer data in CSV format and generate churn probabilities for multiple customers simultaneously.
-
-
-
-Prediction results can be downloaded as a CSV file for further analysis.
-
-
-
-6\. Reports
-
-Provides downloadable project and model documentation, including:
-
-
-
-Model metadata
-
-Customer segment profiles
-
-Model feature list
-
-Deployment summary
-
-Customer Segments
-
-Segment	Management Focus
-
-Silent / Inactive	Reactivation and investigation of inactivity drivers
-
-High-Value Active	Revenue protection, loyalty and proactive retention
-
-Data-Engaged	Data-bundle retention, digital engagement and cross-selling
-
-Light Active	Increase usage, recharge frequency and product migration
-
-Low-Engagement	Early retention intervention before complete inactivity
-
-Technology Stack
-
-Python 3.12
-
-Streamlit
-
-LightGBM
-
-Scikit-learn
-
-Pandas
-
-NumPy
-
-Joblib
-
-Git
-
-GitHub
-
-Streamlit Community Cloud
-
-Repository Structure
-
-EXPRESSO\_CHURN\_CAPSTONE
-
-|
-
-|-- Home.py
-
-|-- requirements.txt
-
-|-- README.md
-
-|
-
-|-- app/
-
-|   `-- utils/
-
-|       `-- prediction.py
-
-|
-
-|-- artifacts/
-
-|   |-- expresso\_churn\_bundle.joblib
-
-|   |-- feature\_columns.json
-
-|   |-- model\_metadata.json
-
-|   |-- preprocessing\_config.joblib
-
-|   `-- segment\_profiles.csv
-
-|
-
-`-- pages/
-
-&#x20;   |-- 1\_Executive\_Dashboard.py
-
-&#x20;   |-- 2\_Churn\_Prediction.py
-
-&#x20;   |-- 3\_Customer\_Segmentation.py
-
-&#x20;   |-- 4\_Model\_Performance.py
-
-&#x20;   |-- 5\_Batch\_Prediction.py
-
-&#x20;   `-- 6\_Reports.py
-
-
-
-Deployment
-
-
-
-The application is deployed through Streamlit Community Cloud from the main branch of the GitHub repository.
-
-
-
-Application entry point:
-
-
-
-
-
-Home.py
-
-
-
-Python deployment version:
-
-
-
-
-
-3.12
-
-Important Interpretation Note
-
-
-
-Churn probabilities are decision-support outputs and should be interpreted together with relevant customer and business information.
-
-
-
-Segment-level management recommendations are derived from observed behavioural profiles and portfolio benchmarks. They are management recommendations rather than direct outputs of the churn model and should be validated against campaign economics, customer-treatment policies, and operational capacity before implementation.
-
-
-
-Group
-
-
-
-Spartans
-
-
-
-Expresso Customer Churn Prediction and Retention Analytics Capstone Project, 2026.
-
-
-
-
-
-\### Save the README
-
-
-
-Save and close Notepad.
-
-
-
-Then verify that Git sees both the committed Home change and the new README appropriately:
-
-
-
-```cmd
-
-git status --short
+---
 
