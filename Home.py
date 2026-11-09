@@ -46,3 +46,27 @@ st.info(
 )
 
 st.caption("Expresso Customer Churn Capstone Project")
+st.divider()
+
+st.subheader("Project Team")
+
+st.markdown(
+    """
+    ### Spartans
+
+    **Capstone Project:** Expresso Customer Churn Prediction and Retention Analytics
+
+    **Team Members**
+
+    1. Daniel Chirchir
+    2. Daniel Tabut
+    3. Livingstone Talel
+    4. Sandra Bosibori
+    5. Patrick Palex
+    6. Immanuel Ochieng
+    """
+)
+
+st.caption(
+    "Spartans | Expresso Customer Churn Capstone Project | 2026"
+)
