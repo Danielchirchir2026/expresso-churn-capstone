@@ -984,7 +984,8 @@
       "sub": "Les clients de la campagne recommandée, classés comme ci-dessus.",
       "value_col": "Valeur attendue à risque (FCFA)",
       "download": "Télécharger la liste ciblée ({k} clients)",
-      "reason": "Motif {n}"
+      "reason": "Motif {n}",
+      "log_link": "Enregistrer ce plan dans le Suivi des campagnes"
     },
     "assume": {
       "title": "Hypothèses derrière ces chiffres",
@@ -1548,6 +1549,175 @@
       "decision_support": "Les prédictions sont une aide à la décision. Elles doivent orienter des offres, jamais déclencher de pénalité, de coupure ou de décision de crédit sur un individu sans examen humain.",
       "privacy": "L'application n'a besoin ni de noms ni de numéros de téléphone. Les fichiers scorés et listes d'appels contiennent des identifiants clients : traitez-les selon les règles de protection des données d'Expresso.",
       "fairness_link": "Ouvrir le contrôle d'équité dans l'Évaluation du modèle"
+    }
+  },
+  "rar": {
+    "eyebrow": "Agir · l'argent en jeu",
+    "title": "Revenu à risque",
+    "sub": "Quel revenu mensuel repose sur des clients susceptibles de partir : une estimation du portefeuille par segment, et la valeur attendue à risque dans votre lot scoré.",
+    "port": {
+      "title": "Estimation du portefeuille par segment",
+      "sub": "Clients × taux de churn × revenu mensuel médian, par segment, jusqu'au total.",
+      "total": "Total",
+      "axis": "Revenu mensuel à risque (FCFA)",
+      "median": "Revenu mensuel médian (FCFA)",
+      "hover": "clients %{customdata[0]:,} · churn %{customdata[1]:.2f}% · revenu médian %{customdata[2]:,.0f}",
+      "so_what": "Environ {total} de revenu mensuel repose sur des clients susceptibles de partir ; {seg} en représente {share} à lui seul : c'est là que la rétention protège le plus d'argent.",
+      "zero_tag": "Pourquoi ce segment affiche 0",
+      "zero": "{seg} contribue 0 à cette estimation car son revenu mensuel médian est de 0 FCFA : au moins la moitié de ses clients n'enregistrent aucun revenu. Son taux de churn de {churn} compte toujours en volume, et le revenu de sa minorité payante n'est pas capté par une estimation fondée sur la médiane.",
+      "caption": "Estimation d'ordre de grandeur fondée sur les médianes de segment_profiles.csv : les médianes résistent aux valeurs extrêmes mais sous-estiment les segments avec quelques gros consommateurs. Utilisez la vue du lot ci-dessous pour des valeurs par client."
+    },
+    "batch": {
+      "title": "Revenu attendu à risque dans votre lot",
+      "sub": "Somme sur les clients de la probabilité de churn × REVENUE.",
+      "total": "Revenu mensuel attendu à risque",
+      "total_help": "Σ (probabilité de churn × REVENUE mensuel) sur les clients du lot.",
+      "share": "Part du revenu du lot à risque",
+      "of_revenue": "sur {rev} de revenu mensuel total",
+      "top10": "Porté par les 10 % premiers clients",
+      "top10_help": "Part du revenu attendu à risque portée par les 10 % de clients au produit probabilité × revenu le plus élevé.",
+      "no_rev": "Clients sans revenu",
+      "no_rev_help": "Part du lot dont REVENUE est vide ou nul : leur départ ne coûte aucun revenu mensuel.",
+      "by_region": "Revenu attendu à risque par région",
+      "by_tenure": "Revenu attendu à risque par ancienneté",
+      "so_what": "{level} porte le plus de revenu attendu à risque ({value}, {share} du total du lot).",
+      "by_segment": "Par segment : {parts}",
+      "caption": "Les valeurs attendues supposent des probabilités calibrées (voir Évaluation du modèle). Revenu mensuel ; multipliez par votre horizon pour une valeur sur la durée."
+    }
+  },
+  "exp": {
+    "eyebrow": "Agir · tester avant de généraliser",
+    "title": "Conception d'expériences",
+    "sub": "Planifiez un test A/B d'une offre de rétention : combien de clients par groupe, comment répartir équitablement la liste d'appels, combien de temps, et si le résultat est réel.",
+    "tab": {
+      "plan": "Planifier le test",
+      "analyse": "Analyser les résultats"
+    },
+    "plan": {
+      "title": "Taille d'échantillon",
+      "sub": "Le groupe test reçoit l'offre, le groupe témoin non. Comparer leurs taux de churn mesure ce que l'offre change réellement.",
+      "base": "Churn de référence du groupe cible (%)",
+      "base_help_batch": "Par défaut : le churn prédit moyen des {k} clients les plus risqués de votre lot.",
+      "base_help_portfolio": "Par défaut : le taux de churn du portefeuille. Scorez un lot pour utiliser le churn prédit de votre groupe cible.",
+      "mode": "Effet attendu exprimé en",
+      "mode_relative": "Baisse relative",
+      "mode_absolute": "Baisse absolue",
+      "red_relative": "Baisse relative attendue du churn (%)",
+      "red_absolute": "Baisse attendue du churn (points de pourcentage)",
+      "red_help": "Le plus petit effet qui vaut la peine d'être détecté. Un effet plus petit exige beaucoup plus de clients.",
+      "alpha": "Seuil de signification (α)",
+      "alpha_help": "Risque de conclure à un effet qui n'existe pas. 0,05 est le choix habituel.",
+      "power": "Puissance",
+      "power_help": "Probabilité de détecter l'effet s'il existe. 0,8 est le minimum habituel.",
+      "two_sided": "Test bilatéral",
+      "two_sided_help": "Détecte aussi les offres qui aggravent le churn. Recommandé.",
+      "weekly": "Contacts par semaine (groupe test)",
+      "weekly_help": "Combien de clients du groupe test l'équipe peut contacter chaque semaine.",
+      "bad_effect": "Le churn attendu avec l'offre doit être supérieur à 0 et inférieur à la référence.",
+      "n_arm": "Clients par groupe",
+      "n_arm_help": "Test z de deux proportions, approximation normale.",
+      "total": "Clients dans le test",
+      "target": "Churn attendu avec l'offre",
+      "target_foot": "référence {base}",
+      "weeks": "Semaines pour contacter le groupe test",
+      "weeks_foot": "à {w} contacts par semaine",
+      "explain": "Pour détecter une baisse de {base} à {target} avec α = {alpha} et une puissance de {power}, placez {n} clients dans chaque groupe. Contacter le groupe test prend environ {weeks} semaine(s) ; le groupe témoin n'est pas contacté mais suivi de la même façon.",
+      "formula": "n par groupe = [z(1-α/2)·√(2·p̄·(1-p̄)) + z(puissance)·√(p1(1-p1) + p2(1-p2))]² ÷ (p1 - p2)², avec p̄ = (p1 + p2) / 2."
+    },
+    "split": {
+      "title": "Répartir la liste d'appels prioritaires",
+      "sub": "Prenez les clients les plus risqués de votre lot et affectez-les au hasard au groupe test ou témoin.",
+      "no_batch": "Scorez un lot dans Scoring par lot pour répartir sa liste d'appels entre test et témoin.",
+      "k": "Clients dans le test (les plus risqués d'abord)",
+      "k_help": "Par défaut, deux fois la taille de groupe nécessaire.",
+      "seed": "Graine aléatoire",
+      "treatment": "Test",
+      "control": "Témoin",
+      "mean_p": "churn prédit moyen {p}",
+      "power": "Puissance obtenue",
+      "power_target": "cible {p}",
+      "underpowered": "Seulement {have} clients par groupe contre {need} nécessaires : le test risque de manquer un effet réel. Ajoutez des clients ou acceptez un effet minimal plus grand.",
+      "download": "Télécharger la liste test / témoin",
+      "caption": "Une affectation aléatoire avec graine fixe rend la répartition reproductible. Un churn prédit moyen proche dans les deux groupes confirme qu'elle est équilibrée."
+    },
+    "res": {
+      "title": "Analyser les résultats",
+      "sub": "Après la campagne, saisissez (ou chargez) le nombre de clients partis dans chaque groupe.",
+      "upload": "Charger les résultats (facultatif)",
+      "upload_help": "CSV avec les colonnes group (treatment / control), customers, churned.",
+      "bad_file": "Lecture impossible. Le fichier doit contenir les colonnes group, customers et churned, avec les lignes « treatment » et « control ».",
+      "customers": "Clients",
+      "churned": "Partis",
+      "example": "Les valeurs de départ sont un exemple ; remplacez-les par les chiffres de votre campagne.",
+      "bad_counts": "Le nombre de partants ne peut pas dépasser le nombre de clients.",
+      "rate_t": "Churn avec l'offre",
+      "rate_c": "Churn sans l'offre",
+      "uplift": "Baisse du churn",
+      "relative": "{rel} en relatif",
+      "ci": "Intervalle de confiance à {level}",
+      "p": "Valeur p",
+      "verdict_tag": "Verdict",
+      "verdict_win": "L'offre a fonctionné : le churn a baissé de {uplift} points (intervalle de confiance de {lo} à {hi} points, p = {p}). Sur le groupe test, cela représente environ {saved} clients retenus.",
+      "verdict_harm": "L'offre a aggravé le churn de {uplift} points (p = {p}). Arrêtez-la et revoyez l'offre.",
+      "verdict_none": "Pas d'effet fiable : l'écart de {uplift} points pourrait être dû au hasard (p = {p}, intervalle de {lo} à {hi} points). Ne généralisez pas encore ; testez plus longtemps ou avec plus de clients.",
+      "so_what": "Le churn était de {t} avec l'offre et de {c} sans ; les barres d'erreur montrent l'incertitude à 95 % autour de chaque taux."
+    }
+  },
+  "camp": {
+    "eyebrow": "Agir · boucle de retour",
+    "title": "Suivi des campagnes",
+    "sub": "Enregistrez chaque campagne de rétention et ses résultats, puis comparez ce qui s'est réellement passé avec la prévision du Planificateur de rétention.",
+    "log": {
+      "title": "Journal des campagnes",
+      "sub": "Modifiez directement dans le tableau. Le journal vit dans cette session : exportez-le pour le conserver, importez-le pour continuer.",
+      "caption": "Les clients retenus doivent venir d'une comparaison équitable (idéalement le groupe témoin de la Conception d'expériences), pas d'un simple décompte des clients restés."
+    },
+    "add": {
+      "button": "Ajouter le dernier plan du Planificateur",
+      "help": "Ajoute une ligne pré-remplie avec la taille, le coût et les résultats prévus du plan.",
+      "no_plan": "Ouvrez d'abord le Planificateur de rétention pour créer un plan.",
+      "go_planner": "Ouvrir le Planificateur de rétention",
+      "synthetic": "Le dernier plan a été construit sur des données de démonstration synthétiques.",
+      "name": "Campagne {n}",
+      "segment": "Ciblée depuis {batch}",
+      "offer": "Offre à {cost} FCFA"
+    },
+    "io": {
+      "import": "Importer un journal (CSV)",
+      "import_help": "Un fichier exporté depuis cette page.",
+      "bad": "Colonnes manquantes dans le fichier : {cols}.",
+      "unreadable": "Impossible de lire ce fichier CSV.",
+      "export": "Exporter le journal (CSV)"
+    },
+    "col": {
+      "campaign": "Campagne",
+      "segment": "Cible",
+      "contacted": "Contactés",
+      "offer": "Offre",
+      "cost": "Coût total (FCFA)",
+      "retained": "Clients retenus",
+      "retained_help": "Clients conservés grâce à la campagne, mesurés si possible face à un groupe témoin.",
+      "value": "Valeur par client retenu (FCFA)",
+      "value_help": "Revenu que vaut un client retenu sur votre horizon.",
+      "planned_retained": "Retenus prévus",
+      "planned_net": "Valeur nette prévue (FCFA)"
+    },
+    "res": {
+      "title": "Réalisé vs prévu",
+      "sub": "Pour les campagnes dont le résultat est saisi.",
+      "empty": "Pas encore de résultats.",
+      "empty_detail": "Saisissez le nombre de clients retenus pour au moins une campagne afin de la comparer au plan.",
+      "contacted": "Clients contactés",
+      "retained": "Clients retenus",
+      "per100": "{n} pour 100 contactés",
+      "net": "Valeur nette réalisée",
+      "vs_plan": "Réalisé moins prévu",
+      "vs_plan_help": "Valeur nette réalisée moins la valeur nette prévue par le Planificateur, sur les campagnes avec résultats.",
+      "planned": "Valeur nette prévue",
+      "realised": "Valeur nette réalisée",
+      "axis": "Valeur nette (FCFA)",
+      "so_what": "{camp} a obtenu le meilleur résultat : {net} de valeur nette, ROI {roi}.",
+      "row": "{camp} : {real} clients retenus pour 100 contactés, contre {plan} prévus."
     }
   }
 }

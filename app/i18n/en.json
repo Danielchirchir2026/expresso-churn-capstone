@@ -984,7 +984,8 @@
       "sub": "The customers in the recommended campaign, ranked as above.",
       "value_col": "Expected value at risk (FCFA)",
       "download": "Download the target list ({k} customers)",
-      "reason": "Reason {n}"
+      "reason": "Reason {n}",
+      "log_link": "Log this plan in the Campaign Tracker"
     },
     "assume": {
       "title": "Assumptions behind these numbers",
@@ -1548,6 +1549,175 @@
       "decision_support": "Predictions are decision support only. They should inform offers, never trigger penalties, disconnection or credit decisions about an individual without human review.",
       "privacy": "The app needs no names or phone numbers. Scored files and call lists contain customer IDs: handle them under Expresso's data-protection rules.",
       "fairness_link": "Open the fairness check on Model Evaluation"
+    }
+  },
+  "rar": {
+    "eyebrow": "Act · money at stake",
+    "title": "Revenue at Risk",
+    "sub": "How much monthly revenue sits with customers likely to leave: a portfolio estimate by segment, and the expected value at risk in your scored batch.",
+    "port": {
+      "title": "Portfolio estimate by segment",
+      "sub": "Customers × churn rate × median monthly revenue, per segment, building up to the total.",
+      "total": "Total",
+      "axis": "Monthly revenue at risk (FCFA)",
+      "median": "Median monthly revenue (FCFA)",
+      "hover": "customers %{customdata[0]:,} · churn %{customdata[1]:.2f}% · median revenue %{customdata[2]:,.0f}",
+      "so_what": "About {total} of monthly revenue sits with customers expected to churn; {seg} alone is {share} of it, so that is where retention protects the most money.",
+      "zero_tag": "Why this segment shows 0",
+      "zero": "{seg} contributes 0 to this estimate because its median monthly revenue is 0 FCFA: at least half of its customers record no revenue. Its {churn} churn rate still matters for volume, and any revenue from its paying minority is not captured by a median-based estimate.",
+      "caption": "A median-based, order-of-magnitude estimate from segment_profiles.csv: medians are robust to outliers but understate segments with a few big spenders. Use the batch view below for customer-level values."
+    },
+    "batch": {
+      "title": "Expected revenue at risk in your batch",
+      "sub": "Sum over customers of churn probability × REVENUE.",
+      "total": "Expected monthly revenue at risk",
+      "total_help": "Σ (churn probability × monthly REVENUE) over the customers in the batch.",
+      "share": "Share of batch revenue at risk",
+      "of_revenue": "of {rev} total monthly revenue",
+      "top10": "Held by the top 10% of customers",
+      "top10_help": "Share of the expected revenue at risk carried by the 10% of customers with the highest probability × revenue.",
+      "no_rev": "Customers with no revenue",
+      "no_rev_help": "Share of the batch with REVENUE empty or 0: their churn costs no monthly revenue.",
+      "by_region": "Expected revenue at risk by region",
+      "by_tenure": "Expected revenue at risk by tenure",
+      "so_what": "{level} carries the most expected revenue at risk ({value}, {share} of the batch total).",
+      "by_segment": "By segment: {parts}",
+      "caption": "Expected values assume the probabilities are calibrated (see Model Evaluation). Monthly revenue; multiply by your value horizon for lifetime figures."
+    }
+  },
+  "exp": {
+    "eyebrow": "Act · test before scaling",
+    "title": "Experiment Designer",
+    "sub": "Plan an A/B test of a retention offer: how many customers each group needs, how to split the call list fairly, how long it takes, and whether the result is real.",
+    "tab": {
+      "plan": "Plan the test",
+      "analyse": "Analyse results"
+    },
+    "plan": {
+      "title": "Sample size",
+      "sub": "Treatment gets the offer; control does not. Comparing their churn rates measures what the offer really changes.",
+      "base": "Baseline churn in the target group (%)",
+      "base_help_batch": "Default: the average predicted churn of the riskiest {k} customers in your batch.",
+      "base_help_portfolio": "Default: the portfolio churn rate. Score a batch to use your target group's predicted churn.",
+      "mode": "Expected effect as",
+      "mode_relative": "Relative reduction",
+      "mode_absolute": "Absolute reduction",
+      "red_relative": "Expected relative reduction in churn (%)",
+      "red_absolute": "Expected reduction in churn (percentage points)",
+      "red_help": "The smallest effect worth detecting. Smaller effects need many more customers.",
+      "alpha": "Significance level (α)",
+      "alpha_help": "Chance of declaring an effect that is not real. 0.05 is the usual choice.",
+      "power": "Power",
+      "power_help": "Chance of detecting the effect if it is real. 0.8 is the usual minimum.",
+      "two_sided": "Two-sided test",
+      "two_sided_help": "Also detects offers that make churn worse. Recommended.",
+      "weekly": "Contacts per week (treatment group)",
+      "weekly_help": "How many treatment customers the team can contact each week.",
+      "bad_effect": "The expected churn after the offer must be above 0 and below the baseline.",
+      "n_arm": "Customers per group",
+      "n_arm_help": "Two-proportion z-test, normal approximation.",
+      "total": "Customers in the test",
+      "target": "Expected churn with the offer",
+      "target_foot": "baseline {base}",
+      "weeks": "Weeks to contact the treatment group",
+      "weeks_foot": "at {w} contacts per week",
+      "explain": "To detect a drop from {base} to {target} with α = {alpha} and {power} power, put {n} customers in each group. Contacting the treatment group takes about {weeks} week(s); the control group is not contacted but is tracked the same way.",
+      "formula": "n per group = [z(1-α/2)·√(2·p̄·(1-p̄)) + z(power)·√(p1(1-p1) + p2(1-p2))]² ÷ (p1 - p2)², with p̄ = (p1 + p2) / 2."
+    },
+    "split": {
+      "title": "Split the priority call list",
+      "sub": "Take the riskiest customers in your batch and assign them at random to treatment or control.",
+      "no_batch": "Score a batch on Batch Scoring to split its priority call list into treatment and control.",
+      "k": "Customers in the test (riskiest first)",
+      "k_help": "Defaults to twice the required group size.",
+      "seed": "Random seed",
+      "treatment": "Treatment",
+      "control": "Control",
+      "mean_p": "mean predicted churn {p}",
+      "power": "Achieved power",
+      "power_target": "target {p}",
+      "underpowered": "Only {have} customers per group against the {need} needed: the test may miss a real effect. Add customers or accept a larger minimum effect.",
+      "download": "Download the treatment / control list",
+      "caption": "Random assignment with a fixed seed makes the split reproducible. Similar average predicted churn in both groups confirms the split is balanced."
+    },
+    "res": {
+      "title": "Analyse results",
+      "sub": "After the campaign, enter (or upload) how many customers in each group churned.",
+      "upload": "Upload outcome counts (optional)",
+      "upload_help": "CSV with columns group (treatment / control), customers, churned.",
+      "bad_file": "Could not read the file. It needs columns group, customers and churned, with rows 'treatment' and 'control'.",
+      "customers": "Customers",
+      "churned": "Churned",
+      "example": "The starting numbers are an example; replace them with your campaign's counts.",
+      "bad_counts": "Churned cannot exceed the number of customers.",
+      "rate_t": "Churn with the offer",
+      "rate_c": "Churn without the offer",
+      "uplift": "Reduction in churn",
+      "relative": "{rel} relative",
+      "ci": "{level} confidence interval",
+      "p": "p-value",
+      "verdict_tag": "Verdict",
+      "verdict_win": "The offer worked: churn fell by {uplift} points (confidence interval {lo} to {hi} points, p = {p}). Across the treatment group that is about {saved} customers kept.",
+      "verdict_harm": "The offer made churn worse by {uplift} points (p = {p}). Stop it and review the offer.",
+      "verdict_none": "No reliable effect: the difference of {uplift} points could be chance (p = {p}, interval {lo} to {hi} points). Do not scale yet; test longer or with more customers.",
+      "so_what": "Churn was {t} with the offer and {c} without; the error bars show the 95% uncertainty around each rate."
+    }
+  },
+  "camp": {
+    "eyebrow": "Act · feedback loop",
+    "title": "Campaign Tracker",
+    "sub": "Log each retention campaign and its results, then compare what really happened with what the Retention Planner predicted.",
+    "log": {
+      "title": "Campaign log",
+      "sub": "Edit directly in the table. The log lives in this session: export it to keep it, import it to continue.",
+      "caption": "Customers retained should come from a fair comparison (ideally the Experiment Designer's control group), not from a raw count of customers who stayed."
+    },
+    "add": {
+      "button": "Add the latest Retention Planner plan",
+      "help": "Adds a row pre-filled with the plan's size, cost and predicted results.",
+      "no_plan": "Open the Retention Planner first to create a plan.",
+      "go_planner": "Open the Retention Planner",
+      "synthetic": "The latest plan was built on synthetic demo data.",
+      "name": "Campaign {n}",
+      "segment": "Targeted from {batch}",
+      "offer": "Offer at {cost} FCFA"
+    },
+    "io": {
+      "import": "Import a log (CSV)",
+      "import_help": "A file exported from this page.",
+      "bad": "The file is missing columns: {cols}.",
+      "unreadable": "Could not read this CSV file.",
+      "export": "Export the log (CSV)"
+    },
+    "col": {
+      "campaign": "Campaign",
+      "segment": "Target",
+      "contacted": "Contacted",
+      "offer": "Offer",
+      "cost": "Total cost (FCFA)",
+      "retained": "Customers retained",
+      "retained_help": "Customers kept thanks to the campaign, measured against a control group where possible.",
+      "value": "Value per retained customer (FCFA)",
+      "value_help": "Revenue a retained customer is worth over your horizon.",
+      "planned_retained": "Planned retained",
+      "planned_net": "Planned net value (FCFA)"
+    },
+    "res": {
+      "title": "Realised vs planned",
+      "sub": "For campaigns with a result entered.",
+      "empty": "No results yet.",
+      "empty_detail": "Enter the number of customers retained for at least one campaign to compare it with the plan.",
+      "contacted": "Customers contacted",
+      "retained": "Customers retained",
+      "per100": "{n} per 100 contacted",
+      "net": "Realised net value",
+      "vs_plan": "Realised minus planned",
+      "vs_plan_help": "Realised net value minus the Retention Planner's predicted net value, summed over campaigns with results.",
+      "planned": "Planned net value",
+      "realised": "Realised net value",
+      "axis": "Net value (FCFA)",
+      "so_what": "{camp} delivered the best result: {net} net value, ROI {roi}.",
+      "row": "{camp}: {real} customers retained per 100 contacted, against {plan} planned."
     }
   }
 }

@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from app import navigation
 from app.core import artifacts, fmt, metrics
 from app.core.features import friendly
 from app.core.segments import segment_name
@@ -181,9 +182,15 @@ if batch:
                        data=lambda: chosen[cols].to_csv(index=False).encode("utf-8"),
                        file_name=f"retention_target_list_top{k_export}.csv", mime="text/csv",
                        icon=":material/download:", type="primary", on_click="ignore")
-    st.session_state["ret_last_plan"] = {"k": int(k_best), "save_rate": float(save), "offer_cost": float(cost),
-                                         "expected_saved": float(row["saved"]), "expected_net": float(row["net"]),
-                                         "horizon": int(horizon)}
+    st.session_state["ret_last_plan"] = {
+        "k": int(k_export), "save_rate": float(save), "offer_cost": float(cost), "horizon": int(horizon),
+        "expected_saved": float(plan.iloc[k_export - 1]["saved"]), "expected_net": float(plan.iloc[k_export - 1]["net"]),
+        "value_per_saved": float(plan.iloc[k_export - 1]["revenue_saved"] / plan.iloc[k_export - 1]["saved"])
+        if plan.iloc[k_export - 1]["saved"] > 0 else 0.0,
+        "batch": batch["name"], "synthetic": bool(batch["synthetic"]),
+    }
+
+    navigation.link("campaigns", label=t("ret.list.log_link"), icon=":material/campaign:")
 
     # -----------------------------------------------------------------------
     # Assumptions, stated plainly

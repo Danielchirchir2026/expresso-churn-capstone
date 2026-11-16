@@ -223,3 +223,60 @@ def group_metrics(y_true, prob, groups, threshold: float, min_size: int = 30, au
             "too_small": not enough,
         })
     return pd.DataFrame(rows).sort_values("n", ascending=False).reset_index(drop=True)
+
+
+# ---------------------------------------------------------------------------
+# A/B test planning and analysis (two proportions)
+# ---------------------------------------------------------------------------
+def sample_size_two_proportions(p1: float, p2: float, alpha: float = 0.05, power: float = 0.8,
+                                two_sided: bool = True) -> int:
+    """Customers needed per arm to detect p1 vs p2 (normal approximation).
+
+    n = [z_a * sqrt(2 * pbar * (1 - pbar)) + z_b * sqrt(p1(1-p1) + p2(1-p2))]^2 / (p1 - p2)^2
+    """
+    from scipy.stats import norm
+
+    if not (0 < p1 < 1 and 0 < p2 < 1) or p1 == p2:
+        raise ValueError("p1 and p2 must be distinct probabilities strictly between 0 and 1")
+    z_a = norm.ppf(1 - alpha / 2) if two_sided else norm.ppf(1 - alpha)
+    z_b = norm.ppf(power)
+    pbar = (p1 + p2) / 2
+    num = (z_a * math.sqrt(2 * pbar * (1 - pbar)) + z_b * math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2
+    return int(math.ceil(num / (p1 - p2) ** 2))
+
+
+def two_proportion_test(churned_t: int, n_t: int, churned_c: int, n_c: int, alpha: float = 0.05) -> dict:
+    """Compare churn in treatment vs control.
+
+    uplift = control rate - treatment rate (positive = the offer reduced churn);
+    p-value from the pooled two-sided z-test; CI from the unpooled standard error.
+    """
+    from scipy.stats import norm
+
+    if n_t <= 0 or n_c <= 0 or not (0 <= churned_t <= n_t) or not (0 <= churned_c <= n_c):
+        raise ValueError("counts must satisfy 0 <= churned <= customers and customers > 0")
+    pt, pc = churned_t / n_t, churned_c / n_c
+    diff = pc - pt
+    pooled = (churned_t + churned_c) / (n_t + n_c)
+    se_pooled = math.sqrt(pooled * (1 - pooled) * (1 / n_t + 1 / n_c))
+    z = diff / se_pooled if se_pooled > 0 else 0.0
+    p_value = float(2 * (1 - norm.cdf(abs(z))))
+    se = math.sqrt(pt * (1 - pt) / n_t + pc * (1 - pc) / n_c)
+    z_ci = norm.ppf(1 - alpha / 2)
+    return {"rate_treatment": pt, "rate_control": pc, "uplift": diff,
+            "relative_reduction": diff / pc if pc > 0 else float("nan"),
+            "ci_low": diff - z_ci * se, "ci_high": diff + z_ci * se, "z": z, "p_value": p_value,
+            "significant": p_value < alpha}
+
+
+def power_two_proportions(p1: float, p2: float, n_per_arm: int, alpha: float = 0.05, two_sided: bool = True) -> float:
+    """Power achieved with ``n_per_arm`` customers per arm (inverse of the sample-size formula)."""
+    from scipy.stats import norm
+
+    if n_per_arm <= 0 or p1 == p2:
+        return 0.0
+    z_a = norm.ppf(1 - alpha / 2) if two_sided else norm.ppf(1 - alpha)
+    pbar = (p1 + p2) / 2
+    z_b = (abs(p1 - p2) * math.sqrt(n_per_arm) - z_a * math.sqrt(2 * pbar * (1 - pbar))) / \
+        math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))
+    return float(norm.cdf(z_b))

@@ -100,3 +100,32 @@ def test_group_metrics_flags_weak_groups():
     assert out.loc["A", "recall"] == pytest.approx(1.0) and out.loc["B", "recall"] == pytest.approx(0.0)
     small = metrics.group_metrics([0, 1], [0.2, 0.8], ["C", "C"], 0.5, min_size=30)
     assert small.loc[0, "too_small"] and not small.loc[0, "flagged"]
+
+
+def test_sample_size_hand_computed():
+    # p1 = 0.20, p2 = 0.15, alpha 0.05 two-sided (z = 1.959964), power 0.80 (z = 0.841621)
+    # pbar = 0.175 -> sqrt(2 * 0.175 * 0.825) = 0.537355 ; sqrt(0.16 + 0.1275) = 0.536190
+    # n = (1.959964 * 0.537355 + 0.841621 * 0.536190)^2 / 0.05^2 = 2.263424 / 0.0025 = 905.37 -> 906
+    assert metrics.sample_size_two_proportions(0.20, 0.15, 0.05, 0.80) == 906
+    # One-sided needs fewer customers
+    assert metrics.sample_size_two_proportions(0.20, 0.15, 0.05, 0.80, two_sided=False) < 906
+    with pytest.raises(ValueError):
+        metrics.sample_size_two_proportions(0.2, 0.2)
+
+
+def test_two_proportion_test_hand_computed():
+    # control 200/1000 = 0.20, treatment 150/1000 = 0.15 -> uplift 0.05
+    # pooled p = 0.175, se = sqrt(0.175 * 0.825 * 0.002) = 0.016993 -> z = 2.9424, p = 0.00326
+    # unpooled se = sqrt(0.00016 + 0.0001275) = 0.016956 -> CI 0.05 +/- 1.96 * 0.016956 = [0.01677, 0.08323]
+    r = metrics.two_proportion_test(150, 1000, 200, 1000)
+    assert r["uplift"] == pytest.approx(0.05)
+    assert r["z"] == pytest.approx(2.9424, abs=1e-3)
+    assert r["p_value"] == pytest.approx(0.00326, abs=5e-5)
+    assert r["ci_low"] == pytest.approx(0.01677, abs=1e-4) and r["ci_high"] == pytest.approx(0.08323, abs=1e-4)
+    assert r["significant"] and r["relative_reduction"] == pytest.approx(0.25)
+
+
+def test_power_inverts_sample_size():
+    n = metrics.sample_size_two_proportions(0.20, 0.15, 0.05, 0.80)
+    assert metrics.power_two_proportions(0.20, 0.15, n) == pytest.approx(0.80, abs=0.002)
+    assert metrics.power_two_proportions(0.20, 0.15, n // 4) < 0.5
