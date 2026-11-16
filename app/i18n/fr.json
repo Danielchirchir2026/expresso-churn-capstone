@@ -1165,5 +1165,68 @@
       "lift": "Lift",
       "cum_lift": "Lift cumulé"
     }
+  },
+  "copilot": {
+    "eyebrow": "Assistant",
+    "title": "Copilote churn",
+    "sub": "Posez vos questions sur le churn, les segments, le modèle ou votre lot scoré en langage courant. Les réponses proviennent uniquement des données et outils de l'application, sources à l'appui.",
+    "mode": {
+      "online": "Claude · {model}",
+      "offline": "Mode FAQ hors ligne",
+      "offline_help": "Aucune clé ANTHROPIC_API_KEY n'est configurée : le Copilote répond aux questions courantes avec des modèles de réponse remplis avec les chiffres de l'application. Ajoutez la clé dans .streamlit/secrets.toml pour activer les réponses libres."
+    },
+    "starters": "Exemples de questions",
+    "starter": {
+      "prioritise": "Quel segment faut-il prioriser ?",
+      "silent": "Pourquoi les Silencieux / Inactifs partent-ils ?",
+      "batch": "Résume mon lot chargé",
+      "auc": "Que signifie une ROC-AUC de {auc} ?"
+    },
+    "clear": "Effacer",
+    "welcome": "Bonjour ! Je peux expliquer le portefeuille, les segments et le modèle, résumer le lot que vous avez scoré, lister les clients les plus risqués et lancer des simulations. Que voulez-vous savoir ?",
+    "input": "Une question sur le churn, les segments, le modèle ou votre lot…",
+    "sources": "Sources utilisées",
+    "grounding": "Contexte : fiche du modèle (model_metadata.json), profils de segments (segment_profiles.csv), facteurs du modèle et glossaire",
+    "tool_error": "a renvoyé une erreur",
+    "tool": {
+      "portfolio_overview": "Vue du portefeuille (profils de segments + métadonnées)",
+      "segment_profile": "Profil de segment",
+      "model_card": "Fiche du modèle",
+      "batch_summary": "Synthèse du lot (lot de session, agrégats uniquement)",
+      "top_customers": "Clients les plus risqués (lot de session, 20 max)",
+      "risk_by": "Risque par colonne (lot de session, agrégats)",
+      "run_what_if": "Simulation (modèle déployé)",
+      "eda_breakdown": "Répartition du churn (eda_breakdowns.parquet)",
+      "model_comparison": "Comparaison de modèles (model_comparison.csv)",
+      "evaluation_at_threshold": "Évaluation à un seuil (prédictions de validation)",
+      "revenue_at_risk": "Revenu à risque",
+      "drift_report": "Rapport de dérive (lot vs entraînement)",
+      "sample_size": "Taille d'échantillon d'un test A/B"
+    },
+    "refusal": "Je ne peux pas répondre à cette demande.",
+    "truncated": "La réponse a été coupée. Merci de poser une question plus ciblée.",
+    "turn_limit": "Je me suis arrêté après plusieurs appels d'outils. Merci de reformuler ou de préciser la question.",
+    "err": {
+      "auth": "La clé API Anthropic a été refusée. Réponse depuis la FAQ hors ligne.",
+      "rate": "L'API Claude limite les requêtes en ce moment. Réponse depuis la FAQ hors ligne.",
+      "status": "L'API Claude a renvoyé une erreur ({code}). Réponse depuis la FAQ hors ligne.",
+      "connection": "Impossible de joindre l'API Claude. Réponse depuis la FAQ hors ligne."
+    },
+    "privacy": "Seuls des agrégats et au plus 20 identifiants clients avec leur score quittent l'application ; les lignes clients brutes ne sont jamais envoyées. Les réponses sont une aide à la décision, pas des verdicts.",
+    "faq": {
+      "prioritise": "Les chiffres font ressortir deux priorités différentes. **Valeur à risque :** {value} combine {rev} du revenu et un churn de {rate} ; c'est là que le revenu exposé au départ est le plus élevé : protégez-le par une rétention proactive. **Volume de partants :** {worst} affiche un churn de {worst_rate} et regroupe {share} des partants, mais rapporte peu : privilégiez une réactivation à faible coût. Le Planificateur de rétention peut dimensionner la campagne sur un lot scoré.",
+      "silent": "Les Silencieux / Inactifs partent à {rate}, contre un taux de {portfolio} pour le portefeuille, et regroupent {share} des partants. Leur client médian n'est actif que {days} jours sur 90 et n'a presque aucun usage enregistré. Les deux signaux les plus forts du modèle, {d1} et {d2}, correspondent précisément à cette absence d'activité enregistrée. Actions recommandées :",
+      "no_batch": "Aucun lot n'a encore été scoré dans cette session. Allez dans Scoring par lot pour charger un fichier ou générer des données de démonstration, puis reposez la question.",
+      "batch": "Votre lot compte {n} clients avec une probabilité moyenne de churn de {mean} : environ {exp} départs sont attendus. {seg} est le segment le plus risqué ({segp} en moyenne).",
+      "batch_rev": "Le revenu mensuel attendu à risque (probabilité × REVENUE) est de {rev}.",
+      "top": "Les cinq clients les plus risqués de votre lot, avec les motifs qui augmentent leur risque :",
+      "auc": "Une ROC-AUC de {auc} signifie que si l'on tire au hasard un client parti et un client resté, le modèle donne le score le plus élevé au partant dans {pct} des cas. 0,5 serait du pile ou face et 1,0 la perfection. Elle mesure la qualité du classement, ce dont une liste d'appels a besoin ; elle a été calculée sur un échantillon de validation des {rows} clients d'entraînement.",
+      "drivers": "Les facteurs les plus forts du modèle, en part du gain total (variables construites regroupées par colonne d'origine) :",
+      "threshold": "Aucun seuil de risque n'a encore été validé par l'entreprise : l'application affiche des probabilités plutôt que des étiquettes Faible / Moyen / Élevé. Vous pouvez tester des classes exploratoires dans Scoring par lot, et la page Évaluation du modèle montre la précision et le rappel obtenus à chaque seuil.",
+      "revenue": "Le revenu est concentré : le segment Actifs à forte valeur génère {share} du revenu du portefeuille. La page Revenu à risque montre le revenu porté par les clients susceptibles de partir.",
+      "segments": "Les cinq segments comportementaux :",
+      "rev_word": "revenu",
+      "help": "En mode hors ligne, je peux répondre sur : le segment à prioriser, les raisons du départ des Silencieux / Inactifs, votre lot scoré et ses clients les plus risqués, la signification de la ROC-AUC, les facteurs du modèle, les seuils de risque, le revenu et les segments. Essayez une des suggestions ci-dessus."
+    }
   }
 }

@@ -1165,5 +1165,68 @@
       "lift": "Lift",
       "cum_lift": "Cumulative lift"
     }
+  },
+  "copilot": {
+    "eyebrow": "Assistant",
+    "title": "Churn Copilot",
+    "sub": "Ask about churn, segments, the model or your scored batch in plain language. Answers come only from the app's data and tools, and each answer lists its sources.",
+    "mode": {
+      "online": "Claude · {model}",
+      "offline": "Offline FAQ mode",
+      "offline_help": "No ANTHROPIC_API_KEY is configured, so the Copilot answers common questions from built-in templates filled with the app's own numbers. Add the key in .streamlit/secrets.toml to enable free-form answers."
+    },
+    "starters": "Try asking",
+    "starter": {
+      "prioritise": "Which segment should we prioritise?",
+      "silent": "Why is Silent / Inactive churning?",
+      "batch": "Summarise my uploaded batch",
+      "auc": "What does ROC-AUC {auc} mean?"
+    },
+    "clear": "Clear chat",
+    "welcome": "Hello! I can explain the portfolio, segments and model, summarise the batch you scored, list the riskiest customers, and run what-if checks. What would you like to know?",
+    "input": "Ask about churn, segments, the model or your batch…",
+    "sources": "Sources used",
+    "grounding": "Grounding: model card (model_metadata.json), segment profiles (segment_profiles.csv), model drivers and glossary",
+    "tool_error": "returned an error",
+    "tool": {
+      "portfolio_overview": "Portfolio overview (segment profiles + metadata)",
+      "segment_profile": "Segment profile",
+      "model_card": "Model card",
+      "batch_summary": "Batch summary (session batch, aggregates only)",
+      "top_customers": "Riskiest customers (session batch, max 20)",
+      "risk_by": "Risk by column (session batch, aggregates)",
+      "run_what_if": "What-if re-scoring (deployed model)",
+      "eda_breakdown": "Churn breakdown (eda_breakdowns.parquet)",
+      "model_comparison": "Model comparison (model_comparison.csv)",
+      "evaluation_at_threshold": "Evaluation at a threshold (validation predictions)",
+      "revenue_at_risk": "Revenue at risk",
+      "drift_report": "Drift report (session batch vs training)",
+      "sample_size": "A/B test sample size"
+    },
+    "refusal": "I can't help with that request.",
+    "truncated": "The answer was cut short. Please ask a narrower question.",
+    "turn_limit": "I stopped after several tool calls. Please rephrase or narrow the question.",
+    "err": {
+      "auth": "The Anthropic API key was rejected. Answering from the offline FAQ instead.",
+      "rate": "The Claude API is rate limiting requests right now. Answering from the offline FAQ instead.",
+      "status": "The Claude API returned an error ({code}). Answering from the offline FAQ instead.",
+      "connection": "Could not reach the Claude API. Answering from the offline FAQ instead."
+    },
+    "privacy": "Only aggregates and at most 20 customer IDs with their scores ever leave the app; raw customer rows are never sent. Answers are decision support, not verdicts.",
+    "faq": {
+      "prioritise": "Two different priorities come out of the numbers. **Value at risk:** {value} combines {rev} of revenue with a {rate} churn rate, so it carries the most revenue exposed to churn: protect it with proactive retention. **Volume of churners:** {worst} churns at {worst_rate} and holds {share} of all churners, but it earns little: use low-cost reactivation there. The Retention Planner can size the campaign for a scored batch.",
+      "silent": "Silent / Inactive customers churn at {rate}, against the portfolio rate of {portfolio}, and they hold {share} of all churners. Their median customer is active only {days} days out of 90 and has almost no recorded usage. The model's two strongest signals, {d1} and {d2}, are exactly these 'no recorded activity' patterns. Recommended plays:",
+      "no_batch": "No batch has been scored in this session yet. Go to Batch Scoring to upload a file or generate demo data, then ask again.",
+      "batch": "Your batch has {n} customers with an average churn probability of {mean}, so about {exp} churners are expected. {seg} is the riskiest segment in it ({segp} on average).",
+      "batch_rev": "Expected monthly revenue at risk (probability × REVENUE) is {rev}.",
+      "top": "The five riskiest customers in your batch, with the reasons raising their risk:",
+      "auc": "A ROC-AUC of {auc} means that if you pick one customer who churned and one who stayed at random, the model gives the churner the higher score {pct} of the time. 0.5 would be a coin flip and 1.0 perfect. It measures ranking quality, which is what a retention call list needs; it was computed on a held-out validation split of the {rows}-customer training data.",
+      "drivers": "The model's strongest drivers, by share of total gain (engineered features grouped back to their raw column):",
+      "threshold": "No business-approved risk thresholds exist yet, so the app shows probabilities rather than Low / Medium / High labels. You can try exploratory bands on Batch Scoring, and the Model Evaluation page shows the precision and recall you would get at any threshold.",
+      "revenue": "Revenue is concentrated: the High-Value Active segment generates {share} of portfolio revenue. The Revenue at Risk page shows how much revenue sits in likely churners.",
+      "segments": "The five behavioural segments:",
+      "rev_word": "revenue",
+      "help": "In offline mode I can answer questions about: which segment to prioritise, why Silent / Inactive customers churn, your scored batch and its riskiest customers, what ROC-AUC means, the model's drivers, risk thresholds, revenue and the segments. Try one of the suggestions above."
+    }
   }
 }
