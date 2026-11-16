@@ -8,6 +8,7 @@ file is absent so pages can show an empty state instead of failing.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -16,6 +17,9 @@ import streamlit as st
 from app.utils.prediction import BUNDLE_PATH, PROJECT_DIR, load_bundle
 
 ARTIFACT_DIR = PROJECT_DIR / "artifacts"
+# Optional exported files can live elsewhere (used by tests and previews);
+# by default they sit next to the required artifacts.
+OPTIONAL_DIR = Path(os.environ.get("EXPRESSO_OPTIONAL_ARTIFACTS", ARTIFACT_DIR))
 EXPORT_COMMAND = "python scripts/export_artifacts.py --train path/to/Train.csv"
 
 OPTIONAL_FILES = {
@@ -78,7 +82,7 @@ def get_feature_columns() -> list[str]:
 # Optional exported artifacts
 # ---------------------------------------------------------------------------
 def optional_path(name: str) -> Path:
-    return ARTIFACT_DIR / OPTIONAL_FILES[name]
+    return OPTIONAL_DIR / OPTIONAL_FILES[name]
 
 
 def has_artifact(name: str) -> bool:
@@ -97,9 +101,9 @@ def _read(path: Path):
 
 
 @st.cache_resource(show_spinner=False)
-def _load_optional(name: str, mtime: float):
+def _load_optional(path_str: str, mtime: float):
     """Read-only shared copy (cache_resource avoids copying large frames)."""
-    return _read(optional_path(name))
+    return _read(Path(path_str))
 
 
 def get_optional(name: str):
@@ -108,7 +112,7 @@ def get_optional(name: str):
     if not path.exists():
         return None
     try:
-        return _load_optional(name, path.stat().st_mtime)
+        return _load_optional(str(path), path.stat().st_mtime)
     except Exception:
         return None
 

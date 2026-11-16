@@ -142,6 +142,14 @@
 .hub-tour .t { font-size: 1.1rem; font-weight: 700; margin-top: .15rem; }
 .hub-tour .d { opacity: .85; margin-top: .25rem; line-height: 1.5; }
 
+/* plain data table with wrapping cells */
+.hub-table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: .3rem 0 .6rem 0; }
+.hub-table th { text-align: left; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7;
+  padding: .55rem .7rem; border-bottom: 1px solid var(--hub-line); }
+.hub-table td { padding: .6rem .7rem; border-bottom: 1px solid var(--hub-line); vertical-align: top; line-height: 1.45; }
+.hub-table tr:last-child td { border-bottom: none; }
+.hub-table .hub-kpi-delta { margin-top: 0; white-space: nowrap; }
+
 /* footer */
 .hub-footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--hub-line);
   display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: space-between; font-size: .82rem; opacity: .7; }

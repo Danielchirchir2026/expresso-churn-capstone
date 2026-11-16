@@ -1294,5 +1294,214 @@
       "sub": "A plain-text record of what is deployed.",
       "dl": "Download deployment summary"
     }
+  },
+  "prob": {
+    "eyebrow": "Overview · the business question",
+    "title": "The Problem",
+    "sub": "Why customer churn matters to Expresso Senegal, who uses this app, which decisions it supports and how we judge success.",
+    "why": {
+      "title": "Why churn matters",
+      "sub": "A prepaid mobile customer can leave at any time, quietly, by simply stopping their top-ups.",
+      "p1": "Every customer who leaves takes their future recharges with them, and replacing them means paying again to acquire someone new.",
+      "p2": "Churn is rarely announced: prepaid customers drift into inactivity first. Spotting the drift early is the only window to act.",
+      "p3": "Retention money is limited. Offers sent to customers who would have stayed anyway are wasted, so the question is not only who is at risk but who is worth saving.",
+      "p4": "Customers can switch to a competing network at any time; their calls to Orange and Tigo numbers are visible in the data and are part of the story.",
+      "kpi_rate_foot": "of customers churned in the data window",
+      "kpi_churners_foot": "customers lost in the window",
+      "kpi_rev_foot": "of revenue comes from one segment"
+    },
+    "users": {
+      "title": "Who uses it, for which decisions",
+      "sub": "Three audiences, three questions.",
+      "executive": {
+        "question": "Where are we losing customers and money, and where should the budget go?",
+        "decisions": "Set retention priorities and budgets by segment; track revenue exposed to churn."
+      },
+      "retention": {
+        "question": "Who exactly should we contact this week, with what offer?",
+        "decisions": "Build call lists, size campaigns for the best return, test offers properly and log results."
+      },
+      "analyst": {
+        "question": "Is the model good enough, fair enough and still valid on new data?",
+        "decisions": "Validate performance, choose thresholds for discussion, check fairness and drift, explain scores."
+      }
+    },
+    "success": {
+      "title": "How we judge success",
+      "sub": "Model criteria and business criteria, measured against the evidence the app holds.",
+      "col_criterion": "Criterion",
+      "col_target": "Target",
+      "col_achieved": "Achieved",
+      "col_status": "Status",
+      "c1": "Ranking quality (ROC-AUC, the Zindi metric)",
+      "c1_target": "Clearly better than random ranking (0.5)",
+      "c1_target_lr": "Better than the Logistic Regression baseline ({lr})",
+      "c2": "Probabilities usable as churn rates",
+      "c2_target": "Within 5 pp of observed churn in every calibration bin",
+      "c3": "Every score explained",
+      "c3_target": "Reason codes for each customer",
+      "c3_done": "Model contributions on Customer Check, Batch Scoring and Customer 360",
+      "c4": "Revenue protected",
+      "c4_target": "Campaigns keep customers at a positive return",
+      "c4_logged": "{n} customers retained in logged campaigns",
+      "c4_pending": "Measured once campaigns are logged in the Campaign Tracker",
+      "pending_export": "Needs validation_predictions.parquet",
+      "met": "met",
+      "not_met": "not met",
+      "open": "open",
+      "caption": "Targets are the team's criteria for this capstone. Evidence comes from model_metadata.json, model_comparison.csv, validation_predictions.parquet and the campaign log."
+    },
+    "crisp": {
+      "title": "From question to deployed model: CRISP-DM",
+      "sub": "Each step links to the page that shows it.",
+      "go": "Open",
+      "business": {
+        "name": "Business understanding",
+        "desc": "Churn, its cost and the decisions to support."
+      },
+      "data": {
+        "name": "Data understanding",
+        "desc": "{rows} customers, {cols} raw columns, heavy missingness."
+      },
+      "prep": {
+        "name": "Data preparation",
+        "desc": "{n} engineered features: flags, logs, ratios, encodings."
+      },
+      "model": {
+        "name": "Modeling",
+        "desc": "LightGBM with early stopping; drivers and reason codes."
+      },
+      "eval": {
+        "name": "Evaluation",
+        "desc": "ROC, precision-recall, calibration, thresholds, fairness."
+      },
+      "deploy": {
+        "name": "Deployment",
+        "desc": "This app: scoring, planning, monitoring and reporting."
+      },
+      "loop": "CRISP-DM is a loop: drift monitoring and the campaign tracker feed back into business understanding, and the model should be retrained when the data moves."
+    }
+  },
+  "eda": {
+    "eyebrow": "Overview · the data",
+    "title": "Data Explorer",
+    "sub": "What the Zindi training data looks like and how churn varies across it. Everything here is an aggregate exported once from Train.csv.",
+    "missing_detail": "The Data Explorer shows aggregates of the training data, exported once from the Zindi Train.csv with:",
+    "kpi": {
+      "rows": "Customers (rows)",
+      "cols": "Columns",
+      "rate": "Churn rate",
+      "churners": "{n} churners",
+      "missing": "Average missingness",
+      "missing_help": "Mean share of empty values across the columns."
+    },
+    "col": {
+      "column": "Column"
+    },
+    "miss": {
+      "title": "Missing values",
+      "sub": "Share of customers with an empty value, per column.",
+      "axis": "% of customers with no value",
+      "so_what": "{top} is empty for {pct} of customers. Empty usage fields mostly mean the line was not used, which is why missingness is so predictive.",
+      "why_tag": "Why missingness predicts churn",
+      "why": "Inactive customers leave usage fields empty: no recharge, no data, no calls. The model therefore learns from what is missing, not only from values. Its strongest driver, {driver}, accounts for {share} of the model's gain."
+    },
+    "by": {
+      "title": "Churn rate by …",
+      "sub": "Pick a dimension to see how churn varies, with customer counts on hover.",
+      "pick": "Dimension",
+      "decile": "{name} (deciles)",
+      "regularity": "Active days (bins of 10)",
+      "hover": "customers %{customdata[0]:,} · churners %{customdata[1]:,}",
+      "overall": "Overall {rate}",
+      "so_what": "Churn ranges from {lr} ({lo}) to {hr} ({hi}, {n} customers): the gap shows how strongly this dimension separates leavers from stayers."
+    },
+    "dist": {
+      "title": "Churners vs non-churners",
+      "sub": "Distribution of a numeric column for each group, drawn from stored quartiles (box = middle 50%, whiskers = 1st to 99th percentile, dashed = mean).",
+      "pick": "Column",
+      "log": "Log scale",
+      "log_disabled": "Not available: this column contains zeros.",
+      "stayed": "Stayed",
+      "churned": "Churned",
+      "so_what": "The median churner has {name} of {m1} against {m0} for customers who stayed.",
+      "caption": "Statistics ignore empty values; see the missing-values chart for how often each column is empty."
+    },
+    "find": {
+      "title": "Key findings",
+      "sub": "Computed from the exported aggregates.",
+      "rate": "{n} of {rows} customers churned ({rate}): the classes are imbalanced, which is why the model is judged on ranking (ROC-AUC) rather than accuracy.",
+      "missing": "{col} is empty for {pct} of customers, and {n} columns are empty for more than 30% of customers: missingness is a feature, not just a nuisance.",
+      "regularity": "Churners were active a median {c} days out of 90, against {s} days for customers who stayed: activity is the clearest behavioural signal.",
+      "tenure": "The {level} tenure band has the highest churn rate ({rate}, {n} customers).",
+      "region": "By region, '{level}' has the highest churn rate ({rate}, {n} customers).",
+      "revenue": "Churn falls from {low} in the lowest revenue decile to {high} in the highest: valuable customers are also the most loyal."
+    },
+    "source": "Source: aggregates of {file} exported by scripts/export_artifacts.py."
+  },
+  "meth": {
+    "eyebrow": "Trust · how it was built",
+    "title": "Methodology",
+    "sub": "How the raw columns became model features, how the model was trained and validated, why ROC-AUC, and the limits and ethics of using it.",
+    "fe": {
+      "title": "Feature engineering",
+      "sub": "{raw} raw columns become {n} model features. The table is generated from the preprocessing config and the model's feature list.",
+      "col_raw": "Raw column",
+      "col_features": "Engineered features",
+      "col_n": "Count",
+      "col_how": "How",
+      "col_why": "Why",
+      "not_used": "Not used by the model",
+      "caption": "All {n} model features appear exactly once. The full per-feature list is on Model & Explainability; the data dictionary is on Reports.",
+      "to_model": "All features with their importance",
+      "to_dict": "Download the data dictionary"
+    },
+    "why": {
+      "raw": "Keeps the original scale; trees split on thresholds directly.",
+      "log": "Usage and money are heavily skewed; the log compresses extreme values so a few heavy users do not dominate.",
+      "missing": "An empty field is information: inactive lines leave usage empty, so 'not recorded' flags let the model use it.",
+      "region_missing": "Same idea for region: a missing region is itself a strong signal.",
+      "region_unseen": "A safe bucket for any region not seen in training.",
+      "onehot": "Region has no natural order, so each region gets its own 0/1 column.",
+      "ordinal": "Tenure bands are ordered, so one ordered number keeps that order.",
+      "freq": "Hundreds of packs exist; replacing each by its popularity keeps the signal without hundreds of columns, with rare packs pooled.",
+      "missing_count": "One summary of how much of the record is empty.",
+      "rev_per_recharge": "Average value of each top-up: many small recharges and few large ones look different.",
+      "data_share": "How data-heavy the customer is relative to spend.",
+      "unused": "Constant in the training data, so it carries no signal."
+    },
+    "train": {
+      "title": "Training and validation",
+      "sub": "Read from the model's own parameters and metadata.",
+      "rate": "Churn rate in training data",
+      "rate_foot": "from eda_summary.json",
+      "rate_missing": "export eda_summary.json to show",
+      "weighting": "Class weighting",
+      "weighted": "Re-weighted",
+      "unweighted": "None",
+      "seed": "Validation split seed",
+      "seed_foot": "from model_metadata.json",
+      "trees": "Trees / best iteration",
+      "trees_foot": "ratio {ratio}",
+      "imbalance_tag": "Class imbalance",
+      "imbalance": "The model was trained on the natural churn rate, without class weights or resampling. ROC-AUC measures ranking, so it is not distorted by imbalance, and leaving the data unweighted keeps the predicted probabilities close to real churn rates (see the calibration curve). Thresholds, not re-weighting, decide how many customers to flag.",
+      "imbalance_weighted": "The model applies class weighting to counter the imbalance. Predicted probabilities may then overstate churn and should be checked against the calibration curve before being read as rates.",
+      "validation_tag": "Validation strategy",
+      "validation": "A random hold-out split (seed {seed}) was kept aside. LightGBM (learning rate {lr}, {leaves} leaves per tree) added trees while the validation score improved; the best score came at iteration {best}. The deployed model has {trees} trees, about 1.1 × the best iteration, which suggests a final refit on all rows. The hold-out share is not recorded in the artifacts; the export script asks for it.",
+      "metric_tag": "Why ROC-AUC",
+      "metric": "ROC-AUC is the Zindi competition metric and it is threshold-free: it measures how well the model ranks churners above stayers, which is exactly what a retention call list needs, before anyone has agreed a cut-off. The deployed model scores {auc}. Precision, recall and costs at a chosen threshold are shown on Model Evaluation."
+    },
+    "ethics": {
+      "title": "Limitations and ethics",
+      "sub": "What the model cannot do, and how it should not be used.",
+      "duplicates": "{n} missing-value indicators appear twice in the feature list (X_MISSING and is_missing_X). Accuracy is unaffected, but importance is split across each pair. The model was not changed.",
+      "thresholds": "No business-approved risk thresholds exist. The app shows probabilities; any Low / Medium / High band is exploratory.",
+      "snapshot": "The data is a single 90-day snapshot. Prices, offers and competitors change, so the model must be monitored for drift and retrained.",
+      "region": "Region is missing for {pct} of customers and 'region not recorded' is the strongest signal. Regions with poorer data capture could be scored as riskier for reasons of record-keeping, not behaviour: check the fairness view before using scores regionally.",
+      "region_nopct": "'Region not recorded' is the strongest signal. Regions with poorer data capture could be scored as riskier for reasons of record-keeping, not behaviour: check the fairness view before using scores regionally.",
+      "decision_support": "Predictions are decision support only. They should inform offers, never trigger penalties, disconnection or credit decisions about an individual without human review.",
+      "privacy": "The app needs no names or phone numbers. Scored files and call lists contain customer IDs: handle them under Expresso's data-protection rules.",
+      "fairness_link": "Open the fairness check on Model Evaluation"
+    }
   }
 }

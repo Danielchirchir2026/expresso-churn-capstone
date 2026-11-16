@@ -44,3 +44,11 @@ def test_data_dictionary_covers_every_raw_column(config):
     used = d.set_index("column")["used_by_model"]
     assert used["MRG"] == "no" and used["REGULARITY"] == "yes"
     assert data_dictionary(config, "fr").set_index("column").loc["REGION", "name"] == "Région"
+
+
+def test_feature_groups_cover_all_69_features_once(config):
+    from app.core.features import OWN_GROUPS, source_of
+
+    groups = [source_of(f, config["raw_source_columns"]) for f in config["feature_columns"]]
+    assert set(groups) <= set(config["raw_source_columns"]) | set(OWN_GROUPS)
+    assert len(groups) == 69

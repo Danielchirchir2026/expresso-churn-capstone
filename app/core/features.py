@@ -57,29 +57,25 @@ def describe(group: str, lang: str | None = None) -> str:
     return "" if value == key else value
 
 
+def kind_key(feature: str) -> str:
+    """Which transformation built a model feature (i18n suffix under feat_kind.*)."""
+    if feature.startswith("LOG1P_"):
+        return "log"
+    if feature == "REGION_MISSING":
+        return "region_missing"
+    if feature == "REGION_Missing":
+        return "region_unseen"
+    if feature.startswith("is_missing_") or (feature.endswith("_MISSING") and not feature.startswith("REGION_")):
+        return "missing"
+    if feature.startswith("REGION_"):
+        return "onehot"
+    return {"TENURE_ORDINAL": "ordinal", "TOP_PACK_FREQ": "freq", "MISSING_COUNT": "missing_count",
+            "REVENUE_PER_RECHARGE": "rev_per_recharge", "DATA_SHARE": "data_share"}.get(feature, "raw")
+
+
 def transformation(feature: str, lang: str | None = None) -> str:
     """Short description of how one engineered feature is built."""
-    if feature.startswith("LOG1P_"):
-        return t("feat_kind.log", lang)
-    if feature.startswith("is_missing_") or (feature.endswith("_MISSING") and not feature.startswith("REGION_")):
-        return t("feat_kind.missing", lang)
-    if feature == "REGION_MISSING":
-        return t("feat_kind.region_missing", lang)
-    if feature == "REGION_Missing":
-        return t("feat_kind.region_unseen", lang)
-    if feature.startswith("REGION_"):
-        return t("feat_kind.onehot", lang)
-    if feature == "TENURE_ORDINAL":
-        return t("feat_kind.ordinal", lang)
-    if feature == "TOP_PACK_FREQ":
-        return t("feat_kind.freq", lang)
-    if feature == "MISSING_COUNT":
-        return t("feat_kind.missing_count", lang)
-    if feature == "REVENUE_PER_RECHARGE":
-        return t("feat_kind.rev_per_recharge", lang)
-    if feature == "DATA_SHARE":
-        return t("feat_kind.data_share", lang)
-    return t("feat_kind.raw", lang)
+    return t(f"feat_kind.{kind_key(feature)}", lang)
 
 
 @st.cache_data(show_spinner=False)

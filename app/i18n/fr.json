@@ -1294,5 +1294,214 @@
       "sub": "Un relevé en texte brut de ce qui est déployé.",
       "dl": "Télécharger le récapitulatif"
     }
+  },
+  "prob": {
+    "eyebrow": "Vue d'ensemble · la question métier",
+    "title": "Le problème",
+    "sub": "Pourquoi l'attrition client compte pour Expresso Sénégal, qui utilise cette application, quelles décisions elle appuie et comment juger le succès.",
+    "why": {
+      "title": "Pourquoi le churn compte",
+      "sub": "Un client prépayé peut partir à tout moment, en silence, simplement en cessant de recharger.",
+      "p1": "Chaque client qui part emporte ses recharges futures, et le remplacer oblige à payer à nouveau pour en acquérir un autre.",
+      "p2": "Le départ est rarement annoncé : les clients prépayés glissent d'abord vers l'inactivité. Repérer cette dérive tôt est la seule fenêtre pour agir.",
+      "p3": "Le budget de rétention est limité. Une offre envoyée à un client qui serait resté est perdue : la question n'est pas seulement qui risque de partir, mais qui vaut la peine d'être retenu.",
+      "p4": "Les clients peuvent passer à un réseau concurrent à tout moment ; leurs appels vers des numéros Orange et Tigo sont visibles dans les données et font partie de l'histoire.",
+      "kpi_rate_foot": "des clients sont partis sur la période",
+      "kpi_churners_foot": "clients perdus sur la période",
+      "kpi_rev_foot": "du revenu vient d'un seul segment"
+    },
+    "users": {
+      "title": "Qui l'utilise, pour quelles décisions",
+      "sub": "Trois publics, trois questions.",
+      "executive": {
+        "question": "Où perdons-nous des clients et du revenu, et où mettre le budget ?",
+        "decisions": "Fixer les priorités et budgets de rétention par segment ; suivre le revenu exposé au churn."
+      },
+      "retention": {
+        "question": "Qui contacter exactement cette semaine, avec quelle offre ?",
+        "decisions": "Construire les listes d'appels, dimensionner les campagnes au meilleur rendement, tester les offres correctement et enregistrer les résultats."
+      },
+      "analyst": {
+        "question": "Le modèle est-il assez bon, assez équitable et toujours valide sur de nouvelles données ?",
+        "decisions": "Valider la performance, proposer des seuils, vérifier l'équité et la dérive, expliquer les scores."
+      }
+    },
+    "success": {
+      "title": "Comment juger le succès",
+      "sub": "Critères du modèle et critères métier, mesurés à partir des éléments dont dispose l'application.",
+      "col_criterion": "Critère",
+      "col_target": "Cible",
+      "col_achieved": "Atteint",
+      "col_status": "Statut",
+      "c1": "Qualité du classement (ROC-AUC, métrique Zindi)",
+      "c1_target": "Nettement meilleur qu'un classement aléatoire (0,5)",
+      "c1_target_lr": "Meilleur que la référence régression logistique ({lr})",
+      "c2": "Probabilités lisibles comme des taux de churn",
+      "c2_target": "À moins de 5 pp du churn observé dans chaque tranche de calibration",
+      "c3": "Chaque score expliqué",
+      "c3_target": "Des codes motifs pour chaque client",
+      "c3_done": "Contributions du modèle dans le Diagnostic client, le Scoring par lot et la vue 360",
+      "c4": "Revenu protégé",
+      "c4_target": "Les campagnes retiennent des clients avec un rendement positif",
+      "c4_logged": "{n} clients retenus dans les campagnes enregistrées",
+      "c4_pending": "Mesuré dès que des campagnes sont enregistrées dans le Suivi des campagnes",
+      "pending_export": "Nécessite validation_predictions.parquet",
+      "met": "atteint",
+      "not_met": "non atteint",
+      "open": "en cours",
+      "caption": "Les cibles sont les critères de l'équipe pour ce projet. Les preuves proviennent de model_metadata.json, model_comparison.csv, validation_predictions.parquet et du journal des campagnes."
+    },
+    "crisp": {
+      "title": "De la question au modèle déployé : CRISP-DM",
+      "sub": "Chaque étape renvoie vers la page qui la montre.",
+      "go": "Ouvrir",
+      "business": {
+        "name": "Compréhension métier",
+        "desc": "Le churn, son coût et les décisions à appuyer."
+      },
+      "data": {
+        "name": "Compréhension des données",
+        "desc": "{rows} clients, {cols} colonnes brutes, beaucoup de valeurs manquantes."
+      },
+      "prep": {
+        "name": "Préparation des données",
+        "desc": "{n} variables construites : indicateurs, logarithmes, ratios, encodages."
+      },
+      "model": {
+        "name": "Modélisation",
+        "desc": "LightGBM avec arrêt précoce ; facteurs et codes motifs."
+      },
+      "eval": {
+        "name": "Évaluation",
+        "desc": "ROC, précision-rappel, calibration, seuils, équité."
+      },
+      "deploy": {
+        "name": "Déploiement",
+        "desc": "Cette application : scoring, planification, surveillance et rapports."
+      },
+      "loop": "CRISP-DM est une boucle : la surveillance de la dérive et le suivi des campagnes alimentent la compréhension métier, et le modèle doit être réentraîné quand les données bougent."
+    }
+  },
+  "eda": {
+    "eyebrow": "Vue d'ensemble · les données",
+    "title": "Explorateur de données",
+    "sub": "À quoi ressemblent les données d'entraînement Zindi et comment le churn y varie. Tout est agrégé et exporté une seule fois depuis Train.csv.",
+    "missing_detail": "L'Explorateur de données affiche des agrégats des données d'entraînement, exportés une seule fois depuis Train.csv de Zindi avec :",
+    "kpi": {
+      "rows": "Clients (lignes)",
+      "cols": "Colonnes",
+      "rate": "Taux de churn",
+      "churners": "{n} partants",
+      "missing": "Taux moyen de valeurs manquantes",
+      "missing_help": "Part moyenne de valeurs vides sur l'ensemble des colonnes."
+    },
+    "col": {
+      "column": "Colonne"
+    },
+    "miss": {
+      "title": "Valeurs manquantes",
+      "sub": "Part des clients sans valeur, par colonne.",
+      "axis": "% de clients sans valeur",
+      "so_what": "{top} est vide pour {pct} des clients. Les champs d'usage vides signifient surtout que la ligne n'a pas servi : c'est pourquoi l'absence de valeur est si prédictive.",
+      "why_tag": "Pourquoi l'absence de valeur prédit le churn",
+      "why": "Les clients inactifs laissent leurs champs d'usage vides : ni recharge, ni data, ni appels. Le modèle apprend donc de ce qui manque, pas seulement des valeurs. Son facteur principal, {driver}, représente {share} du gain du modèle."
+    },
+    "by": {
+      "title": "Taux de churn par …",
+      "sub": "Choisissez une dimension pour voir comment le churn varie, avec le nombre de clients au survol.",
+      "pick": "Dimension",
+      "decile": "{name} (déciles)",
+      "regularity": "Jours actifs (tranches de 10)",
+      "hover": "clients %{customdata[0]:,} · partants %{customdata[1]:,}",
+      "overall": "Global {rate}",
+      "so_what": "Le churn va de {lr} ({lo}) à {hr} ({hi}, {n} clients) : l'écart montre à quel point cette dimension sépare ceux qui partent de ceux qui restent."
+    },
+    "dist": {
+      "title": "Partants vs fidèles",
+      "sub": "Distribution d'une colonne numérique pour chaque groupe, tracée à partir des quartiles stockés (boîte = 50 % centraux, moustaches = 1er au 99e centile, pointillé = moyenne).",
+      "pick": "Colonne",
+      "log": "Échelle logarithmique",
+      "log_disabled": "Indisponible : cette colonne contient des zéros.",
+      "stayed": "Restés",
+      "churned": "Partis",
+      "so_what": "Le partant médian a {name} de {m1} contre {m0} pour les clients restés.",
+      "caption": "Les statistiques ignorent les valeurs vides ; voir le graphique des valeurs manquantes pour leur fréquence."
+    },
+    "find": {
+      "title": "Constats clés",
+      "sub": "Calculés à partir des agrégats exportés.",
+      "rate": "{n} clients sur {rows} sont partis ({rate}) : les classes sont déséquilibrées, c'est pourquoi le modèle est jugé sur le classement (ROC-AUC) plutôt que sur l'exactitude.",
+      "missing": "{col} est vide pour {pct} des clients, et {n} colonnes sont vides pour plus de 30 % des clients : l'absence de valeur est une variable, pas seulement une gêne.",
+      "regularity": "Les partants ont été actifs en médiane {c} jours sur 90, contre {s} jours pour les clients restés : l'activité est le signal comportemental le plus net.",
+      "tenure": "La tranche d'ancienneté {level} a le taux de churn le plus élevé ({rate}, {n} clients).",
+      "region": "Par région, « {level} » a le taux de churn le plus élevé ({rate}, {n} clients).",
+      "revenue": "Le churn passe de {low} dans le décile de revenu le plus bas à {high} dans le plus haut : les clients les plus rentables sont aussi les plus fidèles."
+    },
+    "source": "Source : agrégats de {file} exportés par scripts/export_artifacts.py."
+  },
+  "meth": {
+    "eyebrow": "Confiance · comment il a été construit",
+    "title": "Méthodologie",
+    "sub": "Comment les colonnes brutes sont devenues des variables, comment le modèle a été entraîné et validé, pourquoi la ROC-AUC, et les limites et l'éthique de son usage.",
+    "fe": {
+      "title": "Construction des variables",
+      "sub": "{raw} colonnes brutes deviennent {n} variables du modèle. Le tableau est généré à partir de la configuration de prétraitement et de la liste des variables du modèle.",
+      "col_raw": "Colonne brute",
+      "col_features": "Variables construites",
+      "col_n": "Nombre",
+      "col_how": "Comment",
+      "col_why": "Pourquoi",
+      "not_used": "Non utilisée par le modèle",
+      "caption": "Les {n} variables du modèle apparaissent chacune une fois. La liste détaillée est dans Modèle et explicabilité ; le dictionnaire de données est dans Rapports.",
+      "to_model": "Toutes les variables avec leur importance",
+      "to_dict": "Télécharger le dictionnaire de données"
+    },
+    "why": {
+      "raw": "Conserve l'échelle d'origine ; les arbres découpent directement sur des seuils.",
+      "log": "L'usage et les montants sont très asymétriques ; le logarithme compresse les valeurs extrêmes pour que quelques gros utilisateurs ne dominent pas.",
+      "missing": "Un champ vide est une information : les lignes inactives laissent l'usage vide, les indicateurs « non renseigné » permettent au modèle de l'utiliser.",
+      "region_missing": "Même idée pour la région : une région manquante est en soi un signal fort.",
+      "region_unseen": "Une catégorie de secours pour toute région non vue à l'entraînement.",
+      "onehot": "La région n'a pas d'ordre naturel : chaque région a sa propre colonne 0/1.",
+      "ordinal": "Les tranches d'ancienneté sont ordonnées : un seul nombre ordonné conserve cet ordre.",
+      "freq": "Il existe des centaines de packs ; remplacer chacun par sa popularité garde le signal sans des centaines de colonnes, les packs rares étant regroupés.",
+      "missing_count": "Un résumé de la part du dossier qui est vide.",
+      "rev_per_recharge": "Valeur moyenne de chaque recharge : beaucoup de petites recharges et peu de grosses se distinguent.",
+      "data_share": "À quel point le client consomme de la data par rapport à sa dépense.",
+      "unused": "Constante dans les données d'entraînement : elle ne porte aucun signal."
+    },
+    "train": {
+      "title": "Entraînement et validation",
+      "sub": "Lus dans les paramètres et métadonnées du modèle.",
+      "rate": "Taux de churn des données d'entraînement",
+      "rate_foot": "issu de eda_summary.json",
+      "rate_missing": "exportez eda_summary.json pour l'afficher",
+      "weighting": "Pondération des classes",
+      "weighted": "Repondérées",
+      "unweighted": "Aucune",
+      "seed": "Graine de l'échantillon de validation",
+      "seed_foot": "issue de model_metadata.json",
+      "trees": "Arbres / meilleure itération",
+      "trees_foot": "ratio {ratio}",
+      "imbalance_tag": "Déséquilibre des classes",
+      "imbalance": "Le modèle a été entraîné sur le taux de churn naturel, sans pondération ni rééchantillonnage. La ROC-AUC mesure le classement : elle n'est pas faussée par le déséquilibre, et l'absence de pondération garde les probabilités proches des taux de churn réels (voir la courbe de calibration). Ce sont les seuils, pas la pondération, qui décident combien de clients signaler.",
+      "imbalance_weighted": "Le modèle applique une pondération des classes pour compenser le déséquilibre. Les probabilités peuvent alors surestimer le churn et doivent être vérifiées avec la courbe de calibration avant d'être lues comme des taux.",
+      "validation_tag": "Stratégie de validation",
+      "validation": "Un échantillon de validation aléatoire (graine {seed}) a été mis de côté. LightGBM (taux d'apprentissage {lr}, {leaves} feuilles par arbre) a ajouté des arbres tant que le score de validation s'améliorait ; le meilleur score a été atteint à l'itération {best}. Le modèle déployé compte {trees} arbres, environ 1,1 × la meilleure itération, ce qui suggère un réentraînement final sur toutes les lignes. La part mise de côté n'est pas enregistrée dans les artefacts ; le script d'export la demande.",
+      "metric_tag": "Pourquoi la ROC-AUC",
+      "metric": "La ROC-AUC est la métrique du concours Zindi et elle ne dépend d'aucun seuil : elle mesure la capacité du modèle à classer les partants au-dessus des fidèles, exactement ce dont une liste d'appels a besoin avant qu'un seuil ne soit fixé. Le modèle déployé obtient {auc}. Précision, rappel et coûts à un seuil donné figurent dans l'Évaluation du modèle."
+    },
+    "ethics": {
+      "title": "Limites et éthique",
+      "sub": "Ce que le modèle ne peut pas faire, et comment il ne doit pas être utilisé.",
+      "duplicates": "{n} indicateurs de valeur manquante figurent deux fois dans la liste des variables (X_MISSING et is_missing_X). La précision n'est pas affectée, mais l'importance est partagée dans chaque paire. Le modèle n'a pas été modifié.",
+      "thresholds": "Aucun seuil de risque n'a été validé par l'entreprise. L'application affiche des probabilités ; toute classe Faible / Moyen / Élevé est exploratoire.",
+      "snapshot": "Les données sont un instantané unique de 90 jours. Prix, offres et concurrents évoluent : le modèle doit être surveillé (dérive) et réentraîné.",
+      "region": "La région manque pour {pct} des clients et « région non renseignée » est le signal le plus fort. Des régions où la saisie est moins complète pourraient être jugées plus risquées pour des raisons de tenue des dossiers et non de comportement : consultez la vue d'équité avant d'utiliser les scores par région.",
+      "region_nopct": "« Région non renseignée » est le signal le plus fort. Des régions où la saisie est moins complète pourraient être jugées plus risquées pour des raisons de tenue des dossiers et non de comportement : consultez la vue d'équité avant d'utiliser les scores par région.",
+      "decision_support": "Les prédictions sont une aide à la décision. Elles doivent orienter des offres, jamais déclencher de pénalité, de coupure ou de décision de crédit sur un individu sans examen humain.",
+      "privacy": "L'application n'a besoin ni de noms ni de numéros de téléphone. Les fichiers scorés et listes d'appels contiennent des identifiants clients : traitez-les selon les règles de protection des données d'Expresso.",
+      "fairness_link": "Ouvrir le contrôle d'équité dans l'Évaluation du modèle"
+    }
   }
 }
