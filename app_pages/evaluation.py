@@ -11,14 +11,60 @@ from app.core import artifacts, evaluation, fmt, metrics, state
 from app.i18n import t
 from app.ui import charts
 from app.ui.components import empty_state, insight_callout, kpi_row, page_header, section_header
+from app.ui.guards import require_artifact
 
 bundle = artifacts.get_bundle()
 meta = artifacts.get_metadata()
 page_header(t("eval.title"), t("eval.sub"), t("eval.eyebrow"))
 
 # ---------------------------------------------------------------------------
+# Model comparison (model_comparison.csv)
+# ---------------------------------------------------------------------------
+section_header(t("eval.cmp.title"), t("eval.cmp.sub"))
+comparison = require_artifact("model_comparison", "eval.cmp.missing")
+if comparison is not None:
+    comp = comparison.copy()
+    deployed = comp[comp["model"].str.contains("deployed", case=False)]
+    honest = comp[comp["model"].str.contains("holdout", case=False)]
+    lgb = honest.iloc[0] if len(honest) else (deployed.iloc[0] if len(deployed) else None)
+    base = comp[comp["model"].str.contains("Logistic", case=False)]
+    order = comp.sort_values("roc_auc")
+    fig = go.Figure(go.Bar(
+        y=order["model"], x=order["roc_auc"], orientation="h",
+        marker_color=[charts.accent() if "LightGBM" in m else charts.neutral() for m in order["model"]],
+        text=[fmt.num(v, 4) for v in order["roc_auc"]], textposition="outside",
+        customdata=order[["pr_auc", "log_loss", "f1_at_0_5"]],
+        hovertemplate="<b>%{y}</b><br>ROC-AUC %{x:.4f}<br>PR-AUC %{customdata[0]:.4f}<br>"
+                      "log loss %{customdata[1]:.4f}<br>F1@0.5 %{customdata[2]:.3f}<extra></extra>"))
+    charts.style(fig, height=110 + 48 * len(order), legend=False, xgrid=True, ygrid=False)
+    fig.update_xaxes(range=[0.45, 1.06], title="ROC-AUC")
+    so = t("eval.cmp.so_what_nobase")
+    if lgb is not None and len(base):
+        b = base.iloc[0]
+        so = t("eval.cmp.so_what", auc=fmt.num(lgb["roc_auc"], 4), lr=fmt.num(b["roc_auc"], 4),
+               ap=fmt.num(lgb["pr_auc"], 3), lrap=fmt.num(b["pr_auc"], 3), gain=fmt.num(lgb["roc_auc"] - b["roc_auc"], 3))
+    c1, c2 = st.columns([1.2, 1])
+    with c1:
+        charts.show(fig, so, key="ev_cmp")
+    with c2:
+        st.dataframe(comp, hide_index=True, width="stretch", column_config={
+            "model": st.column_config.TextColumn(t("eval.cmp.col_model"), width="medium"),
+            "roc_auc": st.column_config.NumberColumn("ROC-AUC", format="%.4f"),
+            "pr_auc": st.column_config.NumberColumn("PR-AUC", format="%.4f"),
+            "log_loss": st.column_config.NumberColumn(t("eval.cmp.col_logloss"), format="%.4f"),
+            "f1_at_0_5": st.column_config.NumberColumn("F1 @ 0.5", format="%.3f"),
+            "train_seconds": st.column_config.NumberColumn(t("eval.cmp.col_time"), format="%.1f s"),
+            "note": st.column_config.TextColumn(t("eval.cmp.col_note"), width="large"),
+        })
+    insight_callout(t("eval.cmp.why"), "info", tag=t("eval.cmp.why_tag"))
+    if len(honest) and len(deployed):
+        insight_callout(t("eval.cmp.honest", dep=fmt.num(deployed.iloc[0]["roc_auc"], 4),
+                          hon=fmt.num(honest.iloc[0]["roc_auc"], 4)), "warn")
+
+# ---------------------------------------------------------------------------
 # Choose labelled data
 # ---------------------------------------------------------------------------
+section_header(t("eval.data.title"), t("eval.data.sub"))
 val_df = artifacts.get_optional("validation_predictions")
 batch = state.get_batch()
 batch_has_label = bool(batch and "CHURN" in batch["df"].columns)
@@ -85,7 +131,8 @@ if data is not None:
         elif manifest.get("validation_model") == "holdout_refit":
             insight_callout(t("eval.summary.holdout"), "info")
 
-    tab_curves, tab_thr, tab_gains = st.tabs([t("eval.tab.curves"), t("eval.tab.threshold"), t("eval.tab.gains")])
+    tab_curves, tab_thr, tab_gains, tab_fair = st.tabs([t("eval.tab.curves"), t("eval.tab.threshold"),
+                                                        t("eval.tab.gains"), t("eval.tab.fairness")])
 
     # ---------------- Curves -------------------------------------------------
     with tab_curves:
@@ -162,7 +209,7 @@ if data is not None:
                 dict(label=t("eval.thr.recall"), value=fmt.pct(cm["recall"] * 100, 1), help=t("eval.thr.recall_help")),
                 dict(label="F1", value=fmt.num(cm["f1"], 3)),
                 dict(label=t("eval.thr.flagged"), value=fmt.num(cm["flagged"]),
-                     foot=t("batch.kpi.share", share=fmt.pct(cm["flagged"] / max(s["n"], 1) * 100, 1))),
+                     foot=t("eval.thr.flagged_share", share=fmt.pct(cm["flagged"] / max(s["n"], 1) * 100, 1))),
             ], cols=2)
             if not np.isnan(cm["precision"]):
                 insight_callout(t("eval.thr.words", p=fmt.num(cm["precision"] * 100, 0),
@@ -181,6 +228,39 @@ if data is not None:
         f.update_yaxes(range=[0, 1.02])
         charts.show(f, t("eval.thr.curve_so_what", t=fmt.num(best_f1_t, 3),
                          f1=fmt.num(sweep["f1"].max(), 3)), key="ev_sweep")
+
+        # ------------- Threshold advisor (cost-based) -------------------------
+        section_header(t("eval.adv.title"), t("eval.adv.sub"))
+        profiles = artifacts.get_segment_profiles()
+        typical = float((profiles["customers"] * profiles["median_revenue"]).sum() / profiles["customers"].sum())
+        a1, a2 = st.columns(2)
+        with a1:
+            c_fp = st.number_input(t("eval.adv.cost_fp"), 0.0, 1e7, float(st.session_state.get("ret_cost", 500.0)),
+                                   50.0, key="adv_fp", help=t("eval.adv.cost_fp_help"))
+        with a2:
+            c_fn = st.number_input(t("eval.adv.cost_fn"), 0.0, 1e8, float(round(typical * 3)), 100.0, key="adv_fn",
+                                   help=t("eval.adv.cost_fn_help", typical=fmt.num(typical)))
+        costs = metrics.threshold_cost(data.y, data.p, c_fp, c_fn)
+        best_t = metrics.best_cost_threshold(costs)
+        best = costs.loc[costs["threshold"] == best_t].iloc[0]
+        nobody = float(data.y.sum()) * c_fn
+        insight_callout(t("eval.adv.result", t=fmt.num(best_t, 3), flagged=fmt.num(best["flagged"]),
+                          cost=fmt.money(best["cost"]), nobody=fmt.money(nobody),
+                          saving=fmt.money(nobody - best["cost"])), "good", tag=t("eval.adv.tag"))
+        f = go.Figure()
+        f.add_trace(go.Scatter(x=costs["threshold"], y=costs["cost"], mode="lines", name=t("eval.adv.total"),
+                               line=dict(color=charts.accent(), width=2),
+                               hovertemplate="t = %{x:.3f}<br>%{y:,.0f} FCFA<extra></extra>"))
+        f.add_trace(go.Scatter(x=[best_t], y=[best["cost"]], mode="markers", name=t("eval.adv.best"),
+                               marker=dict(size=11, color=charts.accent(),
+                                           line=dict(width=2, color=charts.ink("surface"))),
+                               hovertemplate="t = %{x:.3f}<br>%{y:,.0f} FCFA<extra></extra>"))
+        charts.style(f, height=340, xgrid=True, title=t("eval.adv.chart"))
+        f.update_xaxes(title=t("eval.thr.label"))
+        f.update_yaxes(title="FCFA")
+        charts.show(f, t("eval.adv.so_what", ratio=fmt.num(c_fn / c_fp, 1) if c_fp else "-", t=fmt.num(best_t, 3)),
+                    key="ev_adv")
+        st.caption(t("eval.adv.caption", n=fmt.num(s["n"])))
 
     # ---------------- Gains & lift -------------------------------------------
     with tab_gains:
@@ -210,3 +290,43 @@ if data is not None:
             "lift": st.column_config.NumberColumn(t("eval.gains.lift"), format="%.2f×"),
             "cum_lift": st.column_config.NumberColumn(t("eval.gains.cum_lift"), format="%.2f×"),
         })
+
+    # ---------------- Fairness ------------------------------------------------
+    with tab_fair:
+        if not data.groups:
+            st.info(t("eval.fair.no_groups"), icon=":material/info:")
+        else:
+            st.caption(t("eval.fair.intro", t=fmt.num(thr, 3)))
+            for gname, values in data.groups.items():
+                gm = metrics.group_metrics(data.y, data.p, values, thr)
+                section_header(t("eval.fair.by", name=t(f"feat.{gname}.name")))
+                flagged = gm[gm["flagged"]]
+                if len(flagged):
+                    insight_callout(t("eval.fair.flagged", groups=", ".join(flagged["group"]),
+                                      overall=fmt.num(s["auc"], 3)), "risk")
+                else:
+                    insight_callout(t("eval.fair.ok", overall=fmt.num(s["auc"], 3)), "good")
+                show = gm[~gm["too_small"]].sort_values("auc")
+                f = go.Figure(go.Bar(
+                    y=show["group"], x=show["auc"], orientation="h",
+                    marker_color=[charts.risk_up() if fl else charts.accent() for fl in show["flagged"]],
+                    customdata=show[["n", "recall", "mean_pred", "churn_rate"]],
+                    hovertemplate="<b>%{y}</b><br>AUC %{x:.3f}<br>n = %{customdata[0]:,}<br>"
+                                  + t("eval.thr.recall") + " %{customdata[1]:.2f}<br>"
+                                  + t("eval.fair.mean_pred") + " %{customdata[2]:.3f}<br>"
+                                  + t("eval.kpi.rate") + " %{customdata[3]:.3f}<extra></extra>"))
+                f.add_vline(x=s["auc"], line=dict(color=charts.ink("muted"), width=1),
+                            annotation_text=t("eval.fair.overall", auc=fmt.num(s["auc"], 3)),
+                            annotation_font=dict(size=11, color=charts.ink("secondary")))
+                f.add_vline(x=s["auc"] - 0.05, line=dict(color=charts.risk_up(), width=1))
+                charts.style(f, height=max(260, 26 * len(show) + 80), legend=False, xgrid=True, ygrid=False)
+                lo = max(0.5, float(show["auc"].min()) - 0.03) if len(show) else 0.5
+                f.update_xaxes(range=[lo, 1.0], title="ROC-AUC")
+                if len(show):
+                    worst = show.iloc[0]
+                    so = t("eval.fair.so_what", worst=worst["group"], auc=fmt.num(worst["auc"], 3),
+                           overall=fmt.num(s["auc"], 3))
+                else:
+                    so = t("eval.fair.no_groups")
+                charts.show(f, so, data=gm.round(4), key=f"ev_fair_{gname}")
+            st.caption(t("eval.fair.caption"))

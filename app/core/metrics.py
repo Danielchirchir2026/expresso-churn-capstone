@@ -187,3 +187,39 @@ def brier(y_true, prob) -> float:
     y = np.asarray(y_true, dtype="float64")
     p = np.asarray(prob, dtype="float64")
     return float(np.mean((p - y) ** 2))
+
+
+# ---------------------------------------------------------------------------
+# Fairness: performance by group
+# ---------------------------------------------------------------------------
+def group_metrics(y_true, prob, groups, threshold: float, min_size: int = 30, auc_gap: float = 0.05) -> pd.DataFrame:
+    """AUC, recall, precision, mean probability and observed churn per group.
+
+    A group is flagged when its AUC is more than ``auc_gap`` below the
+    overall AUC. Groups that are too small or contain one class only get
+    no AUC (and are never flagged).
+    """
+    from sklearn.metrics import roc_auc_score
+
+    y = np.asarray(y_true).astype(int)
+    p = np.asarray(prob, dtype="float64")
+    g = pd.Series(np.asarray(groups, dtype=object)).fillna("Not recorded").astype(str).to_numpy()
+    overall = float(roc_auc_score(y, p)) if len(np.unique(y)) > 1 else float("nan")
+    rows = []
+    for level in pd.unique(g):
+        m = g == level
+        yy, pp_ = y[m], p[m]
+        n = int(m.sum())
+        enough = n >= min_size and len(np.unique(yy)) == 2
+        auc = float(roc_auc_score(yy, pp_)) if enough else float("nan")
+        flag = pp_ >= threshold
+        tp = int((flag & (yy == 1)).sum())
+        rows.append({
+            "group": level, "n": n, "churn_rate": float(yy.mean()), "mean_pred": float(pp_.mean()),
+            "auc": auc, "recall": tp / max(int(yy.sum()), 1) if yy.sum() else float("nan"),
+            "precision": tp / int(flag.sum()) if flag.sum() else float("nan"),
+            "auc_gap": auc - overall if enough else float("nan"),
+            "flagged": bool(enough and auc < overall - auc_gap),
+            "too_small": not enough,
+        })
+    return pd.DataFrame(rows).sort_values("n", ascending=False).reset_index(drop=True)

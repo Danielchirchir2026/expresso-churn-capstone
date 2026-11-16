@@ -1106,7 +1106,8 @@
     "tab": {
       "curves": "Courbes",
       "threshold": "Seuil",
-      "gains": "Gains et lift"
+      "gains": "Gains et lift",
+      "fairness": "Équité"
     },
     "roc": {
       "title": "Courbe ROC",
@@ -1143,7 +1144,8 @@
       "words_tag": "En langage métier",
       "words": "Sur 100 clients appelés, {p} seraient réellement partis. Nous atteignons {r} partants sur 100. {fp} appels iraient à des clients qui restaient de toute façon, et {fn} partants seraient manqués.",
       "curve_title": "Précision, rappel et F1 selon le seuil",
-      "curve_so_what": "Le F1 culmine à {f1} vers t = {t}. Un seuil plus bas détecte plus de partants au prix de plus d'appels inutiles."
+      "curve_so_what": "Le F1 culmine à {f1} vers t = {t}. Un seuil plus bas détecte plus de partants au prix de plus d'appels inutiles.",
+      "flagged_share": "{share} des clients"
     },
     "cm": {
       "title": "Matrice de confusion à t = {t}",
@@ -1166,6 +1168,50 @@
       "cum": "Part cumulée captée",
       "lift": "Lift",
       "cum_lift": "Lift cumulé"
+    },
+    "cmp": {
+      "title": "Comparaison des modèles",
+      "sub": "Le LightGBM déployé face à des modèles de référence simples, sur le même échantillon de validation.",
+      "missing": "Le classement (Dummy, régression logistique, LightGBM) est calculé une fois à partir de Train.csv par le script d'export :",
+      "col_model": "Modèle",
+      "col_logloss": "Log loss",
+      "col_time": "Temps d'entraînement",
+      "col_note": "Notes",
+      "so_what": "LightGBM atteint une ROC-AUC de {auc} contre {lr} pour la régression logistique (+{gain}) et une PR-AUC de {ap} contre {lrap} : il classe mieux les partants, ce dont une liste d'appels a besoin.",
+      "so_what_nobase": "LightGBM est comparé aux modèles de référence exportés dans model_comparison.csv.",
+      "why_tag": "Pourquoi LightGBM",
+      "why": "Les arbres boostés gèrent les nombreuses valeurs manquantes, les usages très asymétriques et les interactions sans croisement manuel de variables, s'entraînent vite sur deux millions de lignes et fournissent les contributions exactes par client pour les codes motifs.",
+      "honest": "Le modèle déployé obtient {dep} sur cet échantillon mais a vu ces lignes lors de son réentraînement final ; la copie réentraînée sur l'échantillon d'apprentissage avec les mêmes réglages obtient {hon}, l'estimation honnête."
+    },
+    "data": {
+      "title": "Évaluation détaillée",
+      "sub": "Choisissez les données étiquetées à évaluer."
+    },
+    "adv": {
+      "title": "Conseiller de seuil",
+      "sub": "Choisissez le seuil qui minimise le coût total, selon le coût d'une fausse alerte et d'un partant manqué.",
+      "cost_fp": "Coût d'une fausse alerte (FCFA)",
+      "cost_fp_help": "Une offre donnée à un client qui serait resté de toute façon. Par défaut, le coût de l'offre du Planificateur de rétention.",
+      "cost_fn": "Coût d'un partant manqué (FCFA)",
+      "cost_fn_help": "Revenu perdu quand un partant n'est pas contacté. Par défaut : 3 mois du revenu médian pondéré par les clients de segment_profiles.csv ({typical} FCFA par mois).",
+      "tag": "Proposé pour discussion, non validé",
+      "result": "Le coût total le plus bas est atteint à t = {t} : {flagged} clients signalés, coût total {cost}. Ne contacter personne coûterait {nobody} en partants manqués : ce seuil économise donc {saving} sur ces données.",
+      "total": "Coût total",
+      "best": "Coût minimal",
+      "chart": "Coût total selon le seuil",
+      "so_what": "Un partant manqué coûte {ratio}× une fausse alerte : le seuil le moins coûteux est {t}. Plus un partant manqué coûte cher par rapport à une offre, plus le seuil doit être bas.",
+      "caption": "Les coûts sont additionnés sur les {n} clients de ces données d'évaluation. Le seuil est une proposition à discuter ; aucun seuil de risque n'a été validé."
+    },
+    "fair": {
+      "no_groups": "Ces données n'ont pas de colonne REGION ou TENURE : impossible de détailler la performance par groupe.",
+      "intro": "Qualité du modèle par groupe. Les groupes dont l'AUC est inférieure de plus de 0,05 à l'AUC globale sont signalés en rouge. Le rappel utilise le seuil choisi plus haut (t = {t}). Les groupes de moins de 30 clients ne sont pas évalués.",
+      "by": "Par {name}",
+      "flagged": "Signalé(s) : {groups} classent les partants nettement moins bien que l'ensemble (AUC {overall}). Les scores de ces groupes méritent un examen humain renforcé.",
+      "ok": "Aucun groupe n'est inférieur de plus de 0,05 à l'AUC globale ({overall}) : la qualité du classement est homogène entre groupes.",
+      "mean_pred": "Probabilité moyenne",
+      "overall": "Global {auc}",
+      "so_what": "Le groupe le plus faible est {worst} avec une AUC de {auc} contre {overall} au global ; la ligne rouge marque la tolérance de 0,05.",
+      "caption": "L'équité est ici une qualité de classement et un rappel comparables entre groupes. Des écarts de probabilité moyenne peuvent être légitimes (taux de churn différents) et sont affichés à côté du taux de churn observé."
     }
   },
   "copilot": {

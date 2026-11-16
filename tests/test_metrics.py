@@ -87,3 +87,16 @@ def test_calibration_and_brier():
     assert cal["observed"].tolist() == pytest.approx([0.0, 1.0])
     # Brier: (0.01 + 0.04 + 0.09 + 0.01) / 4 = 0.0375
     assert metrics.brier([0, 0, 1, 1], [0.1, 0.2, 0.7, 0.9]) == pytest.approx(0.0375)
+
+
+def test_group_metrics_flags_weak_groups():
+    # Group A is perfectly ranked (AUC 1), group B is inverted (AUC 0): B must be flagged.
+    y = [0, 0, 1, 1] * 10 + [0, 0, 1, 1] * 10
+    p = [0.1, 0.2, 0.8, 0.9] * 10 + [0.8, 0.9, 0.1, 0.2] * 10
+    g = ["A"] * 40 + ["B"] * 40
+    out = metrics.group_metrics(y, p, g, threshold=0.5, min_size=10).set_index("group")
+    assert out.loc["A", "auc"] == pytest.approx(1.0) and not out.loc["A", "flagged"]
+    assert out.loc["B", "auc"] == pytest.approx(0.0) and out.loc["B", "flagged"]
+    assert out.loc["A", "recall"] == pytest.approx(1.0) and out.loc["B", "recall"] == pytest.approx(0.0)
+    small = metrics.group_metrics([0, 1], [0.2, 0.8], ["C", "C"], 0.5, min_size=30)
+    assert small.loc[0, "too_small"] and not small.loc[0, "flagged"]

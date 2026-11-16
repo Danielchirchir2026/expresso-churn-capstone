@@ -1106,7 +1106,8 @@
     "tab": {
       "curves": "Curves",
       "threshold": "Threshold",
-      "gains": "Gains & lift"
+      "gains": "Gains & lift",
+      "fairness": "Fairness"
     },
     "roc": {
       "title": "ROC curve",
@@ -1143,7 +1144,8 @@
       "words_tag": "In business words",
       "words": "Of every 100 customers we call, {p} would actually have churned. We reach {r} of every 100 churners. {fp} calls would go to customers who were staying anyway, and {fn} churners would be missed.",
       "curve_title": "Precision, recall and F1 by threshold",
-      "curve_so_what": "F1 peaks at {f1} around t = {t}. Lower thresholds catch more churners at the cost of more wasted calls."
+      "curve_so_what": "F1 peaks at {f1} around t = {t}. Lower thresholds catch more churners at the cost of more wasted calls.",
+      "flagged_share": "{share} of customers"
     },
     "cm": {
       "title": "Confusion matrix at t = {t}",
@@ -1166,6 +1168,50 @@
       "cum": "Cumulative share captured",
       "lift": "Lift",
       "cum_lift": "Cumulative lift"
+    },
+    "cmp": {
+      "title": "Model comparison",
+      "sub": "The deployed LightGBM against simple baselines on the same validation split.",
+      "missing": "The leaderboard (Dummy, Logistic Regression, LightGBM) is computed once from Train.csv by the export script:",
+      "col_model": "Model",
+      "col_logloss": "Log loss",
+      "col_time": "Training time",
+      "col_note": "Notes",
+      "so_what": "LightGBM reaches ROC-AUC {auc} against {lr} for Logistic Regression (+{gain}) and PR-AUC {ap} against {lrap}: it ranks churners better, which is what a call list needs.",
+      "so_what_nobase": "LightGBM is compared with the baselines exported in model_comparison.csv.",
+      "why_tag": "Why LightGBM",
+      "why": "Gradient-boosted trees handle the heavy missingness, skewed usage values and interactions in this data without manual feature crossing, train fast on two million rows, and expose exact per-customer contributions for reason codes.",
+      "honest": "The deployed model scores {dep} on this split but saw these rows during its final refit; the holdout refit with the same settings scores {hon}, the honest estimate."
+    },
+    "data": {
+      "title": "Detailed evaluation",
+      "sub": "Choose labelled data to evaluate on."
+    },
+    "adv": {
+      "title": "Threshold advisor",
+      "sub": "Pick the threshold that minimises total cost, given what a false alarm and a missed churner cost you.",
+      "cost_fp": "Cost of a false alarm (FCFA)",
+      "cost_fp_help": "An offer given to a customer who would have stayed anyway. Defaults to the Retention Planner's offer cost.",
+      "cost_fn": "Cost of a missed churner (FCFA)",
+      "cost_fn_help": "Revenue lost when a churner is not contacted. Default: 3 months of the customer-weighted median revenue in segment_profiles.csv ({typical} FCFA per month).",
+      "tag": "Recommended for discussion, not approved",
+      "result": "The lowest total cost comes at t = {t}: {flagged} customers flagged, total cost {cost}. Contacting nobody would cost {nobody} in missed churners, so this threshold saves {saving} on this data.",
+      "total": "Total cost",
+      "best": "Lowest cost",
+      "chart": "Total cost by threshold",
+      "so_what": "A missed churner costs {ratio}× a false alarm, so the cheapest threshold is {t}: the more a missed churner costs relative to an offer, the lower the threshold should go.",
+      "caption": "Costs are summed over the {n} customers in this evaluation data. The threshold is a proposal for discussion; no risk threshold has been approved."
+    },
+    "fair": {
+      "no_groups": "This data has no REGION or TENURE column, so performance cannot be broken down by group.",
+      "intro": "Model quality by group. Groups whose AUC is more than 0.05 below the overall AUC are flagged in red. Recall uses the threshold chosen above (t = {t}). Groups under 30 customers are not judged.",
+      "by": "By {name}",
+      "flagged": "Flagged: {groups} rank churners noticeably worse than overall (AUC {overall}). Scores for these groups deserve extra human review.",
+      "ok": "No group falls more than 0.05 below the overall AUC ({overall}): ranking quality is consistent across groups.",
+      "mean_pred": "Mean probability",
+      "overall": "Overall {auc}",
+      "so_what": "The weakest group is {worst} with AUC {auc} against {overall} overall; the red line marks the 0.05 tolerance.",
+      "caption": "Fairness here means comparable ranking quality and recall across groups. Differences in average probability can be legitimate (different churn rates) and are shown next to the observed churn rate."
     }
   },
   "copilot": {
