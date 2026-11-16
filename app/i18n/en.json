@@ -992,5 +992,178 @@
       "a4": "A saved customer is worth monthly revenue × the value horizon; no discounting or margin is applied.",
       "a5": "Results are decision support: validate the save rate with a controlled test (see Experiment Designer)."
     }
+  },
+  "model": {
+    "eyebrow": "Trust · the model",
+    "title": "Model & Explainability",
+    "sub": "What the deployed model is, what it is for, what drives its predictions, and where its limits are.",
+    "card": {
+      "title": "Model card",
+      "sub": "Read from model_metadata.json and the model bundle itself.",
+      "type": "Model",
+      "seed": "validation split seed {seed}",
+      "features": "Engineered features",
+      "from_raw": "built from {n} raw columns",
+      "trees": "Trees in the deployed model",
+      "best_iter": "best validation iteration: {n}",
+      "rows": "Training rows",
+      "thresholds": "Risk thresholds approved?",
+      "yes": "Yes",
+      "no": "No",
+      "probabilities_only": "probabilities only",
+      "intended_title": "Intended use",
+      "intended_1": "Rank Expresso Senegal customers by their likelihood of churning, to prioritise retention contact.",
+      "intended_2": "Explain individual scores to retention staff with reason codes.",
+      "intended_3": "Support, not replace, management decisions on campaigns and budgets.",
+      "not_for_title": "Not intended for",
+      "not_for_1": "Automatic decisions about individual customers (pricing, disconnection, credit) without human review.",
+      "not_for_2": "Customers outside the Expresso Senegal population and 90-day window the model was trained on.",
+      "param": "Setting",
+      "value": "Value",
+      "created": "Bundle created"
+    },
+    "limits": {
+      "title": "Limitations",
+      "sub": "Known weaknesses, stated plainly.",
+      "duplicates": "Duplicated indicator features: {n} pairs encode the same 'value is empty' information twice (e.g. {example}). The model is unaffected in accuracy, but importance is split across each pair. The model was not changed.",
+      "refit": "The deployed model has {trees} trees while the best validation iteration was {best}, and its training-row count ({rows}) equals the full dataset. This suggests a final refit on all rows, including the seed-42 validation split. Metrics computed by re-scoring that split with the deployed model would be optimistic; the export script can refit a holdout copy for honest evaluation.",
+      "region_missing": "'Region not recorded' is the single strongest signal. It reflects data completeness (inactive lines often lack a region), not geography, so treat it as a proxy for inactivity.",
+      "snapshot": "The data is a 90-day snapshot. Behaviour, tariffs and the market change; monitor drift and retrain periodically.",
+      "thresholds": "No business-approved risk thresholds exist, so the app shows probabilities. Any Low / Medium / High banding is exploratory."
+    },
+    "imp": {
+      "title": "What drives the predictions",
+      "sub": "Global importance from the LightGBM booster.",
+      "kind": "Importance type",
+      "kind_gain": "Gain",
+      "kind_split": "Split count",
+      "kind_help": "Gain: how much a feature improved the model's fit in total. Split count: how often it was used to split.",
+      "group": "Group by raw column",
+      "group_help": "On: LOG1P_MONTANT, MONTANT and the MONTANT missing flags all count as 'Recharge amount'.",
+      "top": "Show top",
+      "axis_gain": "Share of total gain",
+      "axis_split": "Share of all splits",
+      "col_feature": "Feature",
+      "col_how": "How it is built",
+      "col_split": "Splits",
+      "so_what_gain": "{a} and {b} account for {share} of the model's total gain.",
+      "so_what_split": "{a} and {b} are used in {share} of all tree splits: the model checks them most often.",
+      "gain_vs_split": "Gain and split count disagree: {gain} brings the most gain from a few decisive splits, while {split} is used most often for fine-grained distinctions.",
+      "all_features": "All 69 model features"
+    },
+    "reasons": {
+      "title": "How reason codes work",
+      "sub": "No extra library: the explanations come from the model itself.",
+      "step_1": "LightGBM computes each feature's exact contribution to one customer's score (TreeSHAP, via pred_contrib). Contributions plus a baseline add up to the model's log-odds score exactly.",
+      "step_2": "Contributions of engineered features are added back to their raw column, so 'Recharge amount' combines MONTANT, its log and its missing flags.",
+      "step_3": "The largest positive contributions become the customer's reason codes; the next-best-action rules read them to suggest an offer.",
+      "try": "See it on a customer (Customer Check)",
+      "eval": "See how well the model performs (Model Evaluation)"
+    }
+  },
+  "eval": {
+    "eyebrow": "Trust · evidence",
+    "title": "Model Evaluation",
+    "sub": "How well the model separates churners from stayers on labelled data: ranking quality, calibration, the trade-offs at any threshold, and gains.",
+    "source": {
+      "label": "Labelled data",
+      "validation": "Validation predictions",
+      "upload": "Upload a labelled file",
+      "batch": "Current batch (has CHURN)",
+      "no_artifact": "Validation predictions (y_true, y_prob) have not been exported yet. You can still upload any file with a CHURN column."
+    },
+    "upload": {
+      "label": "Labelled file (CSV or Parquet)",
+      "help": "Needs a CHURN column (0/1) plus either churn_probability, or the raw Expresso columns (the app will score them).",
+      "hint": "Upload a file with a CHURN column to evaluate the model on it."
+    },
+    "err": {
+      "no_label": "The file has no {col} column, so there is nothing to compare predictions against.",
+      "bad_labels": "{n} label value(s) are not 0 or 1.",
+      "no_prob_or_raw": "The file has neither a churn_probability column nor the raw columns needed to score it (missing: {cols}).",
+      "one_class": "All labels are the same, so ROC and precision-recall cannot be computed."
+    },
+    "summary": {
+      "title": "Results on {name}",
+      "sub_validation": "Held-out validation split exported from training (seed 42).",
+      "sub_upload": "Your uploaded labelled file.",
+      "sub_batch": "The batch in this session.",
+      "optimistic": "Re-scored AUC ({auc}) is above the AUC recorded at training ({meta}): the deployed model appears to have seen these rows. Treat these curves as optimistic.",
+      "holdout": "These predictions come from a holdout refit with the deployed model's settings (not the deployed model itself), so they are an honest estimate."
+    },
+    "kpi": {
+      "rows": "Customers",
+      "rate": "Observed churn rate",
+      "meta_auc": "at training: {auc}",
+      "ap": "PR-AUC (average precision)",
+      "ap_help": "Area under the precision-recall curve. A random model scores the churn rate.",
+      "ap_base": "random: {base}",
+      "brier": "Brier score",
+      "brier_help": "Mean squared error of the probabilities. Lower is better; 0 is perfect."
+    },
+    "tab": {
+      "curves": "Curves",
+      "threshold": "Threshold",
+      "gains": "Gains & lift"
+    },
+    "roc": {
+      "title": "ROC curve",
+      "x": "False positive rate",
+      "y": "True positive rate (recall)",
+      "so_what": "AUC {auc}: in {pct} of random churner/stayer pairs the model gives the churner the higher score."
+    },
+    "pr": {
+      "title": "Precision-recall curve",
+      "x": "Recall (churners caught)",
+      "y": "Precision (flagged who churn)",
+      "hover": "Recall %{x:.3f} · Precision %{y:.3f}<br>t = %{customdata:.3f}",
+      "baseline": "Random: {rate}",
+      "so_what": "Even when catching 80% of churners, about {p} of flagged customers are real churners, against {base} for random picks."
+    },
+    "cal": {
+      "title": "Calibration",
+      "x": "Mean predicted probability",
+      "y": "Observed churn rate",
+      "perfect": "Perfect calibration",
+      "model": "Model (10 equal-size bins)",
+      "hover": "Predicted %{x:.3f} · observed %{y:.3f}<br>n = %{customdata:,}",
+      "so_what": "The largest gap between predicted and observed churn in any bin is {gap} (Brier {brier}): probabilities can be read as rough churn rates."
+    },
+    "thr": {
+      "label": "Decision threshold",
+      "help": "Customers with a probability at or above this value are flagged as likely churners.",
+      "f1_best": "Threshold with the best F1: {t}",
+      "precision": "Precision",
+      "precision_help": "Of the customers flagged, the share who actually churned.",
+      "recall": "Recall",
+      "recall_help": "Of the customers who churned, the share the model flagged.",
+      "flagged": "Customers flagged",
+      "words_tag": "In business words",
+      "words": "Of every 100 customers we call, {p} would actually have churned. We reach {r} of every 100 churners. {fp} calls would go to customers who were staying anyway, and {fn} churners would be missed.",
+      "curve_title": "Precision, recall and F1 by threshold",
+      "curve_so_what": "F1 peaks at {f1} around t = {t}. Lower thresholds catch more churners at the cost of more wasted calls."
+    },
+    "cm": {
+      "title": "Confusion matrix at t = {t}",
+      "pred_churn": "Flagged",
+      "pred_stay": "Not flagged",
+      "actual_churn": "Churned",
+      "actual_stay": "Stayed",
+      "tp": "Caught<br>{n}",
+      "fn": "Missed<br>{n}",
+      "fp": "False alarms<br>{n}",
+      "tn": "Correctly left<br>{n}",
+      "so_what": "{flagged} customers are flagged: {tp} real churners caught and {fp} false alarms."
+    },
+    "gains": {
+      "title": "Cumulative gains (actual churners)",
+      "y": "Churners captured",
+      "so_what": "Targeting the riskiest 20% of customers captures {cap} of all churners: {lift}× better than random targeting.",
+      "churners": "Churners",
+      "rate": "Churn rate",
+      "cum": "Cumulative share captured",
+      "lift": "Lift",
+      "cum_lift": "Cumulative lift"
+    }
   }
 }

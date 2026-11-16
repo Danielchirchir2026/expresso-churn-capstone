@@ -110,3 +110,80 @@ def downsample(df: pd.DataFrame, max_points: int = 600) -> pd.DataFrame:
         return df
     idx = np.unique(np.linspace(0, len(df) - 1, max_points).round().astype(int))
     return df.iloc[idx]
+
+
+# ---------------------------------------------------------------------------
+# Classification at a threshold, threshold sweeps, calibration
+# ---------------------------------------------------------------------------
+def confusion_at(y_true, prob, threshold: float) -> dict:
+    """Counts and rates when customers with prob >= threshold are flagged."""
+    y = np.asarray(y_true).astype(bool)
+    flag = np.asarray(prob, dtype="float64") >= threshold
+    tp = int((flag & y).sum())
+    fp = int((flag & ~y).sum())
+    fn = int((~flag & y).sum())
+    tn = int((~flag & ~y).sum())
+    precision = tp / (tp + fp) if tp + fp else float("nan")
+    recall = tp / (tp + fn) if tp + fn else float("nan")
+    f1 = 2 * precision * recall / (precision + recall) if tp and (precision + recall) else 0.0
+    return {"tp": tp, "fp": fp, "fn": fn, "tn": tn, "precision": precision, "recall": recall, "f1": f1,
+            "specificity": tn / (tn + fp) if tn + fp else float("nan"),
+            "accuracy": (tp + tn) / max(len(y), 1), "flagged": tp + fp}
+
+
+def threshold_sweep(y_true, prob, grid=None) -> pd.DataFrame:
+    """tp/fp/fn/tn, precision, recall and F1 for every threshold in ``grid``.
+
+    Uses one sort and cumulative sums, so it is fast on hundreds of
+    thousands of rows.
+    """
+    y = np.asarray(y_true).astype("int64")
+    p = np.asarray(prob, dtype="float64")
+    grid = np.linspace(0, 1, 201) if grid is None else np.asarray(grid, dtype="float64")
+    order = np.argsort(p)
+    p_sorted, y_sorted = p[order], y[order]
+    pos_total, n = int(y.sum()), len(y)
+    # number of rows with p < t, and positives among them
+    idx = np.searchsorted(p_sorted, grid, side="left")
+    pos_below = np.concatenate([[0], np.cumsum(y_sorted)])[idx]
+    flagged = n - idx
+    tp = pos_total - pos_below
+    fp = flagged - tp
+    fn = pos_total - tp
+    tn = n - flagged - fn
+    with np.errstate(divide="ignore", invalid="ignore"):
+        precision = np.where(flagged > 0, tp / np.maximum(flagged, 1), np.nan)
+        recall = tp / max(pos_total, 1)
+        f1 = np.where((precision + recall) > 0, 2 * precision * recall / (precision + recall), 0.0)
+    return pd.DataFrame({"threshold": grid, "tp": tp, "fp": fp, "fn": fn, "tn": tn, "flagged": flagged,
+                         "precision": precision, "recall": recall, "f1": np.nan_to_num(f1)})
+
+
+def threshold_cost(y_true, prob, cost_fp: float, cost_fn: float, grid=None) -> pd.DataFrame:
+    """Total cost = false alarms x cost_fp + missed churners x cost_fn, per threshold."""
+    sweep = threshold_sweep(y_true, prob, grid)
+    sweep["cost"] = sweep["fp"] * float(cost_fp) + sweep["fn"] * float(cost_fn)
+    return sweep
+
+
+def best_cost_threshold(cost_table: pd.DataFrame) -> float:
+    """Threshold with the lowest total cost (lowest threshold wins ties)."""
+    return float(cost_table.loc[cost_table["cost"].idxmin(), "threshold"])
+
+
+def calibration_table(y_true, prob, n_bins: int = 10) -> pd.DataFrame:
+    """Observed churn rate vs mean predicted probability in equal-count bins."""
+    y = np.asarray(y_true, dtype="float64")
+    p = np.asarray(prob, dtype="float64")
+    order = np.argsort(p, kind="mergesort")
+    rows = []
+    for part in np.array_split(order, n_bins):
+        if len(part):
+            rows.append({"mean_pred": float(p[part].mean()), "observed": float(y[part].mean()), "n": int(len(part))})
+    return pd.DataFrame(rows)
+
+
+def brier(y_true, prob) -> float:
+    y = np.asarray(y_true, dtype="float64")
+    p = np.asarray(prob, dtype="float64")
+    return float(np.mean((p - y) ** 2))

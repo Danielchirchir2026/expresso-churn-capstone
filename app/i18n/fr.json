@@ -992,5 +992,178 @@
       "a4": "Un client conservé vaut revenu mensuel × horizon de valeur ; aucune actualisation ni marge n'est appliquée.",
       "a5": "Les résultats sont une aide à la décision : validez le taux de rétention par un test contrôlé (voir Conception d'expériences)."
     }
+  },
+  "model": {
+    "eyebrow": "Confiance · le modèle",
+    "title": "Modèle et explicabilité",
+    "sub": "Ce qu'est le modèle déployé, à quoi il sert, ce qui pilote ses prédictions et où sont ses limites.",
+    "card": {
+      "title": "Fiche du modèle",
+      "sub": "Lue dans model_metadata.json et dans le bundle du modèle.",
+      "type": "Modèle",
+      "seed": "graine de validation {seed}",
+      "features": "Variables construites",
+      "from_raw": "issues de {n} colonnes brutes",
+      "trees": "Arbres du modèle déployé",
+      "best_iter": "meilleure itération en validation : {n}",
+      "rows": "Lignes d'entraînement",
+      "thresholds": "Seuils de risque validés ?",
+      "yes": "Oui",
+      "no": "Non",
+      "probabilities_only": "probabilités uniquement",
+      "intended_title": "Usage prévu",
+      "intended_1": "Classer les clients d'Expresso Sénégal selon leur probabilité de départ, pour prioriser les contacts de rétention.",
+      "intended_2": "Expliquer les scores individuels aux équipes de rétention avec des codes motifs.",
+      "intended_3": "Appuyer, et non remplacer, les décisions de la direction sur les campagnes et budgets.",
+      "not_for_title": "Usages non prévus",
+      "not_for_1": "Décisions automatiques sur un client (tarif, coupure, crédit) sans examen humain.",
+      "not_for_2": "Clients hors de la population Expresso Sénégal et de la fenêtre de 90 jours ayant servi à l'entraînement.",
+      "param": "Paramètre",
+      "value": "Valeur",
+      "created": "Bundle créé le"
+    },
+    "limits": {
+      "title": "Limites",
+      "sub": "Les faiblesses connues, dites clairement.",
+      "duplicates": "Variables indicatrices en double : {n} paires encodent deux fois la même information « valeur vide » (par ex. {example}). La précision n'est pas affectée, mais l'importance est partagée entre chaque paire. Le modèle n'a pas été modifié.",
+      "refit": "Le modèle déployé compte {trees} arbres alors que la meilleure itération de validation était {best}, et son nombre de lignes d'entraînement ({rows}) correspond au jeu complet. Cela suggère un réentraînement final sur toutes les lignes, y compris la validation (graine 42). Des métriques calculées en rescorant cette validation avec le modèle déployé seraient optimistes ; le script d'export peut réentraîner une copie sur l'échantillon d'apprentissage pour une évaluation honnête.",
+      "region_missing": "« Région non renseignée » est le signal le plus fort. Il traduit la complétude des données (les lignes inactives n'ont souvent pas de région), pas la géographie : c'est un indicateur d'inactivité.",
+      "snapshot": "Les données sont un instantané de 90 jours. Les comportements, tarifs et le marché évoluent : surveillez la dérive et réentraînez régulièrement.",
+      "thresholds": "Aucun seuil de risque n'a été validé par l'entreprise ; l'application affiche donc des probabilités. Toute classe Faible / Moyen / Élevé est exploratoire."
+    },
+    "imp": {
+      "title": "Ce qui pilote les prédictions",
+      "sub": "Importance globale issue du booster LightGBM.",
+      "kind": "Type d'importance",
+      "kind_gain": "Gain",
+      "kind_split": "Nombre de divisions",
+      "kind_help": "Gain : l'amélioration totale apportée par une variable. Divisions : la fréquence d'utilisation pour diviser les arbres.",
+      "group": "Regrouper par colonne brute",
+      "group_help": "Activé : LOG1P_MONTANT, MONTANT et les indicateurs de valeur manquante de MONTANT comptent tous comme « Montant rechargé ».",
+      "top": "Afficher les premiers",
+      "axis_gain": "Part du gain total",
+      "axis_split": "Part des divisions",
+      "col_feature": "Variable",
+      "col_how": "Construction",
+      "col_split": "Divisions",
+      "so_what_gain": "{a} et {b} représentent {share} du gain total du modèle.",
+      "so_what_split": "{a} et {b} interviennent dans {share} des divisions des arbres : le modèle les consulte le plus souvent.",
+      "gain_vs_split": "Gain et nombre de divisions divergent : {gain} apporte le plus de gain par quelques divisions décisives, tandis que {split} est utilisé le plus souvent pour des distinctions fines.",
+      "all_features": "Les 69 variables du modèle"
+    },
+    "reasons": {
+      "title": "Comment fonctionnent les codes motifs",
+      "sub": "Aucune bibliothèque supplémentaire : les explications viennent du modèle lui-même.",
+      "step_1": "LightGBM calcule la contribution exacte de chaque variable au score d'un client (TreeSHAP, via pred_contrib). Contributions et référence s'additionnent exactement au score log-odds du modèle.",
+      "step_2": "Les contributions des variables construites sont rattachées à leur colonne brute : « Montant rechargé » combine MONTANT, son logarithme et ses indicateurs de valeur manquante.",
+      "step_3": "Les plus fortes contributions positives deviennent les codes motifs du client ; les règles de prochaine action s'en servent pour suggérer une offre.",
+      "try": "Voir sur un client (Diagnostic client)",
+      "eval": "Voir la performance du modèle (Évaluation du modèle)"
+    }
+  },
+  "eval": {
+    "eyebrow": "Confiance · preuves",
+    "title": "Évaluation du modèle",
+    "sub": "Dans quelle mesure le modèle distingue partants et fidèles sur des données étiquetées : qualité du classement, calibration, arbitrages à chaque seuil et gains.",
+    "source": {
+      "label": "Données étiquetées",
+      "validation": "Prédictions de validation",
+      "upload": "Charger un fichier étiqueté",
+      "batch": "Lot actuel (avec CHURN)",
+      "no_artifact": "Les prédictions de validation (y_true, y_prob) n'ont pas encore été exportées. Vous pouvez néanmoins charger tout fichier contenant une colonne CHURN."
+    },
+    "upload": {
+      "label": "Fichier étiqueté (CSV ou Parquet)",
+      "help": "Nécessite une colonne CHURN (0/1) et soit churn_probability, soit les colonnes brutes Expresso (l'application les scorera).",
+      "hint": "Chargez un fichier avec une colonne CHURN pour y évaluer le modèle."
+    },
+    "err": {
+      "no_label": "Le fichier n'a pas de colonne {col} : il n'y a rien à quoi comparer les prédictions.",
+      "bad_labels": "{n} valeur(s) d'étiquette ne valent ni 0 ni 1.",
+      "no_prob_or_raw": "Le fichier n'a ni colonne churn_probability ni les colonnes brutes nécessaires au scoring (manquantes : {cols}).",
+      "one_class": "Toutes les étiquettes sont identiques : impossible de calculer la courbe ROC ou précision-rappel."
+    },
+    "summary": {
+      "title": "Résultats sur {name}",
+      "sub_validation": "Échantillon de validation exporté de l'entraînement (graine 42).",
+      "sub_upload": "Votre fichier étiqueté.",
+      "sub_batch": "Le lot de cette session.",
+      "optimistic": "L'AUC recalculée ({auc}) dépasse celle enregistrée à l'entraînement ({meta}) : le modèle déployé semble avoir vu ces lignes. Considérez ces courbes comme optimistes.",
+      "holdout": "Ces prédictions proviennent d'un réentraînement sur l'échantillon d'apprentissage avec les réglages du modèle déployé (pas du modèle déployé lui-même) : c'est une estimation honnête."
+    },
+    "kpi": {
+      "rows": "Clients",
+      "rate": "Taux de churn observé",
+      "meta_auc": "à l'entraînement : {auc}",
+      "ap": "PR-AUC (précision moyenne)",
+      "ap_help": "Aire sous la courbe précision-rappel. Un modèle aléatoire obtient le taux de churn.",
+      "ap_base": "aléatoire : {base}",
+      "brier": "Score de Brier",
+      "brier_help": "Erreur quadratique moyenne des probabilités. Plus bas est mieux ; 0 est parfait."
+    },
+    "tab": {
+      "curves": "Courbes",
+      "threshold": "Seuil",
+      "gains": "Gains et lift"
+    },
+    "roc": {
+      "title": "Courbe ROC",
+      "x": "Taux de faux positifs",
+      "y": "Taux de vrais positifs (rappel)",
+      "so_what": "AUC {auc} : dans {pct} des paires partant/fidèle tirées au hasard, le modèle attribue le score le plus élevé au partant."
+    },
+    "pr": {
+      "title": "Courbe précision-rappel",
+      "x": "Rappel (partants détectés)",
+      "y": "Précision (signalés qui partent)",
+      "hover": "Rappel %{x:.3f} · Précision %{y:.3f}<br>t = %{customdata:.3f}",
+      "baseline": "Aléatoire : {rate}",
+      "so_what": "Même en détectant 80 % des partants, environ {p} des clients signalés partent réellement, contre {base} pour un choix aléatoire."
+    },
+    "cal": {
+      "title": "Calibration",
+      "x": "Probabilité prédite moyenne",
+      "y": "Taux de churn observé",
+      "perfect": "Calibration parfaite",
+      "model": "Modèle (10 tranches de même taille)",
+      "hover": "Prédit %{x:.3f} · observé %{y:.3f}<br>n = %{customdata:,}",
+      "so_what": "Le plus grand écart entre churn prédit et observé dans une tranche est de {gap} (Brier {brier}) : les probabilités peuvent se lire comme des taux de churn approximatifs."
+    },
+    "thr": {
+      "label": "Seuil de décision",
+      "help": "Les clients dont la probabilité est supérieure ou égale à ce seuil sont signalés comme partants probables.",
+      "f1_best": "Seuil au meilleur F1 : {t}",
+      "precision": "Précision",
+      "precision_help": "Parmi les clients signalés, la part qui est réellement partie.",
+      "recall": "Rappel",
+      "recall_help": "Parmi les clients partis, la part que le modèle a signalée.",
+      "flagged": "Clients signalés",
+      "words_tag": "En langage métier",
+      "words": "Sur 100 clients appelés, {p} seraient réellement partis. Nous atteignons {r} partants sur 100. {fp} appels iraient à des clients qui restaient de toute façon, et {fn} partants seraient manqués.",
+      "curve_title": "Précision, rappel et F1 selon le seuil",
+      "curve_so_what": "Le F1 culmine à {f1} vers t = {t}. Un seuil plus bas détecte plus de partants au prix de plus d'appels inutiles."
+    },
+    "cm": {
+      "title": "Matrice de confusion à t = {t}",
+      "pred_churn": "Signalé",
+      "pred_stay": "Non signalé",
+      "actual_churn": "Parti",
+      "actual_stay": "Resté",
+      "tp": "Détectés<br>{n}",
+      "fn": "Manqués<br>{n}",
+      "fp": "Fausses alertes<br>{n}",
+      "tn": "Correctement ignorés<br>{n}",
+      "so_what": "{flagged} clients sont signalés : {tp} vrais partants détectés et {fp} fausses alertes."
+    },
+    "gains": {
+      "title": "Gains cumulés (partants réels)",
+      "y": "Partants captés",
+      "so_what": "Cibler les 20 % de clients les plus risqués capte {cap} de tous les partants : {lift}× mieux qu'un ciblage aléatoire.",
+      "churners": "Partants",
+      "rate": "Taux de churn",
+      "cum": "Part cumulée captée",
+      "lift": "Lift",
+      "cum_lift": "Lift cumulé"
+    }
   }
 }

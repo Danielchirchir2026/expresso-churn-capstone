@@ -58,3 +58,32 @@ def test_retention_plan_hand_computed():
 def test_best_k_is_zero_when_nothing_pays():
     plan, _ = metrics.retention_plan([0.1, 0.1], [0, 0], offer_cost=10, save_rate=0.5)
     assert metrics.best_k(plan, capacity=2) == 0
+
+
+def test_threshold_sweep_and_confusion_hand_computed():
+    # threshold 0.55 flags 0.9, 0.8, 0.7, 0.6 -> labels 1, 1, 0, 1
+    cm = metrics.confusion_at(LABELS, SCORES, 0.55)
+    assert (cm["tp"], cm["fp"], cm["fn"], cm["tn"]) == (3, 1, 1, 5)
+    assert cm["precision"] == pytest.approx(0.75) and cm["recall"] == pytest.approx(0.75)
+    sweep = metrics.threshold_sweep(LABELS, SCORES, [0.0, 0.55, 1.0])
+    assert sweep[["tp", "fp", "fn", "tn"]].values.tolist() == [[4, 6, 0, 0], [3, 1, 1, 5], [0, 0, 4, 6]]
+
+
+def test_threshold_cost_hand_computed():
+    # cost = fp * 10 + fn * 100
+    # t=0.00: fp 6, fn 0 -> 60 ; t=0.55: fp 1, fn 1 -> 110 ; t=0.75: fp 0, fn 2 -> 200 ; t=1: fn 4 -> 400
+    table = metrics.threshold_cost(LABELS, SCORES, cost_fp=10, cost_fn=100, grid=[0.0, 0.55, 0.75, 1.0])
+    assert table["cost"].tolist() == pytest.approx([60, 110, 200, 400])
+    assert metrics.best_cost_threshold(table) == 0.0
+    # Make false alarms expensive: cost = fp * 100 + fn * 10 -> 600, 110, 20, 40 -> best t = 0.75
+    table = metrics.threshold_cost(LABELS, SCORES, cost_fp=100, cost_fn=10, grid=[0.0, 0.55, 0.75, 1.0])
+    assert table["cost"].tolist() == pytest.approx([600, 110, 20, 40])
+    assert metrics.best_cost_threshold(table) == 0.75
+
+
+def test_calibration_and_brier():
+    cal = metrics.calibration_table([0, 0, 1, 1], [0.1, 0.2, 0.7, 0.9], n_bins=2)
+    assert cal["mean_pred"].tolist() == pytest.approx([0.15, 0.8])
+    assert cal["observed"].tolist() == pytest.approx([0.0, 1.0])
+    # Brier: (0.01 + 0.04 + 0.09 + 0.01) / 4 = 0.0375
+    assert metrics.brier([0, 0, 1, 1], [0.1, 0.2, 0.7, 0.9]) == pytest.approx(0.0375)
