@@ -7,6 +7,7 @@ to keep peak memory low on Streamlit Community Cloud.
 
 from __future__ import annotations
 
+import os
 from typing import Callable
 
 import numpy as np
@@ -17,7 +18,10 @@ from app.core.segments import assign_segments
 from app.utils.prediction import prepare_customer_features
 
 DEFAULT_CHUNK = 20_000
+CONTRIB_CHUNK = 2_000
+DEFAULT_REASONS_FOR = 2_000  # reason codes for the riskiest N rows (TreeSHAP is ~6 ms/row)
 TOP_K = 3
+THREADS = os.cpu_count() or 1
 
 
 def required_columns(config: dict) -> list[str]:
@@ -25,7 +29,9 @@ def required_columns(config: dict) -> list[str]:
 
 
 def predict_proba(features: pd.DataFrame, model) -> np.ndarray:
-    return model.predict_proba(features)[:, 1]
+    """Churn probability. Same booster and trees as ``model.predict_proba``
+    (bit-identical output, checked by the parity test), but multi-threaded."""
+    return np.asarray(model.booster_.predict(features, num_threads=THREADS), dtype="float64")
 
 
 def contributions(features: pd.DataFrame, model) -> np.ndarray:
@@ -69,14 +75,26 @@ def bands(prob: np.ndarray | pd.Series, low: float, high: float) -> np.ndarray:
     return np.where(p >= high, "high", np.where(p >= low, "medium", "low"))
 
 
+def _reason_columns(per_group: np.ndarray, groups: list[str], top_k: int) -> dict:
+    order = np.argsort(-per_group, axis=1)[:, :top_k]
+    top_vals = np.take_along_axis(per_group, order, axis=1)
+    cols = {}
+    for k in range(top_k):
+        names = np.array(groups, dtype=object)[order[:, k]]
+        cols[f"reason_{k + 1}"] = np.where(top_vals[:, k] > 0, names, None)
+        cols[f"reason_{k + 1}_logodds"] = np.where(top_vals[:, k] > 0, top_vals[:, k], np.nan).astype("float32")
+    return cols
+
+
 def score_batch(raw_df: pd.DataFrame, bundle: dict, chunk_size: int = DEFAULT_CHUNK, with_reasons: bool = True,
-                with_segments: bool = True, top_k: int = TOP_K,
+                with_segments: bool = True, top_k: int = TOP_K, reasons_for: int | None = None,
                 progress: Callable[[float], None] | None = None) -> pd.DataFrame:
     """Score a raw batch in chunks.
 
-    Returns one row per input row: id, churn_probability, segment and the
-    ``top_k`` source groups that pushed risk up the most (with their
-    log-odds contributions).
+    Pass 1 (fast, every row): probability and segment.
+    Pass 2 (TreeSHAP, slower): the ``top_k`` source groups that pushed risk up
+    the most, for the ``reasons_for`` riskiest rows (``None`` = every row).
+    Other rows get reason codes on demand (Customer 360).
     """
     config = bundle["preprocessing_config"]
     model = bundle["model"]
@@ -90,33 +108,53 @@ def score_batch(raw_df: pd.DataFrame, bundle: dict, chunk_size: int = DEFAULT_CH
         raise ValueError("Customer IDs must be unique within the prediction batch.")
 
     n = len(raw_df)
-    parts = []
-    groups, gm = group_matrix(feat_cols, raw_cols)
+    n_explain = n if (reasons_for is None or not with_reasons) else min(int(reasons_for), n)
+    n_explain = n_explain if with_reasons else 0
+    # Rough cost weights so the progress bar moves evenly across both passes.
+    w1, w2 = n * 1.0, n_explain * 25.0
+    total_w = max(w1 + w2, 1.0)
+
+    probs = np.empty(n, dtype="float64")
+    segs = np.empty(n, dtype="int8") if with_segments else None
     for start in range(0, n, chunk_size):
         chunk = raw_df.iloc[start:start + chunk_size]
         feats = prepare_customer_features(chunk, config)
-        out = pd.DataFrame({id_col: chunk[id_col].to_numpy(), "churn_probability": predict_proba(feats, model)})
+        probs[start:start + len(chunk)] = predict_proba(feats, model)
         if with_segments:
-            out["segment"] = assign_segments(chunk, feats, bundle)
-        if with_reasons:
-            contrib = contributions(feats, model)
-            per_group = contrib[:, :-1] @ gm
-            order = np.argsort(-per_group, axis=1)[:, :top_k]
-            top_vals = np.take_along_axis(per_group, order, axis=1)
-            for k in range(top_k):
-                names = np.array(groups, dtype=object)[order[:, k]]
-                out[f"reason_{k + 1}"] = np.where(top_vals[:, k] > 0, names, None)
-                out[f"reason_{k + 1}_logodds"] = np.where(top_vals[:, k] > 0, top_vals[:, k], np.nan).astype("float32")
-            del contrib, per_group
-        parts.append(out)
+            segs[start:start + len(chunk)] = assign_segments(chunk, feats, bundle)
         del feats
         if progress:
-            progress(min((start + len(chunk)) / max(n, 1), 1.0))
-    result = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame()
-    if len(result):
-        result["churn_probability"] = result["churn_probability"].astype("float64")
-        result["risk_decile"] = risk_deciles(result["churn_probability"])
-    return result
+            progress(min((start + len(chunk)) / total_w, 1.0))
+
+    out = pd.DataFrame({id_col: raw_df[id_col].to_numpy(), "churn_probability": probs})
+    if with_segments:
+        out["segment"] = segs
+    if n:
+        out["risk_decile"] = risk_deciles(probs)
+
+    if n_explain:
+        groups, gm = group_matrix(feat_cols, raw_cols)
+        explain_idx = np.sort(np.argsort(-probs, kind="mergesort")[:n_explain])
+        cols = {f"reason_{k + 1}": np.full(n, None, dtype=object) for k in range(top_k)}
+        cols.update({f"reason_{k + 1}_logodds": np.full(n, np.nan, dtype="float32") for k in range(top_k)})
+        done = 0
+        for start in range(0, n_explain, CONTRIB_CHUNK):
+            idx = explain_idx[start:start + CONTRIB_CHUNK]
+            feats = prepare_customer_features(raw_df.iloc[idx], config)
+            per_group = contributions(feats, model)[:, :-1] @ gm
+            for key, values in _reason_columns(per_group, groups, top_k).items():
+                cols[key][idx] = values
+            done += len(idx)
+            del feats, per_group
+            if progress:
+                progress(min((w1 + done * 25.0) / total_w, 1.0))
+        for key, values in cols.items():
+            out[key] = values
+        out["reasons_computed"] = False
+        out.loc[explain_idx, "reasons_computed"] = True
+    if progress:
+        progress(1.0)
+    return out
 
 
 def score_one(raw_row: dict, bundle: dict) -> dict:

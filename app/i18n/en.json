@@ -744,5 +744,253 @@
       "caveat": "Curves show model sensitivity for this one customer, holding everything else fixed. Real behaviours move together, so treat these as directions, not forecasts."
     },
     "back_to_cc": "Back to Customer Check"
+  },
+  "batchui": {
+    "empty": {
+      "msg": "This page needs a scored batch.",
+      "detail": "Score a customer file on Batch Scoring, or generate a synthetic demo batch here in one click.",
+      "go": "Go to Batch Scoring",
+      "demo": "Generate & score a 5,000-row demo batch"
+    },
+    "c360": {
+      "decile": "Risk decile",
+      "profile": "Customer profile"
+    }
+  },
+  "batch": {
+    "eyebrow": "Predict · many customers",
+    "title": "Batch Scoring",
+    "sub": "Upload a customer file (or generate demo data), check it, and score every customer in chunks. Results stay in your session for the Retention Planner, Revenue at Risk, drift checks and the Copilot.",
+    "step1": {
+      "title": "1 · Get data",
+      "sub": "Upload a CSV, generate synthetic demo data, or download the template."
+    },
+    "tab": {
+      "upload": "Upload CSV",
+      "demo": "Generate demo data",
+      "template": "Download template"
+    },
+    "upload": {
+      "label": "Customer file (CSV)",
+      "help": "One row per customer with user_id plus the 17 raw Expresso columns. Extra columns are ignored.",
+      "unreadable": "This file could not be read as CSV ({err}). Check that it is comma-separated and UTF-8 encoded."
+    },
+    "demo": {
+      "rows": "Rows to generate",
+      "seed": "Random seed",
+      "messy": "Add a few messy rows",
+      "messy_help": "Inserts a duplicate ID, an unknown region, a non-numeric amount and other problems so you can see the validation report at work.",
+      "button": "Generate synthetic demo data",
+      "caption": "Synthetic demo data: values are sampled around the segment medians in segment_profiles.csv (and the real tenure/region mix when eda_breakdowns.parquet exists). They are not real customers."
+    },
+    "template": {
+      "body": "The file needs exactly these columns (any order). Leave a cell empty when the value is not recorded: the model uses missingness as information.",
+      "button": "Download CSV template"
+    },
+    "step2": {
+      "title": "2 · Check the file: {name}",
+      "sub": "Problems are listed in plain language, with the rows affected (row 1 is the header)."
+    },
+    "check": {
+      "rows": "Rows",
+      "cols": "Columns",
+      "blocking": "Blocking issues",
+      "warnings": "Warnings",
+      "must_fix": "must be fixed",
+      "all_good": "No problems found. The file is ready to score.",
+      "rows_list": "Rows: {rows}{more}.",
+      "preview": "Preview the first 20 rows"
+    },
+    "severity": {
+      "block": "Must fix",
+      "warn": "Warning",
+      "info": "Note"
+    },
+    "issue": {
+      "empty": "The file has no rows.",
+      "missing_columns": "Required columns are missing: {cols}. Download the template to see the expected layout.",
+      "extra_columns": "{n} extra column(s) will be ignored: {cols}.",
+      "missing_ids": "{n} row(s) have no user_id.",
+      "duplicate_ids": "{n} row(s) repeat a user_id that appears earlier (e.g. '{example}').",
+      "not_numeric": "{n} value(s) in {col} are not numbers (e.g. '{example}'). They will be treated as not recorded.",
+      "negative": "{n} negative value(s) in {col}. Usage and revenue are normally zero or more.",
+      "regularity_range": "{n} REGULARITY value(s) fall outside 0-90 days.",
+      "regularity_missing": "{n} row(s) have no REGULARITY. The model never saw this in training.",
+      "unknown_region": "{n} row(s) have a region the model does not know ({values}). They are scored as an unseen region.",
+      "unknown_tenure": "{n} row(s) have an unknown tenure band ({values}). Tenure is then treated as unknown.",
+      "unknown_pack": "{n} row(s) use a pack never seen in training ({values}). They are grouped with rare packs.",
+      "mrg_values": "{n} row(s) have an MRG value other than 'NO'. MRG is not used by the model.",
+      "silent_rows": "{n} row(s) ({share}%) have every usage field empty: these look like inactive lines."
+    },
+    "fix": {
+      "drop_missing_ids": "Drop rows without a user_id",
+      "drop_dups": "Keep only the first row for each duplicated user_id"
+    },
+    "step3": {
+      "title": "3 · Score",
+      "sub": "Scored in chunks of 20,000 rows to stay within Streamlit Cloud's memory."
+    },
+    "score": {
+      "button": "Score {n} customers",
+      "blocked": "Fix the blocking issues above (or accept the suggested fixes) before scoring.",
+      "progress": "Scoring customers…",
+      "done": "Scored {n} customers.",
+      "explain": "Reason codes for the riskiest N customers",
+      "explain_help": "Reason codes use the model's TreeSHAP contributions, which are the slow part of scoring. Explain the customers you are likely to contact; any other customer is explained on demand in Customer 360."
+    },
+    "results": {
+      "none": "No batch scored yet. Upload a file or generate demo data above.",
+      "title": "Results: {name}",
+      "sub": "{n} customers scored at {at}. Probabilities are the model output; bands below are optional and exploratory."
+    },
+    "bands": {
+      "title": "Exploratory risk bands",
+      "low": "Medium from",
+      "low_help": "Probabilities at or above this are labelled Medium. Default: the portfolio churn rate.",
+      "high": "High from",
+      "high_help": "Probabilities at or above this are labelled High.",
+      "order": "'High from' should be above 'Medium from'.",
+      "col": "Band (exploratory)",
+      "low_label": "Low",
+      "medium_label": "Medium",
+      "high_label": "High",
+      "medium": "Medium"
+    },
+    "kpi": {
+      "customers": "Customers",
+      "mean_p": "Average probability",
+      "expected": "Expected churners",
+      "expected_help": "Sum of the churn probabilities: the number of churners to expect if the probabilities are well calibrated.",
+      "above_high": "In the High band",
+      "share": "{share} of the batch"
+    },
+    "filters": {
+      "title": "Filter the results",
+      "prob": "Probability range",
+      "region": "Region",
+      "tenure": "Tenure",
+      "segment": "Segment",
+      "all": "All",
+      "showing": "Showing {n} of {total} customers."
+    },
+    "table": {
+      "reasons": "Top reasons (risk up)",
+      "capped": "The table shows the 1,000 riskiest customers in the current filter; downloads include everyone.",
+      "reasons_partial": "Reason codes were computed for the {n} riskiest customers; others are explained on demand in Customer 360."
+    },
+    "charts": {
+      "hist": "Distribution of churn probability",
+      "hist_so_what": "{share} of these customers sit at or above the High threshold ({high}); the median customer scores {median}.",
+      "region": "Average churn probability by region",
+      "region_so_what": "{top} has the highest average risk ({p}) and {low} the lowest ({lp}): regional campaigns should start where the bar is longest.",
+      "mean_p": "Average probability",
+      "tenure": "Average churn probability by tenure",
+      "tenure_so_what": "Risk peaks in the {top} tenure band ({p} on average).",
+      "segment": "Average churn probability by segment",
+      "segment_so_what": "{top} carries the highest average risk ({p}); {big} is the largest group in this batch ({share})."
+    },
+    "c360": {
+      "title": "Customer 360",
+      "sub": "Look up one scored customer: profile, probability, reasons and a suggested next action.",
+      "pick": "Pick one of the 50 riskiest",
+      "search": "…or type a user_id",
+      "placeholder": "e.g. DEMO-000123",
+      "not_found": "No customer with user_id '{id}' in this batch."
+    },
+    "dl": {
+      "title": "Downloads",
+      "sub": "Files are generated when you click.",
+      "csv": "Scored file (CSV)",
+      "xlsx": "Scored file (Excel)",
+      "xlsx_help": "Large batches take a little while to write to Excel.",
+      "k": "Priority call list size",
+      "calls": "Priority call list: top {k} (CSV)",
+      "clear": "Clear this batch from the session"
+    }
+  },
+  "ret": {
+    "eyebrow": "Act · campaign economics",
+    "title": "Retention Planner",
+    "sub": "Turn scores into a campaign: rank customers by risk, then find how many to contact for the best expected net return under your assumptions.",
+    "inputs": {
+      "title": "Your assumptions",
+      "sub": "Every input is editable. Results update instantly.",
+      "value_mode": "Value of a saved customer",
+      "value_mode_help": "Use each customer's own REVENUE from the file, or one flat monthly amount for everyone.",
+      "mode": {
+        "per_customer": "Each customer's REVENUE",
+        "flat": "Flat monthly amount"
+      },
+      "flat": "Flat monthly revenue (FCFA)",
+      "flat_help": "Defaults to the median REVENUE in this batch ({median} FCFA).",
+      "cost": "Offer cost per contacted customer (FCFA)",
+      "cost_help": "Cost of the incentive plus contact cost, paid for every customer contacted.",
+      "save": "Save rate for contacted churners",
+      "save_help": "Share of would-be churners who stay because of the offer. Use a past campaign or an A/B test to set it.",
+      "capacity": "Contact capacity (customers)",
+      "capacity_help": "The most customers the team can contact in this campaign.",
+      "horizon": "Value horizon (months)",
+      "horizon_help": "How many months of revenue a saved customer is worth.",
+      "rank": "Rank customers by",
+      "rank_prob": "Churn probability",
+      "rank_value": "Expected value at risk",
+      "rank_help": "Probability ranks the likeliest leavers first. Expected value (probability × revenue) ranks by money at risk."
+    },
+    "rec": {
+      "title": "Recommendation",
+      "sub": "The contact count with the highest expected net value, within capacity.",
+      "best": "Contact the top {k} customers: expected net value {net}, about {saved} customers kept (capacity {cap}).",
+      "none": "At these assumptions no campaign size is profitable: the offer costs more than the revenue it is expected to save. Lower the cost, raise the save rate, or rank by value.",
+      "alt_tag": "Try this instead",
+      "alt_value": "Ranking by expected value at risk is profitable: contact {k} customers for an expected net value of {net}. Under probability ranking, {zero} of the customers within capacity record no revenue, so saving them earns nothing.",
+      "alt_prob": "Ranking by churn probability is profitable here: contact {k} customers for an expected net value of {net}.",
+      "switch_value": "Rank by expected value at risk",
+      "switch_prob": "Rank by churn probability"
+    },
+    "kpi": {
+      "contact": "Customers to contact",
+      "reached": "Expected churners reached",
+      "reached_help": "Sum of churn probabilities of the contacted customers.",
+      "saved": "Expected customers kept",
+      "saved_help": "Churners reached × save rate.",
+      "revenue": "Expected revenue saved",
+      "cost": "Campaign cost",
+      "net": "Expected net value",
+      "roi": "ROI {roi}"
+    },
+    "curve": {
+      "title": "Value by campaign size",
+      "sub": "Cumulative expected revenue saved, campaign cost and net value as more customers are contacted (riskiest first).",
+      "best": "Recommended size",
+      "capacity": "Capacity",
+      "x": "Customers contacted (k)",
+      "so_what": "Net value peaks at {k} contacts within capacity (unconstrained peak: {peak}). Beyond that, each extra offer costs more than it is expected to save.",
+      "so_what_none": "The net line never rises above zero within capacity: this offer does not pay for itself at these assumptions."
+    },
+    "gains": {
+      "title": "Expected gains: who to call first",
+      "sub": "Share of expected churners captured when contacting the riskiest X% of this batch.",
+      "model": "Ranked by model",
+      "random": "Random selection",
+      "x": "Customers contacted (riskiest first)",
+      "y": "Expected churners captured",
+      "so_what": "Contacting the riskiest 20% of this batch reaches {cap} of the expected churners: {lift}× what a random 20% would reach.",
+      "caveat": "Expected values use the model's probabilities as if they were well calibrated. Model Evaluation shows the realised gains on labelled validation data."
+    },
+    "list": {
+      "title": "Targeted list",
+      "sub": "The customers in the recommended campaign, ranked as above.",
+      "value_col": "Expected value at risk (FCFA)",
+      "download": "Download the target list ({k} customers)",
+      "reason": "Reason {n}"
+    },
+    "assume": {
+      "title": "Assumptions behind these numbers",
+      "a1": "Churn probabilities come from the deployed model and are treated as calibrated expectations.",
+      "a2": "Only churners can be saved; the save rate applies to them, not to everyone contacted.",
+      "a3": "Every contacted customer costs the full offer cost, whether or not they would have left.",
+      "a4": "A saved customer is worth monthly revenue × the value horizon; no discounting or margin is applied.",
+      "a5": "Results are decision support: validate the save rate with a controlled test (see Experiment Designer)."
+    }
   }
 }

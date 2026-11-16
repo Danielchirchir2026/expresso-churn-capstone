@@ -744,5 +744,253 @@
       "caveat": "Les courbes montrent la sensibilité du modèle pour ce seul client, toutes choses égales par ailleurs. Dans la réalité les comportements évoluent ensemble : ce sont des tendances, pas des prévisions."
     },
     "back_to_cc": "Retour au diagnostic client"
+  },
+  "batchui": {
+    "empty": {
+      "msg": "Cette page nécessite un lot scoré.",
+      "detail": "Scorez un fichier clients dans Scoring par lot, ou générez ici un lot de démonstration synthétique en un clic.",
+      "go": "Aller au Scoring par lot",
+      "demo": "Générer et scorer un lot de démonstration de 5 000 lignes"
+    },
+    "c360": {
+      "decile": "Décile de risque",
+      "profile": "Profil client"
+    }
+  },
+  "batch": {
+    "eyebrow": "Prédire · de nombreux clients",
+    "title": "Scoring par lot",
+    "sub": "Chargez un fichier clients (ou générez des données de démonstration), vérifiez-le et scorez chaque client par paquets. Les résultats restent dans votre session pour le Planificateur de rétention, le Revenu à risque, les contrôles de dérive et le Copilote.",
+    "step1": {
+      "title": "1 · Obtenir les données",
+      "sub": "Chargez un CSV, générez des données synthétiques ou téléchargez le modèle de fichier."
+    },
+    "tab": {
+      "upload": "Charger un CSV",
+      "demo": "Générer des données",
+      "template": "Modèle de fichier"
+    },
+    "upload": {
+      "label": "Fichier clients (CSV)",
+      "help": "Une ligne par client avec user_id et les 17 colonnes brutes Expresso. Les colonnes supplémentaires sont ignorées.",
+      "unreadable": "Ce fichier n'a pas pu être lu comme CSV ({err}). Vérifiez qu'il est séparé par des virgules et encodé en UTF-8."
+    },
+    "demo": {
+      "rows": "Nombre de lignes",
+      "seed": "Graine aléatoire",
+      "messy": "Ajouter quelques lignes erronées",
+      "messy_help": "Insère un identifiant en double, une région inconnue, un montant non numérique et d'autres problèmes pour voir le rapport de validation à l'œuvre.",
+      "button": "Générer des données de démonstration",
+      "caption": "Données de démonstration synthétiques : valeurs tirées autour des médianes de segment_profiles.csv (et de la répartition réelle ancienneté/région si eda_breakdowns.parquet existe). Ce ne sont pas de vrais clients."
+    },
+    "template": {
+      "body": "Le fichier doit contenir exactement ces colonnes (dans n'importe quel ordre). Laissez une cellule vide si la valeur n'est pas renseignée : le modèle utilise l'absence comme information.",
+      "button": "Télécharger le modèle CSV"
+    },
+    "step2": {
+      "title": "2 · Vérifier le fichier : {name}",
+      "sub": "Les problèmes sont décrits en clair, avec les lignes concernées (la ligne 1 est l'en-tête)."
+    },
+    "check": {
+      "rows": "Lignes",
+      "cols": "Colonnes",
+      "blocking": "Problèmes bloquants",
+      "warnings": "Avertissements",
+      "must_fix": "à corriger",
+      "all_good": "Aucun problème détecté. Le fichier est prêt à être scoré.",
+      "rows_list": "Lignes : {rows}{more}.",
+      "preview": "Aperçu des 20 premières lignes"
+    },
+    "severity": {
+      "block": "À corriger",
+      "warn": "Avertissement",
+      "info": "Remarque"
+    },
+    "issue": {
+      "empty": "Le fichier ne contient aucune ligne.",
+      "missing_columns": "Colonnes obligatoires manquantes : {cols}. Téléchargez le modèle pour voir la structure attendue.",
+      "extra_columns": "{n} colonne(s) supplémentaire(s) seront ignorées : {cols}.",
+      "missing_ids": "{n} ligne(s) n'ont pas de user_id.",
+      "duplicate_ids": "{n} ligne(s) répètent un user_id déjà présent (par ex. « {example} »).",
+      "not_numeric": "{n} valeur(s) de {col} ne sont pas des nombres (par ex. « {example} »). Elles seront traitées comme non renseignées.",
+      "negative": "{n} valeur(s) négative(s) dans {col}. L'usage et le revenu sont normalement nuls ou positifs.",
+      "regularity_range": "{n} valeur(s) de REGULARITY sont hors de l'intervalle 0-90 jours.",
+      "regularity_missing": "{n} ligne(s) n'ont pas de REGULARITY. Le modèle n'a jamais vu ce cas à l'entraînement.",
+      "unknown_region": "{n} ligne(s) ont une région inconnue du modèle ({values}). Elles sont scorées comme une région non vue.",
+      "unknown_tenure": "{n} ligne(s) ont une tranche d'ancienneté inconnue ({values}). L'ancienneté est alors considérée comme inconnue.",
+      "unknown_pack": "{n} ligne(s) utilisent un pack jamais vu à l'entraînement ({values}). Ils sont regroupés avec les packs rares.",
+      "mrg_values": "{n} ligne(s) ont une valeur MRG autre que « NO ». MRG n'est pas utilisé par le modèle.",
+      "silent_rows": "{n} ligne(s) ({share} %) ont tous les champs d'usage vides : elles ressemblent à des lignes inactives."
+    },
+    "fix": {
+      "drop_missing_ids": "Supprimer les lignes sans user_id",
+      "drop_dups": "Ne garder que la première ligne de chaque user_id en double"
+    },
+    "step3": {
+      "title": "3 · Scorer",
+      "sub": "Scoring par paquets de 20 000 lignes pour respecter la mémoire de Streamlit Cloud."
+    },
+    "score": {
+      "button": "Scorer {n} clients",
+      "blocked": "Corrigez les problèmes bloquants ci-dessus (ou acceptez les corrections proposées) avant de scorer.",
+      "progress": "Scoring des clients…",
+      "done": "{n} clients scorés.",
+      "explain": "Codes motifs pour les N clients les plus risqués",
+      "explain_help": "Les codes motifs utilisent les contributions TreeSHAP du modèle, la partie lente du scoring. Expliquez les clients que vous contacterez probablement ; tout autre client est expliqué à la demande dans la vue 360."
+    },
+    "results": {
+      "none": "Aucun lot scoré pour l'instant. Chargez un fichier ou générez des données ci-dessus.",
+      "title": "Résultats : {name}",
+      "sub": "{n} clients scorés le {at}. Les probabilités sont la sortie du modèle ; les classes ci-dessous sont facultatives et exploratoires."
+    },
+    "bands": {
+      "title": "Classes de risque exploratoires",
+      "low": "Moyen à partir de",
+      "low_help": "Les probabilités supérieures ou égales à ce seuil sont classées Moyen. Par défaut : le taux de churn du portefeuille.",
+      "high": "Élevé à partir de",
+      "high_help": "Les probabilités supérieures ou égales à ce seuil sont classées Élevé.",
+      "order": "« Élevé à partir de » doit être supérieur à « Moyen à partir de ».",
+      "col": "Classe (exploratoire)",
+      "low_label": "Faible",
+      "medium_label": "Moyen",
+      "high_label": "Élevé",
+      "medium": "Moyen"
+    },
+    "kpi": {
+      "customers": "Clients",
+      "mean_p": "Probabilité moyenne",
+      "expected": "Partants attendus",
+      "expected_help": "Somme des probabilités de churn : le nombre de départs attendu si les probabilités sont bien calibrées.",
+      "above_high": "Dans la classe Élevé",
+      "share": "{share} du lot"
+    },
+    "filters": {
+      "title": "Filtrer les résultats",
+      "prob": "Plage de probabilité",
+      "region": "Région",
+      "tenure": "Ancienneté",
+      "segment": "Segment",
+      "all": "Tous",
+      "showing": "{n} clients affichés sur {total}."
+    },
+    "table": {
+      "reasons": "Principaux motifs (risque en hausse)",
+      "capped": "Le tableau affiche les 1 000 clients les plus risqués du filtre actuel ; les téléchargements incluent tout le monde.",
+      "reasons_partial": "Les codes motifs ont été calculés pour les {n} clients les plus risqués ; les autres sont expliqués à la demande dans la vue 360."
+    },
+    "charts": {
+      "hist": "Distribution de la probabilité de churn",
+      "hist_so_what": "{share} de ces clients sont au-dessus du seuil Élevé ({high}) ; le client médian obtient {median}.",
+      "region": "Probabilité de churn moyenne par région",
+      "region_so_what": "{top} présente le risque moyen le plus élevé ({p}) et {low} le plus faible ({lp}) : les campagnes régionales doivent commencer là où la barre est la plus longue.",
+      "mean_p": "Probabilité moyenne",
+      "tenure": "Probabilité de churn moyenne par ancienneté",
+      "tenure_so_what": "Le risque culmine dans la tranche d'ancienneté {top} ({p} en moyenne).",
+      "segment": "Probabilité de churn moyenne par segment",
+      "segment_so_what": "{top} porte le risque moyen le plus élevé ({p}) ; {big} est le groupe le plus important de ce lot ({share})."
+    },
+    "c360": {
+      "title": "Vue client 360",
+      "sub": "Consultez un client scoré : profil, probabilité, motifs et prochaine action suggérée.",
+      "pick": "Choisir parmi les 50 plus risqués",
+      "search": "…ou saisir un user_id",
+      "placeholder": "ex. DEMO-000123",
+      "not_found": "Aucun client avec le user_id « {id} » dans ce lot."
+    },
+    "dl": {
+      "title": "Téléchargements",
+      "sub": "Les fichiers sont générés au moment du clic.",
+      "csv": "Fichier scoré (CSV)",
+      "xlsx": "Fichier scoré (Excel)",
+      "xlsx_help": "Les gros lots prennent un peu de temps à écrire en Excel.",
+      "k": "Taille de la liste d'appels prioritaires",
+      "calls": "Liste d'appels prioritaires : top {k} (CSV)",
+      "clear": "Retirer ce lot de la session"
+    }
+  },
+  "ret": {
+    "eyebrow": "Agir · économie des campagnes",
+    "title": "Planificateur de rétention",
+    "sub": "Transformez les scores en campagne : classez les clients par risque, puis trouvez combien en contacter pour le meilleur rendement net attendu selon vos hypothèses.",
+    "inputs": {
+      "title": "Vos hypothèses",
+      "sub": "Toutes les valeurs sont modifiables. Les résultats se mettent à jour instantanément.",
+      "value_mode": "Valeur d'un client conservé",
+      "value_mode_help": "Utiliser le REVENUE de chaque client du fichier, ou un même montant mensuel pour tous.",
+      "mode": {
+        "per_customer": "REVENUE de chaque client",
+        "flat": "Montant mensuel fixe"
+      },
+      "flat": "Revenu mensuel fixe (FCFA)",
+      "flat_help": "Par défaut, le REVENUE médian de ce lot ({median} FCFA).",
+      "cost": "Coût de l'offre par client contacté (FCFA)",
+      "cost_help": "Coût de l'incitation et du contact, payé pour chaque client contacté.",
+      "save": "Taux de rétention des partants contactés",
+      "save_help": "Part des futurs partants qui restent grâce à l'offre. Fixez-la à partir d'une campagne passée ou d'un test A/B.",
+      "capacity": "Capacité de contact (clients)",
+      "capacity_help": "Nombre maximal de clients que l'équipe peut contacter pour cette campagne.",
+      "horizon": "Horizon de valeur (mois)",
+      "horizon_help": "Combien de mois de revenu vaut un client conservé.",
+      "rank": "Classer les clients par",
+      "rank_prob": "Probabilité de churn",
+      "rank_value": "Valeur attendue à risque",
+      "rank_help": "La probabilité classe d'abord les départs les plus probables. La valeur attendue (probabilité × revenu) classe par montant à risque."
+    },
+    "rec": {
+      "title": "Recommandation",
+      "sub": "Le nombre de contacts offrant la meilleure valeur nette attendue, dans la limite de la capacité.",
+      "best": "Contactez les {k} premiers clients : valeur nette attendue {net}, environ {saved} clients conservés (capacité {cap}).",
+      "none": "Avec ces hypothèses, aucune taille de campagne n'est rentable : l'offre coûte plus que le revenu qu'elle devrait sauver. Réduisez le coût, augmentez le taux de rétention ou classez par valeur.",
+      "alt_tag": "Essayez plutôt",
+      "alt_value": "Le classement par valeur attendue à risque est rentable : contactez {k} clients pour une valeur nette attendue de {net}. Avec le classement par probabilité, {zero} des clients dans la limite de capacité n'ont aucun revenu enregistré : les retenir ne rapporte rien.",
+      "alt_prob": "Le classement par probabilité de churn est rentable ici : contactez {k} clients pour une valeur nette attendue de {net}.",
+      "switch_value": "Classer par valeur attendue à risque",
+      "switch_prob": "Classer par probabilité de churn"
+    },
+    "kpi": {
+      "contact": "Clients à contacter",
+      "reached": "Partants attendus atteints",
+      "reached_help": "Somme des probabilités de churn des clients contactés.",
+      "saved": "Clients conservés attendus",
+      "saved_help": "Partants atteints × taux de rétention.",
+      "revenue": "Revenu sauvé attendu",
+      "cost": "Coût de la campagne",
+      "net": "Valeur nette attendue",
+      "roi": "ROI {roi}"
+    },
+    "curve": {
+      "title": "Valeur selon la taille de campagne",
+      "sub": "Revenu sauvé attendu, coût de campagne et valeur nette cumulés à mesure que l'on contacte plus de clients (les plus risqués d'abord).",
+      "best": "Taille recommandée",
+      "capacity": "Capacité",
+      "x": "Clients contactés (k)",
+      "so_what": "La valeur nette culmine à {k} contacts dans la limite de la capacité (sommet sans contrainte : {peak}). Au-delà, chaque offre supplémentaire coûte plus qu'elle ne rapporte.",
+      "so_what_none": "La courbe nette ne dépasse jamais zéro dans la limite de la capacité : cette offre n'est pas rentable avec ces hypothèses."
+    },
+    "gains": {
+      "title": "Gains attendus : qui appeler en premier",
+      "sub": "Part des partants attendus captée en contactant les X % les plus risqués de ce lot.",
+      "model": "Classement du modèle",
+      "random": "Sélection aléatoire",
+      "x": "Clients contactés (les plus risqués d'abord)",
+      "y": "Partants attendus captés",
+      "so_what": "Contacter les 20 % les plus risqués de ce lot atteint {cap} des partants attendus : {lift}× ce qu'atteindrait un échantillon aléatoire de 20 %.",
+      "caveat": "Les valeurs attendues utilisent les probabilités du modèle comme si elles étaient bien calibrées. L'Évaluation du modèle montre les gains réalisés sur les données de validation étiquetées."
+    },
+    "list": {
+      "title": "Liste ciblée",
+      "sub": "Les clients de la campagne recommandée, classés comme ci-dessus.",
+      "value_col": "Valeur attendue à risque (FCFA)",
+      "download": "Télécharger la liste ciblée ({k} clients)",
+      "reason": "Motif {n}"
+    },
+    "assume": {
+      "title": "Hypothèses derrière ces chiffres",
+      "a1": "Les probabilités de churn viennent du modèle déployé et sont traitées comme des espérances calibrées.",
+      "a2": "Seuls les partants peuvent être retenus ; le taux de rétention s'applique à eux, pas à tous les contactés.",
+      "a3": "Chaque client contacté coûte l'offre complète, qu'il soit sur le départ ou non.",
+      "a4": "Un client conservé vaut revenu mensuel × horizon de valeur ; aucune actualisation ni marge n'est appliquée.",
+      "a5": "Les résultats sont une aide à la décision : validez le taux de rétention par un test contrôlé (voir Conception d'expériences)."
+    }
   }
 }

@@ -1,6 +1,10 @@
 [server]
 runOnSave = false
 maxUploadSize = 200
+# The source watcher re-resolves every imported module after each run on the
+# server's event loop; on Windows this can stall the UI for minutes. Turn it
+# back on while developing with:  streamlit run Home.py --server.fileWatcherType auto
+fileWatcherType = "none"
 
 [browser]
 gatherUsageStats = false
