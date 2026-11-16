@@ -27,13 +27,18 @@ def _flatten(node, prefix=""):
     return flat
 
 
-@lru_cache(maxsize=None)
+@lru_cache(maxsize=8)
+def _catalog(lang: str, mtime: float) -> dict:
+    with open(I18N_DIR / f"{lang}.json", encoding="utf-8") as fh:
+        return _flatten(json.load(fh))
+
+
 def catalog(lang: str) -> dict:
+    """Flattened catalog; reloads automatically when the JSON file changes."""
     path = I18N_DIR / f"{lang}.json"
     if not path.exists():
         return {}
-    with open(path, encoding="utf-8") as fh:
-        return _flatten(json.load(fh))
+    return _catalog(lang, path.stat().st_mtime)
 
 
 def current_lang() -> str:

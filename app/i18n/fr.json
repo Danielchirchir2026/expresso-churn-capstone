@@ -75,21 +75,59 @@
     "tour": "Visite guidée"
   },
   "glossary": {
-    "churn": {"term": "Churn (attrition)", "def": "Un client qui cesse d'utiliser Expresso pendant la période observée (étiquette CHURN des données)."},
-    "probability": {"term": "Probabilité de churn", "def": "L'estimation du modèle (0-100 %) qu'un client parte. C'est un score, pas une certitude."},
-    "roc_auc": {"term": "ROC-AUC", "def": "La probabilité que le modèle classe un client partant au-dessus d'un client fidèle tiré au hasard. 0,5 = pile ou face, 1,0 = parfait."},
-    "pp": {"term": "pp (points de pourcentage)", "def": "La différence arithmétique entre deux pourcentages : de 20 % à 25 % = +5 pp (hausse relative de 25 %)."},
-    "segment": {"term": "Segment", "def": "Un groupe de clients aux usages et à la valeur similaires, obtenu par regroupement des comportements."},
-    "reason_code": {"term": "Code motif", "def": "Une variable qui a fait monter ou baisser le risque prédit d'un client, lue dans les contributions du modèle lui-même."},
-    "decile": {"term": "Décile de risque", "def": "Les clients classés par probabilité puis coupés en dix groupes égaux. Le décile 1 regroupe les 10 % les plus risqués."},
-    "lift": {"term": "Lift", "def": "Combien de fois plus de partants un groupe ciblé contient par rapport à un groupe aléatoire de même taille."},
-    "psi": {"term": "PSI", "def": "Indice de stabilité de population : l'écart de distribution d'une colonne par rapport à l'entraînement. Sous 0,1 stable, au-dessus de 0,25 fort décalage."},
-    "exploratory_band": {"term": "Classe exploratoire", "def": "Étiquettes Faible / Moyen / Élevé selon des seuils que vous choisissez. Non validées par l'entreprise."}
+    "churn": {
+      "term": "Churn (attrition)",
+      "def": "Un client qui cesse d'utiliser Expresso pendant la période observée (étiquette CHURN des données)."
+    },
+    "probability": {
+      "term": "Probabilité de churn",
+      "def": "L'estimation du modèle (0-100 %) qu'un client parte. C'est un score, pas une certitude."
+    },
+    "roc_auc": {
+      "term": "ROC-AUC",
+      "def": "La probabilité que le modèle classe un client partant au-dessus d'un client fidèle tiré au hasard. 0,5 = pile ou face, 1,0 = parfait."
+    },
+    "pp": {
+      "term": "pp (points de pourcentage)",
+      "def": "La différence arithmétique entre deux pourcentages : de 20 % à 25 % = +5 pp (hausse relative de 25 %)."
+    },
+    "segment": {
+      "term": "Segment",
+      "def": "Un groupe de clients aux usages et à la valeur similaires, obtenu par regroupement des comportements."
+    },
+    "reason_code": {
+      "term": "Code motif",
+      "def": "Une variable qui a fait monter ou baisser le risque prédit d'un client, lue dans les contributions du modèle lui-même."
+    },
+    "decile": {
+      "term": "Décile de risque",
+      "def": "Les clients classés par probabilité puis coupés en dix groupes égaux. Le décile 1 regroupe les 10 % les plus risqués."
+    },
+    "lift": {
+      "term": "Lift",
+      "def": "Combien de fois plus de partants un groupe ciblé contient par rapport à un groupe aléatoire de même taille."
+    },
+    "psi": {
+      "term": "PSI",
+      "def": "Indice de stabilité de population : l'écart de distribution d'une colonne par rapport à l'entraînement. Sous 0,1 stable, au-dessus de 0,25 fort décalage."
+    },
+    "exploratory_band": {
+      "term": "Classe exploratoire",
+      "def": "Étiquettes Faible / Moyen / Élevé selon des seuils que vous choisissez. Non validées par l'entreprise."
+    }
   },
   "ui": {
-    "tone": {"info": "Constat", "good": "Atout", "warn": "À surveiller", "risk": "Risque"},
+    "tone": {
+      "info": "Constat",
+      "good": "Atout",
+      "warn": "À surveiller",
+      "risk": "Risque"
+    },
     "synthetic_banner": "Données de démonstration synthétiques : les résultats ci-dessous servent uniquement à la démonstration, ce ne sont pas de vrais clients.",
-    "gauge": {"portfolio": "Portefeuille", "label": "Probabilité de churn"},
+    "gauge": {
+      "portfolio": "Portefeuille",
+      "label": "Probabilité de churn"
+    },
     "so_what": "À retenir :",
     "view_table": "Voir sous forme de tableau",
     "error": {
@@ -256,5 +294,269 @@
       "sub": "Projet de fin d'études : prédiction de l'attrition client Expresso et analyse de la rétention."
     },
     "provenance": "Les chiffres de cette page sont calculés à partir de artifacts/segment_profiles.csv et artifacts/model_metadata.json."
+  },
+  "feat": {
+    "REGION": {
+      "name": "Région",
+      "desc": "Région de résidence du client au Sénégal. Vide pour de nombreux clients inactifs."
+    },
+    "TENURE": {
+      "name": "Ancienneté",
+      "desc": "Durée de relation avec Expresso, par tranches de 3-6 mois à plus de 24 mois."
+    },
+    "MONTANT": {
+      "name": "Montant rechargé",
+      "desc": "Montant total des recharges sur la période, en FCFA."
+    },
+    "FREQUENCE_RECH": {
+      "name": "Nombre de recharges",
+      "desc": "Nombre de fois où le client a rechargé."
+    },
+    "REVENUE": {
+      "name": "Revenu mensuel",
+      "desc": "Revenu mensuel généré par le client, en FCFA."
+    },
+    "ARPU_SEGMENT": {
+      "name": "ARPU",
+      "desc": "Revenu moyen par utilisateur : revenu sur 90 jours divisé par 3."
+    },
+    "FREQUENCE": {
+      "name": "Événements de revenu",
+      "desc": "Nombre de fois où le client a généré un revenu."
+    },
+    "DATA_VOLUME": {
+      "name": "Usage data",
+      "desc": "Nombre de connexions / volume de données mobiles utilisé."
+    },
+    "ON_NET": {
+      "name": "Appels on-net",
+      "desc": "Appels d'Expresso vers des numéros Expresso."
+    },
+    "ORANGE": {
+      "name": "Appels vers Orange",
+      "desc": "Appels vers le réseau Orange (concurrent)."
+    },
+    "TIGO": {
+      "name": "Appels vers Tigo",
+      "desc": "Appels vers le réseau Tigo (concurrent)."
+    },
+    "ZONE1": {
+      "name": "Appels zone 1",
+      "desc": "Appels vers la zone internationale 1."
+    },
+    "ZONE2": {
+      "name": "Appels zone 2",
+      "desc": "Appels vers la zone internationale 2."
+    },
+    "MRG": {
+      "name": "Indicateur MRG",
+      "desc": "Marqueur d'un client sur le départ (constant « NO » dans les données d'entraînement)."
+    },
+    "REGULARITY": {
+      "name": "Jours actifs (sur 90)",
+      "desc": "Nombre de jours où le client a été actif sur les 90 derniers jours."
+    },
+    "TOP_PACK": {
+      "name": "Pack le plus utilisé",
+      "desc": "Le forfait/pack que le client a le plus souvent activé."
+    },
+    "FREQ_TOP_PACK": {
+      "name": "Activations du pack principal",
+      "desc": "Nombre d'activations du pack principal du client."
+    },
+    "MISSING_COUNT": {
+      "name": "Champs d'usage vides",
+      "desc": "Nombre de champs d'usage vides pour le client (plus de champs vides = moins d'activité)."
+    },
+    "REVENUE_PER_RECHARGE": {
+      "name": "Revenu par recharge",
+      "desc": "Revenu mensuel divisé par le nombre de recharges."
+    },
+    "DATA_SHARE": {
+      "name": "Data par unité de revenu",
+      "desc": "Usage data divisé par le revenu mensuel."
+    },
+    "user_id": {
+      "name": "Identifiant client",
+      "desc": "Identifiant unique du client (non utilisé par le modèle)."
+    },
+    "CHURN": {
+      "name": "Étiquette de churn",
+      "desc": "1 si le client est parti, 0 sinon (données d'entraînement et fichiers d'évaluation uniquement)."
+    }
+  },
+  "feat_kind": {
+    "raw": "Valeur brute en numérique",
+    "log": "log(1 + valeur), compresse les très grandes valeurs d'usage",
+    "missing": "1 si la valeur brute est vide, sinon 0",
+    "region_missing": "1 si la région est vide (encodage one-hot ; remplace l'indicateur de région vide du même nom)",
+    "region_unseen": "1 si la région ne fait pas partie des 14 régions connues",
+    "onehot": "1 si le client est dans cette région, sinon 0",
+    "ordinal": "Tranche d'ancienneté en nombre ordonné (0 = 3-6 mois … 7 = plus de 24 mois)",
+    "freq": "Part des clients d'entraînement ayant le même pack principal (packs rares regroupés en « Other »)",
+    "missing_count": "Nombre de champs d'usage numériques vides",
+    "rev_per_recharge": "REVENUE ÷ FREQUENCE_RECH (vide si 0 recharge)",
+    "data_share": "DATA_VOLUME ÷ REVENUE (vide si revenu nul)"
+  },
+  "exec": {
+    "eyebrow": "Vue d'ensemble · pour la direction",
+    "title": "Tableau de bord direction",
+    "sub": "Où se concentre le churn, où se trouve le revenu, et ce que les chiffres recommandent. Chaque valeur est calculée à partir des profils de segments et des métadonnées du modèle.",
+    "kpi_foot": {
+      "customers_share": "pour {share} des clients"
+    },
+    "bubble": {
+      "title": "Churn, taille et valeur",
+      "sub": "Chaque bulle est un segment : plus à droite = plus de clients, plus haut = plus de churn, plus grosse = plus de revenu.",
+      "so_what": "{worst} affiche {worst_rate} de churn mais n'apporte que {worst_rev} du revenu, tandis que {top} apporte {top_rev} du revenu avec {top_rate} de churn : réactiver en haut à gauche, protéger la grosse bulle en bas."
+    },
+    "axis": {
+      "pct_customers": "% des clients",
+      "churn_rate": "Taux de churn"
+    },
+    "hover": {
+      "revenue_share": "% du revenu",
+      "churner_share": "% des partants",
+      "customers": "Clients"
+    },
+    "portfolio_line": "Churn du portefeuille {rate}",
+    "treemap": {
+      "title": "Clients par segment",
+      "sub": "Taille des tuiles = clients, couleur = taux de churn.",
+      "colorbar": "Churn",
+      "churn_word": "churn",
+      "so_what": "{big} est le groupe le plus important ({share} des clients) avec un churn de {rate} ; l'échelle de couleur montre où se concentrent les départs."
+    },
+    "share": {
+      "title": "Part des partants vs part du revenu",
+      "sub": "Qui part, comparé à qui paie.",
+      "churners": "% des partants",
+      "revenue": "% du revenu",
+      "so_what": "{seg} représente {churners} des partants mais seulement {rev} du revenu : compter les partants seuls orienterait le budget vers les clients les moins rentables."
+    },
+    "insights": {
+      "title": "Constats pour la direction",
+      "sub": "Rédigés automatiquement à partir des chiffres des segments ; ils se mettent à jour si les artefacts changent."
+    },
+    "drivers": {
+      "title": "Ce qui pilote les prédictions du modèle",
+      "sub": "Importance par gain de LightGBM, avec les variables construites regroupées par colonne Expresso d'origine.",
+      "hover": "Part du gain total",
+      "n_features": "Variables construites",
+      "axis": "Part du gain total",
+      "col_driver": "Facteur",
+      "col_source": "Colonne source",
+      "so_what": "{a} et {b} expliquent ensemble {share} du gain total du modèle : le fait que les données d'un client soient renseignées, et son nombre de jours actifs, distinguent ceux qui partent bien plus que les tarifs.",
+      "more": "Ouvrir Modèle et explicabilité pour le détail complet",
+      "mostly_missing": "{name} (surtout : non renseignée)"
+    },
+    "table": {
+      "title": "Synthèse de gestion par segment",
+      "sub": "Les chiffres sources, directement issus de segment_profiles.csv."
+    },
+    "col": {
+      "segment": "Segment",
+      "median_revenue": "Revenu médian (FCFA)",
+      "median_days": "Jours actifs médians"
+    },
+    "provenance": "Taux de churn global = moyenne des taux de churn des segments pondérée par le nombre de clients. Les revenus sont des parts du revenu observé du portefeuille.",
+    "brief_link": "Télécharger la note de synthèse (PDF) depuis la page Rapports"
+  },
+  "segx": {
+    "eyebrow": "Agir · segments",
+    "title": "Explorateur de segments",
+    "sub": "Cinq segments comportementaux obtenus par regroupement des usages, recharges et revenus. Comparez-en deux, situez-les par rapport au portefeuille et lisez les actions recommandées.",
+    "strip": {
+      "customers": "Clients",
+      "churn": "Taux de churn"
+    },
+    "compare": {
+      "title": "Comparer deux segments",
+      "sub": "Choisissez deux segments à mettre côte à côte.",
+      "primary": "Segment principal",
+      "comparison": "Segment de comparaison"
+    },
+    "m": {
+      "customers": "Clients",
+      "of_portfolio": "{share} du portefeuille",
+      "churn": "Taux de churn",
+      "revenue_share": "Part du revenu",
+      "active_days": "Jours actifs médians",
+      "data_users": "Utilisateurs data",
+      "recharges": "Recharges médianes"
+    },
+    "metric": {
+      "churn": "Taux de churn",
+      "active_days": "Jours actifs",
+      "data_users": "Utilisateurs data",
+      "revenue_share": "Part du revenu",
+      "recharges": "Recharges",
+      "offnet": "Part off-net"
+    },
+    "radar": {
+      "title": "Profil comportemental",
+      "sub": "Chaque axe est rapporté au segment le plus élevé (100 = le plus haut des cinq), pour comparer les formes.",
+      "pick": "Segments sur le radar",
+      "hover_norm": "Valeur normalisée (max = 100)",
+      "empty": "Choisissez au moins un segment pour tracer le radar.",
+      "so_what": "Les clients {high} sont actifs en médiane {hd} jours sur 90 contre {ld} pour {low} : l'activité est l'écart comportemental le plus net entre segments."
+    },
+    "bench": {
+      "title": "Comparaison au portefeuille",
+      "sub": "Vert ▲ = mieux que le portefeuille, rouge ▼ = moins bien. Pour le churn, plus bas est mieux.",
+      "vs": "{d} vs portefeuille",
+      "value_gap": "Part du revenu − part des clients",
+      "value_gap_delta": "valeur par client vs moyenne",
+      "value_gap_help": "Positif : le segment rapporte plus que son poids en clients (valeur par client supérieure à la moyenne).",
+      "caption": "Références du portefeuille (pondérées par les clients) : churn {churn}, jours actifs {days}, utilisateurs data {data}, recharges {rech}."
+    },
+    "interp": {
+      "title": "Interprétation pour la direction",
+      "sub": "Générée à partir des écarts ci-dessus avec des règles fixes (±5 pp de churn, ±5 jours d'activité, ±10 pp de data, ±10 pp de valeur).",
+      "churn_above": "Le churn dépasse de {gap} points de pourcentage la référence du portefeuille : segment prioritaire pour la rétention ou la réactivation.",
+      "churn_below": "Le churn est inférieur de {gap} points de pourcentage à la référence du portefeuille : rétention relativement solide.",
+      "churn_aligned": "Le churn est globalement aligné sur la référence du portefeuille ({gap}).",
+      "active_below": "L'activité est inférieure de {gap} jours actifs à la référence du portefeuille : engagement plus faible.",
+      "active_above": "L'activité dépasse de {gap} jours actifs la référence du portefeuille : engagement plus fort.",
+      "data_below": "L'adoption de la data est inférieure de {gap} points à la référence : potentiel pour des campagnes ciblées de forfaits data.",
+      "data_above": "L'adoption de la data dépasse de {gap} points la référence : un groupe de clients très numérique.",
+      "value_high": "Le segment représente {cust} des clients mais {rev} du revenu : la protection de la valeur est une priorité.",
+      "value_low": "Le segment représente {cust} des clients mais seulement {rev} du revenu : valeur commerciale relativement faible.",
+      "caption": "Ces interprétations aident à prioriser ; elles ne remplacent ni le jugement métier ni les politiques de traitement client validées."
+    },
+    "actions": {
+      "title": "Actions de gestion recommandées",
+      "sub": "Le plan d'action de l'équipe pour chaque segment.",
+      "caption": "Les actions recommandées sont des stratégies de gestion fondées sur le comportement des segments, pas des sorties du modèle. Validez-les au regard de l'économie des campagnes, des politiques de traitement et des capacités."
+    },
+    "matrix": {
+      "title": "Matrice stratégique",
+      "sub": "Taux de churn en fonction de la part du revenu. Déplacez les seuils pour tester la robustesse du placement de chaque segment.",
+      "churn_cut": "Seuil de churn (%)",
+      "churn_cut_help": "Par défaut : le taux de churn du portefeuille.",
+      "rev_cut": "Seuil de part du revenu (%)",
+      "rev_cut_help": "Par défaut : une part égale (100 % ÷ nombre de segments).",
+      "col_quad": "Quadrant",
+      "so_what_protect": "{segs} combinent forte valeur et fort churn : ils sont prioritaires pour le budget de rétention.",
+      "so_what_none": "Aucun segment n'est à la fois à forte valeur et à fort churn avec ces seuils. Sécurisez {seg} par une veille d'alerte précoce et concentrez la réactivation sur {react}."
+    },
+    "quad": {
+      "protect": {
+        "name": "Protéger",
+        "desc": "Forte valeur, fort churn : le budget de rétention va ici en priorité."
+      },
+      "grow": {
+        "name": "Développer",
+        "desc": "Forte valeur, faible churn : fidélité, ventes additionnelles et veille d'alerte."
+      },
+      "reactivate": {
+        "name": "Réactiver",
+        "desc": "Faible valeur, fort churn : réactivation automatisée à faible coût ; tester avant de généraliser."
+      },
+      "deprioritise": {
+        "name": "Dé-prioriser",
+        "desc": "Faible valeur, faible churn : pas de dépense spécifique ; orienter vers des produits à plus forte valeur."
+      }
+    }
   }
 }
