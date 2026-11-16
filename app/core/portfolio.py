@@ -45,55 +45,55 @@ def compute(profiles: pd.DataFrame, metadata: dict) -> Portfolio:
     )
 
 
-def executive_insights(profiles: pd.DataFrame, pf: Portfolio) -> list[tuple[str, str]]:
+def executive_insights(profiles: pd.DataFrame, pf: Portfolio, lang: str | None = None) -> list[tuple[str, str]]:
     """Return 3-5 (tone, text) insights computed from the profiles."""
     p = profiles.set_index("segment")
     out: list[tuple[str, str]] = []
 
     worst = p["churn_rate"].idxmax()
     out.append(("risk", t(
-        "insights.exec.highest_churn",
-        segment=segment_name(worst),
-        rate=fmt.pct(p.loc[worst, "churn_rate"], 1),
-        multiple=fmt.num(p.loc[worst, "churn_rate"] / pf.churn_rate, 1),
-        share=fmt.pct(p.loc[worst, "pct_of_churners"], 0),
+        "insights.exec.highest_churn", lang,
+        segment=segment_name(worst, lang),
+        rate=fmt.pct(p.loc[worst, "churn_rate"], 1, lang),
+        multiple=fmt.num(p.loc[worst, "churn_rate"] / pf.churn_rate, 1, lang),
+        share=fmt.pct(p.loc[worst, "pct_of_churners"], 0, lang),
     )))
 
     top_rev = p["pct_of_revenue"].idxmax()
     out.append(("good", t(
-        "insights.exec.revenue_concentration",
-        segment=segment_name(top_rev),
-        rev=fmt.pct(p.loc[top_rev, "pct_of_revenue"], 0),
-        cust=fmt.pct(p.loc[top_rev, "pct_customers"], 0),
-        rate=fmt.pct(p.loc[top_rev, "churn_rate"], 2),
+        "insights.exec.revenue_concentration", lang,
+        segment=segment_name(top_rev, lang),
+        rev=fmt.pct(p.loc[top_rev, "pct_of_revenue"], 0, lang),
+        cust=fmt.pct(p.loc[top_rev, "pct_customers"], 0, lang),
+        rate=fmt.pct(p.loc[top_rev, "churn_rate"], 2, lang),
     )))
 
     low_value = p[p["pct_of_revenue"] < 2.0]
     if not low_value.empty:
         out.append(("warn", t(
-            "insights.exec.value_mismatch",
-            churners=fmt.pct(low_value["pct_of_churners"].sum(), 0),
-            revenue=fmt.pct(low_value["pct_of_revenue"].sum(), 1),
+            "insights.exec.value_mismatch", lang,
+            churners=fmt.pct(low_value["pct_of_churners"].sum(), 0, lang),
+            revenue=fmt.pct(low_value["pct_of_revenue"].sum(), 1, lang),
             n=len(low_value),
         )))
 
     exposure = p["pct_of_revenue"] * p["churn_rate"] / 100
     protect = exposure.idxmax()
     out.append(("info", t(
-        "insights.exec.value_exposure",
-        segment=segment_name(protect),
-        rev=fmt.pct(p.loc[protect, "pct_of_revenue"], 1),
-        rate=fmt.pct(p.loc[protect, "churn_rate"], 1),
+        "insights.exec.value_exposure", lang,
+        segment=segment_name(protect, lang),
+        rev=fmt.pct(p.loc[protect, "pct_of_revenue"], 1, lang),
+        rate=fmt.pct(p.loc[protect, "churn_rate"], 1, lang),
     )))
 
     best = p["churn_rate"].idxmin()
     gap = p.loc[best, "median_active_days"] - p.loc[worst, "median_active_days"]
     if gap > 0:
         out.append(("info", t(
-            "insights.exec.activity_gap",
-            best=segment_name(best),
-            best_days=fmt.num(p.loc[best, "median_active_days"]),
-            worst=segment_name(worst),
-            worst_days=fmt.num(p.loc[worst, "median_active_days"]),
+            "insights.exec.activity_gap", lang,
+            best=segment_name(best, lang),
+            best_days=fmt.num(p.loc[best, "median_active_days"], 0, lang),
+            worst=segment_name(worst, lang),
+            worst_days=fmt.num(p.loc[worst, "median_active_days"], 0, lang),
         )))
     return out[:5]

@@ -460,7 +460,9 @@
       "median_days": "Median active days"
     },
     "provenance": "Overall churn rate = customer-weighted average of segment churn rates. Revenue figures are shares of observed portfolio revenue.",
-    "brief_link": "Download the Executive Brief (PDF) on the Reports page"
+    "brief_link": "Download the Executive Brief (PDF) on the Reports page",
+    "brief_btn": "Download Executive Brief (PDF)",
+    "brief_help": "KPIs, the churn-vs-value chart, the computed insights and the segment table on one page."
   },
   "segx": {
     "eyebrow": "Act · segments",
@@ -1227,6 +1229,70 @@
       "segments": "The five behavioural segments:",
       "rev_word": "revenue",
       "help": "In offline mode I can answer questions about: which segment to prioritise, why Silent / Inactive customers churn, your scored batch and its riskiest customers, what ROC-AUC means, the model's drivers, risk thresholds, revenue and the segments. Try one of the suggestions above."
+    }
+  },
+  "pdf": {
+    "title": "Expresso Churn Intelligence Hub - Executive Brief",
+    "subtitle": "Expresso Senegal customer churn · generated {date} · Team Spartans",
+    "footer": "Decision support only: predictions inform, people decide. Expresso Churn Intelligence Hub.",
+    "batch_title": "Latest scored batch: {name}",
+    "batch_line": "{n} customers scored, average churn probability {mean}, about {exp} expected churners.",
+    "provenance": "All figures are computed from artifacts/segment_profiles.csv and artifacts/model_metadata.json (model bundle created {created}). Insights are generated from these numbers by fixed rules. Risk thresholds have not been approved, so no Low / Medium / High labels are shown."
+  },
+  "dict": {
+    "packs": "{n} known packs; others are grouped as 'Other'",
+    "yes": "yes",
+    "no": "no",
+    "kind": {
+      "id": "identifier",
+      "label": "label",
+      "categorical": "categorical",
+      "numeric": "numeric",
+      "engineered": "engineered"
+    }
+  },
+  "rep": {
+    "eyebrow": "Reports",
+    "title": "Reports & Downloads",
+    "sub": "Everything you might send to someone else: the executive brief, scored files, the call list, the data dictionary and the model files.",
+    "brief": {
+      "title": "Briefs",
+      "sub": "Ready to attach to an email or print.",
+      "pdf": "Executive Brief (PDF)",
+      "pdf_desc": "One page: KPIs, the churn-vs-size-vs-value chart (drawn as vectors, no image dependency), the computed insights, the segment table and, if a batch is loaded, its summary.",
+      "download": "Download Executive Brief"
+    },
+    "batch": {
+      "title": "Batch outputs",
+      "sub": "From the batch scored in this session.",
+      "empty": "Score a file or generate demo data on Batch Scoring to unlock these downloads.",
+      "csv": "Scored file (CSV)",
+      "xlsx": "Scored file (Excel)",
+      "rows": "{n} customers with probability, decile, segment and reason codes.",
+      "calls": "Priority call list",
+      "calls_desc": "The riskiest K customers, ready for the retention team."
+    },
+    "ref": {
+      "title": "Reference files",
+      "sub": "Documentation of the data and the deployed model.",
+      "dict": "Data dictionary (CSV)",
+      "dict_desc": "Every raw column in plain language: meaning, type, whether it can be empty, allowed values and the engineered features built from it.",
+      "dict_dl": "Download data dictionary",
+      "dict_preview": "Preview the data dictionary",
+      "meta": "Model metadata (JSON)",
+      "meta_desc": "Model type, validation AUC, versions and approval status.",
+      "meta_dl": "Download model metadata",
+      "segments": "Segment profiles (CSV)",
+      "segments_desc": "Size, churn, revenue and behaviour for each of the five segments.",
+      "segments_dl": "Download segment profiles",
+      "features": "Model feature list (TXT)",
+      "features_desc": "The {n} engineered features, in the order the model expects.",
+      "features_dl": "Download feature list"
+    },
+    "deploy": {
+      "title": "Deployment summary",
+      "sub": "A plain-text record of what is deployed.",
+      "dl": "Download deployment summary"
     }
   }
 }

@@ -460,7 +460,9 @@
       "median_days": "Jours actifs médians"
     },
     "provenance": "Taux de churn global = moyenne des taux de churn des segments pondérée par le nombre de clients. Les revenus sont des parts du revenu observé du portefeuille.",
-    "brief_link": "Télécharger la note de synthèse (PDF) depuis la page Rapports"
+    "brief_link": "Télécharger la note de synthèse (PDF) depuis la page Rapports",
+    "brief_btn": "Télécharger la note de synthèse (PDF)",
+    "brief_help": "Indicateurs, graphique churn/valeur, constats calculés et tableau des segments sur une page."
   },
   "segx": {
     "eyebrow": "Agir · segments",
@@ -1227,6 +1229,70 @@
       "segments": "Les cinq segments comportementaux :",
       "rev_word": "revenu",
       "help": "En mode hors ligne, je peux répondre sur : le segment à prioriser, les raisons du départ des Silencieux / Inactifs, votre lot scoré et ses clients les plus risqués, la signification de la ROC-AUC, les facteurs du modèle, les seuils de risque, le revenu et les segments. Essayez une des suggestions ci-dessus."
+    }
+  },
+  "pdf": {
+    "title": "Expresso Churn Intelligence Hub - Note de synthèse",
+    "subtitle": "Attrition client Expresso Sénégal · générée le {date} · Équipe Spartans",
+    "footer": "Aide à la décision uniquement : les prédictions éclairent, les personnes décident. Expresso Churn Intelligence Hub.",
+    "batch_title": "Dernier lot scoré : {name}",
+    "batch_line": "{n} clients scorés, probabilité moyenne de churn {mean}, environ {exp} départs attendus.",
+    "provenance": "Tous les chiffres sont calculés à partir de artifacts/segment_profiles.csv et artifacts/model_metadata.json (bundle du modèle créé le {created}). Les constats sont générés à partir de ces chiffres par des règles fixes. Les seuils de risque n'ont pas été validés : aucune étiquette Faible / Moyen / Élevé n'est affichée."
+  },
+  "dict": {
+    "packs": "{n} packs connus ; les autres sont regroupés en « Other »",
+    "yes": "oui",
+    "no": "non",
+    "kind": {
+      "id": "identifiant",
+      "label": "étiquette",
+      "categorical": "catégorielle",
+      "numeric": "numérique",
+      "engineered": "construite"
+    }
+  },
+  "rep": {
+    "eyebrow": "Rapports",
+    "title": "Rapports et téléchargements",
+    "sub": "Tout ce que vous pourriez transmettre : la note de synthèse, les fichiers scorés, la liste d'appels, le dictionnaire de données et les fichiers du modèle.",
+    "brief": {
+      "title": "Notes",
+      "sub": "Prêtes à joindre à un e-mail ou à imprimer.",
+      "pdf": "Note de synthèse (PDF)",
+      "pdf_desc": "Une page : indicateurs, graphique churn/taille/valeur (dessiné en vectoriel, sans dépendance d'image), constats calculés, tableau des segments et, si un lot est chargé, sa synthèse.",
+      "download": "Télécharger la note de synthèse"
+    },
+    "batch": {
+      "title": "Sorties du lot",
+      "sub": "À partir du lot scoré dans cette session.",
+      "empty": "Scorez un fichier ou générez des données dans Scoring par lot pour débloquer ces téléchargements.",
+      "csv": "Fichier scoré (CSV)",
+      "xlsx": "Fichier scoré (Excel)",
+      "rows": "{n} clients avec probabilité, décile, segment et codes motifs.",
+      "calls": "Liste d'appels prioritaires",
+      "calls_desc": "Les K clients les plus risqués, prêts pour l'équipe rétention."
+    },
+    "ref": {
+      "title": "Fichiers de référence",
+      "sub": "Documentation des données et du modèle déployé.",
+      "dict": "Dictionnaire de données (CSV)",
+      "dict_desc": "Chaque colonne brute en clair : signification, type, possibilité d'être vide, valeurs admises et variables construites à partir d'elle.",
+      "dict_dl": "Télécharger le dictionnaire de données",
+      "dict_preview": "Aperçu du dictionnaire de données",
+      "meta": "Métadonnées du modèle (JSON)",
+      "meta_desc": "Type de modèle, AUC de validation, versions et statut de validation.",
+      "meta_dl": "Télécharger les métadonnées",
+      "segments": "Profils de segments (CSV)",
+      "segments_desc": "Taille, churn, revenu et comportement de chacun des cinq segments.",
+      "segments_dl": "Télécharger les profils de segments",
+      "features": "Liste des variables du modèle (TXT)",
+      "features_desc": "Les {n} variables construites, dans l'ordre attendu par le modèle.",
+      "features_dl": "Télécharger la liste des variables"
+    },
+    "deploy": {
+      "title": "Récapitulatif du déploiement",
+      "sub": "Un relevé en texte brut de ce qui est déployé.",
+      "dl": "Télécharger le récapitulatif"
     }
   }
 }

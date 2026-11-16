@@ -6,9 +6,11 @@ import streamlit as st
 
 from app import navigation
 from app.core import artifacts, fmt, portfolio
+from app.core import state
 from app.core.features import friendly, global_importance, grouped_importance
+from app.core.pdf import executive_brief
 from app.core.segments import with_names
-from app.i18n import t
+from app.i18n import current_lang, t
 from app.ui import charts
 from app.ui.components import insight_callout, kpi_row, page_header, section_header
 
@@ -19,6 +21,12 @@ pf = portfolio.compute(profiles, meta)
 p = profiles.set_index("segment")
 
 page_header(t("exec.title"), t("exec.sub"), t("exec.eyebrow"))
+_lang = current_lang()
+_raw_profiles = artifacts.get_segment_profiles()
+_batch = state.get_batch()  # captured now: the deferred callable runs outside the script context
+st.download_button(t("exec.brief_btn"), data=lambda: executive_brief(_raw_profiles, meta, _lang, _batch),
+                   file_name=f"expresso_executive_brief_{_lang}.pdf", mime="application/pdf",
+                   icon=":material/picture_as_pdf:", on_click="ignore", key="exec_pdf", help=t("exec.brief_help"))
 
 kpi_row([
     dict(label=t("kpi.total_customers"), value=fmt.num(pf.total_customers), help=t("kpi.total_customers_help")),
@@ -200,5 +208,3 @@ st.dataframe(
     },
 )
 st.caption(t("exec.provenance"))
-if navigation.available("reports"):
-    navigation.link("reports", label=t("exec.brief_link"), icon=":material/picture_as_pdf:")

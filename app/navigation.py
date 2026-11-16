@@ -49,23 +49,10 @@ ROLE_PRIORITY = {
 ROLES = ["all", "executive", "retention", "analyst"]
 
 
-# Interim: original pages, used until their rebuilt version lands.
-LEGACY = {
-    "executive": "legacy_pages/1_Executive_Dashboard.py",
-    "customer_check": "legacy_pages/2_Churn_Prediction.py",
-    "segments": "legacy_pages/3_Customer_Segmentation.py",
-    "model": "legacy_pages/4_Model_Performance.py",
-    "batch": "legacy_pages/5_Batch_Prediction.py",
-    "reports": "legacy_pages/6_Reports.py",
-}
-
-
 def page_path(key: str) -> str | None:
     """Relative path of a page that exists (None if not built yet)."""
-    for rel in (PAGES[key][0], LEGACY.get(key)):
-        if rel and (ROOT / rel).exists():
-            return rel
-    return None
+    rel = PAGES[key][0]
+    return rel if (ROOT / rel).exists() else None
 
 
 def available(key: str) -> bool:
