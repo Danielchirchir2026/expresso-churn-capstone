@@ -19,23 +19,6 @@ EXPECTED = ["eda_summary.json", "eda_breakdowns.parquet", "validation_prediction
             "reference_stats.json", "export_manifest.json"]
 
 
-@pytest.fixture(scope="session")
-def exported(tmp_path_factory, bundle, config):
-    tmp = tmp_path_factory.mktemp("export")
-    df = demo.generate(20_000, pd.read_csv(ROOT / "artifacts" / "segment_profiles.csv"), config, seed=3)
-    p = scoring.score_batch(validation.clean(df, config), bundle, with_reasons=False, with_segments=False)
-    # Test-only labels drawn from the model's own probabilities: exercises the mechanics, not the model.
-    df["CHURN"] = (np.random.default_rng(0).random(len(df)) < p["churn_probability"].to_numpy()).astype(int)
-    train = tmp / "Train.csv"
-    df.to_csv(train, index=False)
-    out = tmp / "artifacts"
-    proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "export_artifacts.py"), "--train", str(train),
-                           "--out", str(out), "--baseline-sample", "5000"], capture_output=True, text=True,
-                          cwd=ROOT, timeout=900)
-    assert proc.returncode == 0, proc.stderr[-2000:]
-    return out
-
-
 def test_export_script_writes_every_file(exported):
     for name in EXPECTED:
         assert (exported / name).exists(), name
@@ -50,7 +33,7 @@ def test_export_script_writes_every_file(exported):
     assert set(summary["segment_medians"]) == {"0", "1", "2", "3", "4"}
 
 
-PAGES_WITH_ARTIFACTS = ["data_explorer", "problem", "methodology", "evaluation", "customer_check", "what_if"]
+PAGES_WITH_ARTIFACTS = ["data_explorer", "problem", "methodology", "evaluation", "customer_check", "what_if", "drift"]
 
 
 @pytest.mark.parametrize("page", PAGES_WITH_ARTIFACTS)

@@ -1719,5 +1719,81 @@
       "so_what": "{camp} a obtenu le meilleur résultat : {net} de valeur nette, ROI {roi}.",
       "row": "{camp} : {real} clients retenus pour 100 contactés, contre {plan} prévus."
     }
+  },
+  "drift": {
+    "eyebrow": "Prédire · santé des données",
+    "title": "Qualité et dérive des données",
+    "sub": "Le lot scoré ressemble-t-il aux données d'apprentissage du modèle ? De forts écarts rendent ses prédictions moins fiables.",
+    "missing_detail": "Le contrôle de dérive compare votre lot aux distributions d'entraînement de reference_stats.json, exporté une fois avec :",
+    "kpi": {
+      "checked": "Colonnes vérifiées",
+      "ref_rows": "vs {n} lignes d'entraînement",
+      "green": "Stables",
+      "amber": "Écart modéré",
+      "red": "Écart fort"
+    },
+    "legend": {
+      "green": "PSI inférieur à 0,10",
+      "amber": "PSI de 0,10 à 0,25",
+      "red": "PSI supérieur à 0,25"
+    },
+    "overall": {
+      "tag": "Bilan",
+      "green": "Le lot ressemble aux données d'entraînement : les prédictions s'utilisent normalement.",
+      "amber": "Certaines colonnes ont modérément changé. Les prédictions restent utilisables, mais vérifiez les colonnes signalées.",
+      "red": "Certaines colonnes sont très différentes des données d'entraînement. Utilisez les prédictions de ce lot avec prudence et investiguez avant d'agir."
+    },
+    "table": {
+      "title": "Colonne par colonne",
+      "sub": "Le PSI compare la part des clients dans chaque tranche d'entraînement (déciles pour les nombres, catégories pour le texte, plus les valeurs vides).",
+      "caption": "Indice de stabilité de population : vert sous 0,10, orange de 0,10 à 0,25, rouge au-dessus de 0,25. Le statut est indiqué par la couleur, une icône et du texte."
+    },
+    "col": {
+      "column": "Colonne",
+      "psi": "PSI",
+      "status": "Statut",
+      "missing": "Valeurs vides : entraînement → lot",
+      "unseen": "Catégories inconnues"
+    },
+    "status": {
+      "green": "Stable",
+      "amber": "Modéré",
+      "red": "Fort",
+      "na": "n/d"
+    },
+    "warn": {
+      "title": "Avertissements",
+      "red": "{name} est très différent des données d'entraînement dans ce fichier (PSI {psi}) ; les prédictions peuvent être moins fiables.",
+      "amber": "{name} a modérément changé par rapport à l'entraînement (PSI {psi}) ; à surveiller.",
+      "missing": "{name} est vide pour {new} de ce lot contre {ref} à l'entraînement : vérifiez l'extraction du fichier.",
+      "unseen": "{name} contient des valeurs jamais vues par le modèle : {values}."
+    },
+    "chart": {
+      "title": "Écart par colonne",
+      "sub": "PSI par colonne avec les seuils 0,10 et 0,25.",
+      "so_what": "{name} a le plus bougé (PSI {psi}, {status}).",
+      "pick": "Comparer les distributions de",
+      "training": "Entraînement",
+      "batch": "Ce lot",
+      "unseen": "Inconnu / autre",
+      "dist_so_what": "Le plus grand écart concerne « {bin} » : {train} des clients d'entraînement contre {batch} dans ce lot."
+    },
+    "synthetic_note": "Ce lot est composé de données de démonstration synthétiques : une certaine dérive par rapport aux vraies données d'entraînement est normale."
+  },
+  "alerts": {
+    "title": "Alertes",
+    "sub": "Déclenchées automatiquement après le scoring, selon des règles fixes.",
+    "tag": "Alerte",
+    "above": "{n} clients ({share}) sont au-dessus du seuil Élevé de {high}.",
+    "vip": "{n} clients sont à la fois dans les 10 % de revenu les plus élevés (au moins {cut} par mois) et dans le décile le plus risqué : appels prioritaires pour le service rétention.",
+    "vip_none": "Aucun client n'est à la fois dans le décile de revenu le plus élevé et le décile le plus risqué.",
+    "vip_dl": "Télécharger les {n} clients à forte valeur et fort risque",
+    "regions": "Régions au risque moyen inhabituellement élevé : {regions} (moyenne du lot {mean}).",
+    "regions_none": "Aucune région ne se distingue par son risque moyen (moyenne du lot {mean}).",
+    "drift_green": "Dérive des données : le lot ressemble aux données d'entraînement.",
+    "drift_amber": "Dérive des données : {amber} colonne(s) ont modérément changé.",
+    "drift_red": "Dérive des données : {red} colonne(s) ont fortement changé ; les prédictions peuvent être moins fiables.",
+    "drift_link": "Ouvrir Qualité et dérive des données",
+    "rules": "Règles : Élevé = le seuil « Élevé à partir de » ci-dessus ; forte valeur = 10 % des clients payants au REVENUE le plus élevé ; région inhabituelle = probabilité moyenne supérieure à {factor}× la moyenne du lot avec au moins {min} clients."
   }
 }

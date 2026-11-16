@@ -1719,5 +1719,81 @@
       "so_what": "{camp} delivered the best result: {net} net value, ROI {roi}.",
       "row": "{camp}: {real} customers retained per 100 contacted, against {plan} planned."
     }
+  },
+  "drift": {
+    "eyebrow": "Predict · data health",
+    "title": "Data Quality & Drift",
+    "sub": "Does the batch you scored look like the data the model learned from? Large shifts mean its predictions are less reliable.",
+    "missing_detail": "Drift checks compare your batch with the training distributions in reference_stats.json, exported once with:",
+    "kpi": {
+      "checked": "Columns checked",
+      "ref_rows": "vs {n} training rows",
+      "green": "Stable",
+      "amber": "Moderate shift",
+      "red": "Large shift"
+    },
+    "legend": {
+      "green": "PSI below 0.10",
+      "amber": "PSI 0.10 to 0.25",
+      "red": "PSI above 0.25"
+    },
+    "overall": {
+      "tag": "Overall",
+      "green": "The batch looks like the training data: predictions can be used as usual.",
+      "amber": "Some columns have shifted moderately. Predictions are usable but check the flagged columns.",
+      "red": "Some columns look very different from the training data. Treat predictions for this batch with caution and investigate before acting."
+    },
+    "table": {
+      "title": "Column by column",
+      "sub": "PSI compares the share of customers in each training bin (deciles for numbers, categories for text, plus empty values).",
+      "caption": "Population Stability Index: green below 0.10, amber 0.10 to 0.25, red above 0.25. Status is shown by colour, icon and text."
+    },
+    "col": {
+      "column": "Column",
+      "psi": "PSI",
+      "status": "Status",
+      "missing": "Empty values: training → batch",
+      "unseen": "Unseen categories"
+    },
+    "status": {
+      "green": "Stable",
+      "amber": "Moderate",
+      "red": "Large",
+      "na": "n/a"
+    },
+    "warn": {
+      "title": "Warnings",
+      "red": "{name} in this file looks very different from the training data (PSI {psi}); predictions may be less reliable.",
+      "amber": "{name} has shifted moderately from the training data (PSI {psi}); keep an eye on it.",
+      "missing": "{name} is empty for {new} of this batch against {ref} in training: check how the file was extracted.",
+      "unseen": "{name} contains values the model never saw: {values}."
+    },
+    "chart": {
+      "title": "Shift by column",
+      "sub": "PSI per column with the 0.10 and 0.25 thresholds.",
+      "so_what": "{name} moved the most (PSI {psi}, {status}).",
+      "pick": "Compare distributions for",
+      "training": "Training",
+      "batch": "This batch",
+      "unseen": "Unseen / other",
+      "dist_so_what": "The biggest difference is in '{bin}': {train} of training customers against {batch} in this batch."
+    },
+    "synthetic_note": "This batch is synthetic demo data, so some drift against the real training data is expected."
+  },
+  "alerts": {
+    "title": "Alerts",
+    "sub": "Raised automatically after scoring, with fixed rules.",
+    "tag": "Alert",
+    "above": "{n} customers ({share}) are at or above the High threshold of {high}.",
+    "vip": "{n} customers are both in the top 10% by revenue (at least {cut} per month) and in the riskiest decile: priority calls for the retention desk.",
+    "vip_none": "No customer is in both the top revenue decile and the riskiest decile.",
+    "vip_dl": "Download the {n} high-value, high-risk customers",
+    "regions": "Regions with unusually high average risk: {regions} (batch average {mean}).",
+    "regions_none": "No region's average risk stands out (batch average {mean}).",
+    "drift_green": "Data drift: the batch looks like the training data.",
+    "drift_amber": "Data drift: {amber} column(s) shifted moderately.",
+    "drift_red": "Data drift: {red} column(s) shifted strongly; predictions may be less reliable.",
+    "drift_link": "Open Data Quality & Drift",
+    "rules": "Rules: High = the 'High from' threshold above; high value = top 10% of paying customers by REVENUE; unusual region = average probability more than {factor}× the batch average with at least {min} customers."
   }
 }

@@ -7,7 +7,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from app.core import artifacts, batchops, demo, fmt, portfolio, state, validation
+from app import navigation
+from app.core import alerts, artifacts, batchops, demo, fmt, portfolio, state, validation
 from app.core.explain import reason_label
 from app.core.features import friendly
 from app.core.segments import SEGMENT_IDS, segment_name
@@ -160,6 +161,36 @@ else:
         dict(label=t("batch.kpi.above_high"), value=fmt.num((band == "high").sum()),
              foot=t("batch.kpi.share", share=fmt.pct((band == "high").mean() * 100, 1))),
     ], cols=4)
+
+    # Alerts (rule-based, rules stated below)
+    section_header(t("alerts.title"), t("alerts.sub"))
+    al = alerts.batch_alerts(df, high, ID)
+    insight_callout(t("alerts.above", n=fmt.num(al["above"]), share=fmt.pct(al["above_share"] * 100, 1),
+                      high=fmt.num(high, 3)), "risk" if al["above"] else "good", tag=t("alerts.tag"))
+    if al["vip_count"]:
+        insight_callout(t("alerts.vip", n=fmt.num(al["vip_count"]), cut=fmt.money(al["vip_revenue_cut"])), "risk",
+                        tag=t("alerts.tag"))
+        vip = al["vip"]
+        st.download_button(t("alerts.vip_dl", n=fmt.num(len(vip))),
+                           data=lambda: vip.drop(columns=[c for c in vip.columns if c.endswith("_logodds")])
+                           .to_csv(index=False).encode("utf-8"),
+                           file_name="high_value_high_risk_customers.csv", mime="text/csv", on_click="ignore",
+                           icon=":material/workspace_premium:", key="alerts_vip_dl")
+    else:
+        insight_callout(t("alerts.vip_none"), "good", tag=t("alerts.tag"))
+    if al["regions"]:
+        listing = ", ".join(f"{r} ({fmt.pct(m * 100, 1)}, n={fmt.num(n)})" for r, m, n in al["regions"][:6])
+        insight_callout(t("alerts.regions", regions=listing, mean=fmt.pct(al["overall_mean"] * 100, 1)), "warn",
+                        tag=t("alerts.tag"))
+    else:
+        insight_callout(t("alerts.regions_none", mean=fmt.pct(al["overall_mean"] * 100, 1)), "good", tag=t("alerts.tag"))
+    drift_rep = batch.get("drift")
+    if drift_rep:
+        c = drift_rep["counts"]
+        insight_callout(t(f"alerts.drift_{drift_rep['overall']}", red=c.get("red", 0), amber=c.get("amber", 0)),
+                        {"green": "good", "amber": "warn", "red": "risk"}[drift_rep["overall"]], tag=t("alerts.tag"))
+        navigation.link("drift", label=t("alerts.drift_link"))
+    st.caption(t("alerts.rules", factor=fmt.num(alerts.REGION_FACTOR, 2), min=alerts.MIN_REGION))
 
     # Filters
     section_header(t("batch.filters.title"))

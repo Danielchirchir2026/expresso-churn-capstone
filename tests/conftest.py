@@ -1,5 +1,6 @@
 """Shared pytest fixtures for the Expresso churn app."""
 
+import subprocess
 import sys
 from pathlib import Path
 
@@ -66,3 +67,23 @@ def edge_rows(config):
     ]
     df = pd.DataFrame(rows)
     return df[[config["id_column"]] + config["raw_source_columns"]]
+
+
+@pytest.fixture(scope="session")
+def exported(tmp_path_factory, bundle, config):
+    """Run scripts/export_artifacts.py on a small synthetic Train.csv (test-only labels)."""
+    from app.core import demo, scoring, validation
+
+    tmp = tmp_path_factory.mktemp("export")
+    df = demo.generate(20_000, pd.read_csv(ROOT / "artifacts" / "segment_profiles.csv"), config, seed=3)
+    p = scoring.score_batch(validation.clean(df, config), bundle, with_reasons=False, with_segments=False)
+    # Test-only labels drawn from the model's own probabilities: exercises the mechanics, not the model.
+    df["CHURN"] = (np.random.default_rng(0).random(len(df)) < p["churn_probability"].to_numpy()).astype(int)
+    train = tmp / "Train.csv"
+    df.to_csv(train, index=False)
+    out = tmp / "artifacts"
+    proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "export_artifacts.py"), "--train", str(train),
+                           "--out", str(out), "--baseline-sample", "5000"], capture_output=True, text=True,
+                          cwd=ROOT, timeout=900)
+    assert proc.returncode == 0, proc.stderr[-2000:]
+    return out
