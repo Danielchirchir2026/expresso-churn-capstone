@@ -1,3 +1,11 @@
+"""Canonical preprocessing and prediction for the Expresso churn model.
+
+The transformation below reproduces the logic shipped with the first
+deployment (commit dd86793), which mirrors the training notebook. Do not
+change it: the LightGBM bundle expects exactly these 69 features, in this
+order, built exactly this way.
+"""
+
 from pathlib import Path
 
 import joblib
@@ -37,7 +45,9 @@ def prepare_customer_features(raw_df, config):
         raise ValueError(
             "Input data is missing required columns: "
             + ", ".join(missing_columns)
-        ) # Keep only expected source columns
+        )
+
+    # Keep only expected source columns
     source = raw_df[required_columns].copy()
 
     if source[id_col].isna().any():
@@ -79,7 +89,9 @@ def prepare_customer_features(raw_df, config):
         out[column] = pd.to_numeric(
             source[column],
             errors="coerce"
-        ).astype("float32")# Tenure encoding
+        ).astype("float32")
+
+    # Tenure encoding
     tenure_codes = pd.Categorical(
         source["TENURE"],
         categories=config["tenure_order"],
@@ -88,7 +100,7 @@ def prepare_customer_features(raw_df, config):
 
     out["TENURE_ORDINAL"] = tenure_codes.astype("int8")
 
-        # Region encoding
+    # Region encoding
     region = source["REGION"].fillna("Missing").astype(str)
     region = region.where(
         region.isin(config["region_values"]),
@@ -103,6 +115,7 @@ def prepare_customer_features(raw_df, config):
     out["REGION_Missing"] = (
         region == "Missing"
     ).astype("int8")
+
     # TOP_PACK frequency encoding
     pack = source["TOP_PACK"].fillna("Other").astype(str)
 
@@ -117,7 +130,19 @@ def prepare_customer_features(raw_df, config):
             config["top_pack_frequency"].get("Other", 0.0)
         )
         .astype("float32")
-    )        .astype("int8")
+    )
+
+    # Missingness features
+    for column in config["missing_source_columns"]:
+        out[f"is_missing_{column}"] = (
+            source[column].isna().astype("int8")
+        )
+
+    out["MISSING_COUNT"] = (
+        source[config["feature_source_columns"]]
+        .isna()
+        .sum(axis=1)
+        .astype("int8")
     )
 
     # Engineered behavioural ratios
@@ -148,7 +173,9 @@ def prepare_customer_features(raw_df, config):
     out = out.replace(
         [np.inf, -np.inf],
         np.nan
-    )    # Validate final feature schema
+    )
+
+    # Validate final feature schema
     expected_features = config["feature_columns"]
 
     missing_features = [

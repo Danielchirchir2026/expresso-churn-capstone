@@ -1,3 +1,5 @@
+# Runtime pins. numpy / pandas / scikit-learn / lightgbm must match the
+# versions the model bundle was pickled with (see artifacts/model_metadata.json).
 streamlit==1.67.0
 numpy==1.26.4
 pandas==2.3.3
@@ -5,3 +7,8 @@ scikit-learn==1.8.0
 lightgbm==4.6.0
 joblib==1.5.2
 pyarrow==21.0.0
+scipy==1.17.1
+plotly==7.1.0
+fpdf2==2.9.0
+openpyxl==3.1.5
+anthropic==2.9.0
