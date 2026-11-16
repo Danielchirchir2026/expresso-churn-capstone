@@ -1,0 +1,260 @@
+{
+  "app": {
+    "name": "Expresso Churn Intelligence Hub",
+    "short_name": "Churn Intelligence Hub",
+    "tagline": "Expresso Sénégal · Équipe Spartans"
+  },
+  "nav": {
+    "section": {
+      "overview": "Vue d'ensemble",
+      "predict": "Prédire",
+      "act": "Agir",
+      "trust": "Confiance",
+      "assistant": "Assistant",
+      "reports": "Rapports"
+    },
+    "page": {
+      "home": "Accueil",
+      "problem": "Le problème",
+      "executive": "Tableau de bord direction",
+      "data_explorer": "Explorateur de données",
+      "customer_check": "Diagnostic client",
+      "what_if": "Simulateur de scénarios",
+      "batch": "Scoring par lot",
+      "drift": "Qualité et dérive des données",
+      "retention": "Planificateur de rétention",
+      "revenue_risk": "Revenu à risque",
+      "segments": "Explorateur de segments",
+      "experiment": "Conception d'expériences",
+      "campaigns": "Suivi des campagnes",
+      "methodology": "Méthodologie",
+      "model": "Modèle et explicabilité",
+      "evaluation": "Évaluation du modèle",
+      "copilot": "Copilote churn",
+      "reports": "Rapports"
+    }
+  },
+  "pages": {
+    "home": "Page d'accueil avec les chiffres clés et un parcours par rôle.",
+    "problem": "Pourquoi le churn compte pour Expresso, à qui sert l'application et comment mesurer le succès.",
+    "executive": "Indicateurs du portefeuille, économie des segments et constats générés automatiquement.",
+    "data_explorer": "À quoi ressemblent les données d'entraînement et comment le churn y varie.",
+    "customer_check": "Évaluer un client, comprendre pourquoi et obtenir une action suggérée.",
+    "what_if": "Modifier le comportement d'un client et voir la probabilité de churn évoluer.",
+    "batch": "Charger ou générer un fichier de clients et les évaluer tous.",
+    "drift": "Vérifier qu'un nouveau fichier ressemble aux données d'apprentissage du modèle.",
+    "retention": "Choisir combien de clients contacter pour le meilleur rendement attendu.",
+    "revenue_risk": "Quel revenu repose sur des clients susceptibles de partir.",
+    "segments": "Comparer les segments comportementaux et les actions recommandées.",
+    "experiment": "Planifier un test A/B d'une offre de rétention et analyser le résultat.",
+    "campaigns": "Enregistrer les campagnes et comparer les résultats au plan.",
+    "methodology": "Construction des variables, validation du modèle et limites.",
+    "model": "Fiche du modèle et facteurs qui pilotent ses prédictions.",
+    "evaluation": "ROC, précision-rappel, calibration, seuils et équité.",
+    "copilot": "Poser des questions en langage courant, avec des réponses tirées des données de l'application.",
+    "reports": "Télécharger notes de synthèse, fichiers scorés, dictionnaire de données et fichiers du modèle."
+  },
+  "sidebar": {
+    "language": "Langue",
+    "role": "Vue",
+    "role_help": "Réordonne la navigation pour que chaque rôle voie d'abord ses pages les plus utiles.",
+    "roles": {
+      "all": "Tous",
+      "executive": "Direction",
+      "retention": "Équipe rétention",
+      "analyst": "Analyste"
+    },
+    "model_ok": "Modèle chargé",
+    "model_err": "Erreur du modèle",
+    "batch_loaded": "Lot en session : {rows} lignes",
+    "no_batch": "Aucun lot en session",
+    "glossary": "Glossaire",
+    "present": "Mode présentation",
+    "present_help": "Mode présentation : masque la barre latérale et les commandes, agrandit les indicateurs et graphiques.",
+    "present_exit": "Quitter le mode présentation",
+    "tour": "Visite guidée"
+  },
+  "glossary": {
+    "churn": {"term": "Churn (attrition)", "def": "Un client qui cesse d'utiliser Expresso pendant la période observée (étiquette CHURN des données)."},
+    "probability": {"term": "Probabilité de churn", "def": "L'estimation du modèle (0-100 %) qu'un client parte. C'est un score, pas une certitude."},
+    "roc_auc": {"term": "ROC-AUC", "def": "La probabilité que le modèle classe un client partant au-dessus d'un client fidèle tiré au hasard. 0,5 = pile ou face, 1,0 = parfait."},
+    "pp": {"term": "pp (points de pourcentage)", "def": "La différence arithmétique entre deux pourcentages : de 20 % à 25 % = +5 pp (hausse relative de 25 %)."},
+    "segment": {"term": "Segment", "def": "Un groupe de clients aux usages et à la valeur similaires, obtenu par regroupement des comportements."},
+    "reason_code": {"term": "Code motif", "def": "Une variable qui a fait monter ou baisser le risque prédit d'un client, lue dans les contributions du modèle lui-même."},
+    "decile": {"term": "Décile de risque", "def": "Les clients classés par probabilité puis coupés en dix groupes égaux. Le décile 1 regroupe les 10 % les plus risqués."},
+    "lift": {"term": "Lift", "def": "Combien de fois plus de partants un groupe ciblé contient par rapport à un groupe aléatoire de même taille."},
+    "psi": {"term": "PSI", "def": "Indice de stabilité de population : l'écart de distribution d'une colonne par rapport à l'entraînement. Sous 0,1 stable, au-dessus de 0,25 fort décalage."},
+    "exploratory_band": {"term": "Classe exploratoire", "def": "Étiquettes Faible / Moyen / Élevé selon des seuils que vous choisissez. Non validées par l'entreprise."}
+  },
+  "ui": {
+    "tone": {"info": "Constat", "good": "Atout", "warn": "À surveiller", "risk": "Risque"},
+    "synthetic_banner": "Données de démonstration synthétiques : les résultats ci-dessous servent uniquement à la démonstration, ce ne sont pas de vrais clients.",
+    "gauge": {"portfolio": "Portefeuille", "label": "Probabilité de churn"},
+    "so_what": "À retenir :",
+    "view_table": "Voir sous forme de tableau",
+    "error": {
+      "title": "Un problème est survenu sur cette page.",
+      "hint": "Le reste de l'application fonctionne. Modifiez vos saisies ou rechargez la page. Les détails techniques ci-dessous aident l'équipe à corriger.",
+      "details": "Détails techniques"
+    },
+    "exploratory_note": "Exploratoire, non validé",
+    "missing_artifact": "Cette vue nécessite {file}.",
+    "missing_artifact_detail": "Il est produit une seule fois à partir du fichier Train.csv de Zindi avec le script d'export :",
+    "decision_support": "Aide à la décision uniquement : les prédictions éclairent, les personnes décident."
+  },
+  "auth": {
+    "title": "Connexion",
+    "sub": "Ce déploiement est protégé par mot de passe. Demandez l'accès à l'équipe projet.",
+    "label": "Mot de passe",
+    "submit": "Entrer",
+    "wrong": "Ce mot de passe est incorrect."
+  },
+  "footer": {
+    "team": "Équipe Spartans",
+    "disclaimer": "Aide à la décision uniquement : les prédictions éclairent, les personnes décident."
+  },
+  "tour": {
+    "step": "Visite · étape {n} sur {total}",
+    "back": "Retour",
+    "next": "Suivant",
+    "finish": "Terminer",
+    "end": "Quitter la visite",
+    "text": {
+      "home": "Commencez ici. Les quatre chiffres clés proviennent directement des artefacts du modèle, et chaque rôle dispose d'un raccourci vers sa page la plus utile.",
+      "problem": "Pourquoi le churn compte pour Expresso, à qui s'adresse l'application et le parcours CRISP-DM de la question métier au modèle déployé.",
+      "executive": "Un écran pour la direction : où se concentre le churn, où se trouve le revenu, et des constats rédigés à partir des chiffres.",
+      "segments": "Cinq segments comportementaux. Comparez-en deux, situez-les par rapport au portefeuille et lisez les actions recommandées.",
+      "customer_check": "Évaluez un client, voyez les raisons du score et une prochaine action suggérée.",
+      "what_if": "Modifiez un levier à la fois et voyez de combien la probabilité de churn changerait.",
+      "batch": "Chargez un fichier (ou générez des données de démonstration), validez-le et évaluez des milliers de clients par paquets.",
+      "retention": "Transformez les scores en campagne : combien de clients appeler pour maximiser le profit attendu, selon vos hypothèses.",
+      "evaluation": "La preuve que le modèle fonctionne : ROC, précision-rappel, calibration, conseiller de seuil et contrôle d'équité.",
+      "copilot": "Posez vos questions en langage courant. Les réponses viennent uniquement des données et outils de l'application, sources à l'appui.",
+      "reports": "Téléchargez la note de synthèse, les fichiers scorés, la liste d'appels et le dictionnaire de données."
+    }
+  },
+  "seg": {
+    "silent": {
+      "name": "Silencieux / Inactif",
+      "blurb": "Presque aucun usage, rechargement ni revenu enregistré sur les 90 jours.",
+      "actions": [
+        "Prioriser des campagnes de réactivation ciblées pour les clients ayant eu un potentiel de valeur.",
+        "Analyser les principales causes d'inactivité avant d'appliquer des incitations à la rétention.",
+        "Utiliser des incitations contrôlées au rechargement ou à l'usage pour tester la réactivation.",
+        "Distinguer les clients potentiellement récupérables des comptes durablement inactifs et sans valeur."
+      ]
+    },
+    "high_value": {
+      "name": "Actifs à forte valeur",
+      "blurb": "Rechargements fréquents, revenu élevé et activité la plupart des jours.",
+      "actions": [
+        "Prioriser la protection de la valeur : ce segment génère une part disproportionnée du revenu du portefeuille.",
+        "Déclencher des actions proactives de reconquête dès que l'activité ou les rechargements commencent à baisser.",
+        "Envisager des avantages de fidélité et des offres personnalisées pour renforcer la rétention.",
+        "Suivre la régularité, la fréquence de rechargement et l'usage comme signaux d'alerte précoce."
+      ]
+    },
+    "data_engaged": {
+      "name": "Engagés data",
+      "blurb": "Presque tous utilisent les données mobiles ; revenu solide et activité régulière.",
+      "actions": [
+        "Renforcer la rétention par des offres ciblées de forfaits data et de services numériques.",
+        "Exploiter les ventes croisées qui complètent une forte adoption de la data.",
+        "Encourager des rechargements plus fréquents et des forfaits data de plus longue durée.",
+        "Surveiller la baisse de l'usage data comme signe précoce de désengagement."
+      ]
+    },
+    "light_active": {
+      "name": "Actifs modérés",
+      "blurb": "Activité modérée, petits rechargements, appels surtout vers d'autres réseaux.",
+      "actions": [
+        "Accroître l'engagement par des forfaits ciblés abordables et des incitations au rechargement.",
+        "Favoriser la migration vers des produits à plus forte valeur selon l'usage observé.",
+        "Mener des campagnes personnalisées pour augmenter la fréquence d'activité et les jours actifs.",
+        "Surveiller les clients dont l'activité glisse vers le segment Faible engagement."
+      ]
+    },
+    "low_engagement": {
+      "name": "Faible engagement",
+      "blurb": "Peu de jours actifs et peu de revenu : à un pas de devenir silencieux.",
+      "actions": [
+        "Prioriser une intervention de rétention précoce avant que les clients ne deviennent totalement inactifs.",
+        "Utiliser des offres ciblées de réactivation ou d'engagement à faible coût.",
+        "Analyser les freins au rechargement, à l'adoption de la data et à l'usage régulier.",
+        "Surveiller la migration vers le segment Silencieux / Inactif comme signal d'alerte précoce."
+      ]
+    }
+  },
+  "kpi": {
+    "total_customers": "Clients au total",
+    "total_customers_help": "Somme des clients des cinq segments de segment_profiles.csv.",
+    "churn_rate": "Taux de churn global",
+    "churn_rate_help": "Moyenne des taux de churn observés par segment, pondérée par le nombre de clients.",
+    "est_churners": "Partants estimés",
+    "est_churners_help": "Clients × taux de churn, additionnés sur les segments.",
+    "roc_auc": "ROC-AUC de validation",
+    "roc_auc_help": "Issu de model_metadata.json : capacité du modèle à classer les partants au-dessus des fidèles sur des données de validation.",
+    "revenue_concentration": "Concentration du revenu",
+    "revenue_concentration_help": "Part du revenu du portefeuille générée par le segment Actifs à forte valeur.",
+    "churners_silent": "Partants issus des Silencieux / Inactifs",
+    "churners_silent_help": "Part de l'ensemble des partants appartenant au segment Silencieux / Inactif."
+  },
+  "insights": {
+    "exec": {
+      "highest_churn": "{segment} affiche un churn de {rate}, soit {multiple}× le taux du portefeuille, et regroupe {share} des partants. Le levier est la réactivation, pas la remise.",
+      "revenue_concentration": "{segment} génère {rev} du revenu avec {cust} des clients, et seuls {rate} d'entre eux partent. Protéger ce groupe, c'est protéger l'entreprise.",
+      "value_mismatch": "{churners} des partants proviennent de {n} segment(s) qui ne produisent que {revenue} du revenu. Les budgets de rétention doivent être pondérés par la valeur, pas par le nombre de clients.",
+      "value_exposure": "{segment} porte le plus de revenu exposé au churn : {rev} du revenu avec un taux de churn de {rate}. C'est le meilleur candidat pour une rétention proactive.",
+      "activity_gap": "L'activité distingue ceux qui restent de ceux qui partent : les clients {best} sont actifs en médiane {best_days} jours sur 90, contre {worst_days} pour {worst}."
+    }
+  },
+  "home": {
+    "eyebrow": "Expresso Sénégal · Attrition client",
+    "title": "Savoir qui va partir, pourquoi, et ce que vaut leur rétention.",
+    "lede": "Un outil de décision pour la direction, l'équipe rétention et les analystes. Chaque chiffre provient du modèle LightGBM déployé et de ses artefacts. Des probabilités, pas des verdicts.",
+    "chip": {
+      "model": "Modèle {model}",
+      "features": "{n} variables construites",
+      "segments": "{n} segments comportementaux",
+      "rows": "{n} clients analysés"
+    },
+    "ring_label": "des clients sont partis",
+    "ring_churned": "Partis",
+    "ring_stayed": "Restés",
+    "start": {
+      "title": "Par où commencer",
+      "sub": "Choisissez votre rôle. La navigation se réorganise autour de vos besoins."
+    },
+    "persona": {
+      "executive": {
+        "who": "Direction",
+        "title": "Où perdons-nous des clients et du revenu ?",
+        "desc": "Indicateurs du portefeuille, économie des segments et revenu exposé au churn, sur un seul écran.",
+        "cta": "Ouvrir le tableau de bord direction"
+      },
+      "retention": {
+        "who": "Équipe rétention / CRM",
+        "title": "Qui appeler cette semaine ?",
+        "desc": "Scorer un fichier clients, planifier une campagne au meilleur rendement attendu et suivre les résultats.",
+        "cta": "Planifier une campagne de rétention"
+      },
+      "analyst": {
+        "who": "Analyste",
+        "title": "Peut-on faire confiance au modèle ?",
+        "desc": "Fiche du modèle, facteurs explicatifs, courbes d'évaluation, seuils, équité et dérive.",
+        "cta": "Examiner le modèle"
+      }
+    },
+    "tour_cta": "Visite guidée",
+    "tour_hint": "Un parcours guidé de deux minutes à travers les pages clés, étape par étape.",
+    "inside": {
+      "title": "Contenu de l'application",
+      "sub": "Toutes les pages, regroupées par usage."
+    },
+    "team": {
+      "title": "Équipe Spartans",
+      "sub": "Projet de fin d'études : prédiction de l'attrition client Expresso et analyse de la rétention."
+    },
+    "provenance": "Les chiffres de cette page sont calculés à partir de artifacts/segment_profiles.csv et artifacts/model_metadata.json."
+  }
+}

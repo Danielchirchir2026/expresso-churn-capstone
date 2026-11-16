@@ -1,0 +1,53 @@
+[server]
+runOnSave = false
+maxUploadSize = 200
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+
+[runner]
+magicEnabled = false
+
+# ---------------------------------------------------------------------------
+# Theme: deep navy with one confident teal accent. Both modes are defined so
+# viewers can switch in the app menu; dark is the default.
+# ---------------------------------------------------------------------------
+[theme]
+base = "dark"
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+headingFont = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+headingFontWeights = [800, 700, 700, 600, 600, 600]
+baseRadius = "0.75rem"
+buttonRadius = "0.6rem"
+showWidgetBorder = true
+
+[theme.dark]
+primaryColor = "#2DD4BF"
+backgroundColor = "#0B1220"
+secondaryBackgroundColor = "#131C2E"
+textColor = "#E6EDF7"
+borderColor = "#24324D"
+linkColor = "#5EEAD4"
+codeBackgroundColor = "#101827"
+dataframeHeaderBackgroundColor = "#131C2E"
+chartCategoricalColors = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9085e9", "#e66767"]
+
+[theme.dark.sidebar]
+backgroundColor = "#0E1626"
+secondaryBackgroundColor = "#16213A"
+
+[theme.light]
+primaryColor = "#0F766E"
+backgroundColor = "#F7F9FC"
+secondaryBackgroundColor = "#EAF0F7"
+textColor = "#0B1220"
+borderColor = "#D3DCE8"
+linkColor = "#0F766E"
+dataframeHeaderBackgroundColor = "#EAF0F7"
+chartCategoricalColors = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
+
+[theme.light.sidebar]
+backgroundColor = "#EEF3F9"
