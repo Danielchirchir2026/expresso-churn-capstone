@@ -57,12 +57,12 @@
 .hub-callout { border-radius: 12px; padding: .8rem 1rem; margin: .45rem 0;
   background: var(--hub-soft); border: 1px solid var(--hub-line); border-left: 4px solid var(--tone, var(--hub-accent)); }
 .hub-callout .tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 800;
-  color: var(--tone, var(--hub-accent)); margin-bottom: .2rem; display: block; }
+  color: var(--tag, var(--tone, var(--hub-accent))); margin-bottom: .2rem; display: block; }
 .hub-callout .body { line-height: 1.5; font-size: .96rem; }
-.hub-callout.good { --tone: var(--hub-good); }
-.hub-callout.warn { --tone: var(--hub-warn); }
-.hub-callout.risk { --tone: var(--hub-critical); }
-.hub-callout.info { --tone: var(--hub-accent); }
+.hub-callout.good { --tone: var(--hub-good); --tag: var(--hub-good-text, var(--hub-good)); }
+.hub-callout.warn { --tone: var(--hub-warn); --tag: var(--hub-warn-text, var(--hub-warn)); }
+.hub-callout.risk { --tone: var(--hub-critical); --tag: var(--hub-bad-text, var(--hub-critical)); }
+.hub-callout.info { --tone: var(--hub-accent); --tag: var(--hub-accent); }
 
 /* ---------- empty state ---------- */
 .hub-empty { border: 1.5px dashed var(--hub-line); border-radius: var(--hub-radius);
@@ -133,7 +133,7 @@
 .hub-badge.ok { color: var(--hub-good-text, #22c55e); }
 .hub-badge.err { color: var(--hub-bad-text, #f87171); }
 .hub-badge.muted { opacity: .75; }
-.hub-badge.warn { color: #c98500; }
+.hub-badge.warn { color: var(--hub-warn-text, #c98500); }
 
 /* tour card */
 .hub-tour { border-radius: 16px; padding: 1rem 1.2rem; margin-bottom: .6rem;
@@ -156,7 +156,7 @@
 
 /* synthetic data banner */
 .hub-synthetic { border-radius: 10px; padding: .45rem .8rem; font-size: .85rem; font-weight: 600;
-  border: 1px dashed #c98500; color: #c98500; margin: .2rem 0 .8rem 0; }
+  border: 1px dashed var(--hub-warn-text, #c98500); color: var(--hub-warn-text, #c98500); margin: .2rem 0 .8rem 0; }
 
 /* ---------- responsive: stack columns on narrow screens ---------- */
 @media (max-width: 900px) {

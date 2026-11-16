@@ -19,16 +19,20 @@ CSS_PATH = Path(__file__).resolve().parent / "style.css"
 
 THEME_VARS = {
     "dark": ("--hub-accent:#2DD4BF;--hub-accent-a40:rgba(45,212,191,.45);--hub-accent-a18:rgba(45,212,191,.16);"
-             "--hub-accent-a10:rgba(45,212,191,.08);--hub-good-text:#34d399;--hub-bad-text:#f87171;"
+             "--hub-accent-a10:rgba(45,212,191,.08);--hub-good-text:#34d399;--hub-bad-text:#f87171;--hub-warn-text:#fbbf24;"
              "--hub-card-bg:rgba(19,28,46,.72);"),
     "light": ("--hub-accent:#0F766E;--hub-accent-a40:rgba(15,118,110,.45);--hub-accent-a18:rgba(15,118,110,.12);"
-              "--hub-accent-a10:rgba(15,118,110,.07);--hub-good-text:#006300;--hub-bad-text:#b42318;"
+              "--hub-accent-a10:rgba(15,118,110,.07);--hub-good-text:#006300;--hub-bad-text:#b42318;--hub-warn-text:#8a5a00;"
               "--hub-card-bg:rgba(255,255,255,.9);"),
 }
 
 PRESENT_CSS = """
 section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"],
-header[data-testid="stHeader"], [data-testid="stExpander"], [data-testid="stDownloadButton"] { display:none !important; }
+header[data-testid="stHeader"], [data-testid="stExpander"], [data-testid="stDownloadButton"],
+[data-testid="stSlider"], [data-testid="stNumberInput"], [data-testid="stSelectbox"], [data-testid="stMultiSelect"],
+[data-testid="stFileUploader"], [data-testid="stTextInput"], [data-testid="stCheckbox"], [data-testid="stRadio"],
+[data-testid="stForm"], [data-testid="stButtonGroup"], [data-testid="stToggle"], [data-testid="stPageLink"],
+[data-testid="stCaptionContainer"] { display:none !important; }
 .block-container { max-width: 1500px !important; padding-top: 1rem !important; }
 .hub-kpi-value { font-size: 2.6rem !important; }
 .hub-kpi-label { font-size: 1rem !important; }

@@ -35,7 +35,7 @@ OPTIONAL_FILES = {
 # ---------------------------------------------------------------------------
 # Model bundle
 # ---------------------------------------------------------------------------
-@st.cache_resource(show_spinner="Loading the churn model…")
+@st.cache_resource(show_spinner="Loading the churn model… / Chargement du modèle…")
 def get_bundle() -> dict:
     return load_bundle()
 

@@ -59,8 +59,8 @@ def available(key: str) -> bool:
     return page_path(key) is not None
 
 
-def build(role: str = "all"):
-    """Build the st.navigation object for the chosen role view."""
+def ordered(role: str = "all") -> list[tuple[str, list[str]]]:
+    """[(section, [page keys])] in display order for a role view (pure, testable)."""
     role = role if role in SECTION_ORDER else "all"
     priority = ROLE_PRIORITY[role]
     default_order = list(PAGES)
@@ -68,22 +68,29 @@ def build(role: str = "all"):
     def rank(key: str) -> tuple[int, int]:
         return (priority.index(key) if key in priority else len(priority), default_order.index(key))
 
-    sections: dict[str, list] = {"": []}
+    out = [("", ["home"])]
     for section in SECTION_ORDER[role]:
-        sections[t(f"nav.section.{section}")] = []
-    section_labels = {s: t(f"nav.section.{s}") for s in SECTION_ORDER["all"]}
+        keys = sorted((k for k, (_, _, sec) in PAGES.items() if sec == section), key=rank)
+        out.append((section, keys))
+    return out
 
-    for key in sorted(PAGES, key=rank):
-        path = page_path(key)
-        if path is None:
-            continue
-        _, icon, section = PAGES[key]
-        page = st.Page(path, title=t(f"nav.page.{key}"), icon=icon, url_path=key.replace("_", "-"),
-                       default=(key == "home"))
-        label = "" if section == "" else section_labels[section]
-        sections[label].append(page)
 
-    return st.navigation({k: v for k, v in sections.items() if v}, position="sidebar", expanded=True)
+def build(role: str = "all"):
+    """Build the st.navigation object for the chosen role view."""
+    sections: dict[str, list] = {}
+    for section, keys in ordered(role):
+        label = t(f"nav.section.{section}") if section else ""
+        pages = []
+        for key in keys:
+            path = page_path(key)
+            if path is None:
+                continue
+            _, icon, _ = PAGES[key]
+            pages.append(st.Page(path, title=t(f"nav.page.{key}"), icon=icon, url_path=key.replace("_", "-"),
+                                 default=(key == "home")))
+        if pages:
+            sections[label] = pages
+    return st.navigation(sections, position="sidebar", expanded=True)
 
 
 def goto(key: str) -> None:

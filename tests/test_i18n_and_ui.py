@@ -46,3 +46,44 @@ def test_pages_do_not_call_st_stop():
     # never render. Pages use if/else instead.
     offenders = [p.name for p in (ROOT / "app_pages").glob("*.py") if "st.stop()" in p.read_text(encoding="utf-8")]
     assert not offenders, offenders
+
+
+def test_role_views_reorder_navigation():
+    from app.navigation import PAGES, ROLES, ordered
+
+    for role in ROLES:
+        layout = ordered(role)
+        keys = [k for _, ks in layout for k in ks]
+        assert sorted(keys) == sorted(PAGES), role          # every page exactly once
+        assert layout[0] == ("", ["home"])                    # Home always first
+    assert ordered("executive")[1] == ("overview", ["executive", "problem", "data_explorer"])
+    assert ordered("retention")[1][0] == "act" and ordered("retention")[1][1][0] == "retention"
+    assert ordered("analyst")[1][0] == "trust" and ordered("analyst")[1][1][0] == "model"
+
+
+def test_guided_tour_walks_every_step():
+    from streamlit.testing.v1 import AppTest
+
+    from app.ui.layout import tour_steps
+
+    at = AppTest.from_file(str(ROOT / "Home.py"), default_timeout=300).run()
+    at.button(key="home_tour").click().run()
+    steps = tour_steps()
+    for i in range(len(steps)):
+        assert at.session_state["tour_step"] == i
+        assert not at.exception, [e.value for e in at.exception]
+        at.button(key="tour_next").click().run()
+    assert at.session_state["tour_step"] is None
+
+
+def test_presentation_mode_and_french_render():
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(ROOT / "Home.py"), default_timeout=300)
+    at.session_state["present_mode"] = True
+    at.session_state["lang"] = "fr"
+    at.run()
+    at.switch_page("app_pages/executive.py").run()
+    assert not at.exception
+    assert any(b.key == "present_exit" for b in at.button)
+    assert any("Tableau de bord direction" in h.value for h in at.get("html"))
