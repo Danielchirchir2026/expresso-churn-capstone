@@ -558,5 +558,191 @@
         "desc": "Faible valeur, faible churn : pas de dépense spécifique ; orienter vers des produits à plus forte valeur."
       }
     }
+  },
+  "cc": {
+    "eyebrow": "Prédire · un client",
+    "title": "Diagnostic client",
+    "sub": "Évaluez un client avec le modèle déployé, voyez les raisons du score et obtenez une prochaine action suggérée.",
+    "presets": {
+      "title": "Partir d'un client type",
+      "sub": "Remplissez le formulaire avec le client médian d'un segment, puis ajustez.",
+      "button": "{name} type",
+      "help": "Charge les médianes de ce segment dans le formulaire et l'évalue.",
+      "loaded": "Chargé : {name} type. Rempli à partir des données : {fields}.",
+      "note_profile": "Les autres champs d'usage ne figurent pas dans segment_profiles.csv ; ils restent « non renseignés ». La région et l'ancienneté conservent votre choix.",
+      "note_eda": "Tous les champs proviennent des médianes par segment de eda_summary.json."
+    },
+    "tab": {
+      "profile": "Profil",
+      "recharge": "Recharges et revenu",
+      "usage": "Usage",
+      "activity": "Activité"
+    },
+    "form": {
+      "customer_id": "Identifiant client",
+      "customer_id_help": "Libellé libre pour ce client. Il n'est pas utilisé par le modèle.",
+      "not_recorded": "Non renseigné",
+      "not_recorded_help": "Cochez si la valeur est vide dans le dossier du client. Les valeurs vides portent de l'information pour le modèle.",
+      "not_recorded_opt": "— non renseigné —",
+      "other_pack": "Autre pack / pack rare",
+      "mrg_note": "MRG vaut toujours « NO » dans les données d'entraînement et n'est pas utilisé par le modèle ; il est donc fixé.",
+      "submit": "Évaluer ce client"
+    },
+    "hint_run": "Choisissez un client type ci-dessus ou remplissez le formulaire, puis cliquez sur « Évaluer ce client ».",
+    "result": {
+      "title": "Résultat pour {id}",
+      "sub": "La probabilité de churn du modèle, comparée au portefeuille.",
+      "vs_portfolio": "vs taux de churn du portefeuille",
+      "portfolio_is": "portefeuille : {rate}",
+      "multiple": "Risque relatif",
+      "multiple_help": "Probabilité de ce client divisée par le taux de churn du portefeuille.",
+      "segment": "Segment comportemental",
+      "segment_rate": "taux de churn du segment {rate}",
+      "segment_help": "Attribué avec le modèle de segmentation du bundle (la règle des clients silencieux est reconstituée à partir de sa configuration).",
+      "no_bands": "Aucune étiquette Faible / Moyen / Élevé n'est affichée : les seuils de risque n'ont pas été validés. Un client type (médian) obtient généralement un score inférieur au taux de churn moyen de son segment, car le churn se concentre chez les membres les moins actifs."
+    },
+    "why": {
+      "title": "Pourquoi ce score",
+      "raw_toggle": "Afficher les variables individuelles du modèle",
+      "raw_help": "Désactivé : variables regroupées par colonne d'origine. Activé : les 69 variables du modèle.",
+      "start": "Client moyen (référence du modèle)",
+      "others": "Tous les autres facteurs",
+      "end": "Ce client",
+      "axis": "Probabilité de churn (échelle log-odds)",
+      "hover_contrib": "Contribution (log-odds)",
+      "hover_after": "Probabilité après cette étape",
+      "col_factor": "Facteur",
+      "dir_up": "a le plus augmenté",
+      "dir_down": "a le plus réduit",
+      "so_what": "{name} {dir} le risque de ce client. Les barres rouges poussent vers le départ, les bleues en éloignent."
+    },
+    "reasons": {
+      "title": "En clair",
+      "sub": "Les cinq principaux codes motifs, issus des contributions du modèle lui-même."
+    },
+    "nba": {
+      "title": "Prochaine action",
+      "sub": "Suggestions fondées sur les codes motifs et le profil.",
+      "caption": "Suggestions métier, pas une sortie du modèle. Vérifiez les offres au regard de la politique de campagne et du budget."
+    },
+    "to_whatif": "Tester des changements dans le simulateur"
+  },
+  "reason": {
+    "val": {
+      "REGULARITY": "Actif {v} jours sur les 90 derniers",
+      "REGION": "Région : {v}",
+      "REGION_missing": "Aucune région renseignée",
+      "REGION_unseen": "La région « {v} » est inconnue du modèle",
+      "TENURE": "Tranche d'ancienneté {v}",
+      "TOP_PACK": "Pack le plus utilisé : {v}",
+      "TOP_PACK_missing": "Aucun pack principal renseigné",
+      "MISSING_COUNT": "{v} champs d'usage sur {n} sont vides",
+      "ratio_missing": "{name} ne peut pas être calculé",
+      "numeric": "{name} : {v}",
+      "missing": "{name} : non renseigné",
+      "text": "{name} : {v}"
+    },
+    "sentence": {
+      "up": "{what} : a {strength} augmenté le risque de churn.",
+      "down": "{what} : a {strength} réduit le risque de churn."
+    },
+    "strength": {
+      "strong": "fortement",
+      "moderate": "modérément",
+      "slight": "légèrement"
+    },
+    "biggest": "(le facteur principal)"
+  },
+  "nba": {
+    "low_risk": {
+      "title": "Aucune dépense de rétention",
+      "body": "Le risque est bien inférieur au taux du portefeuille. Maintenez ce client dans les communications de fidélité habituelles."
+    },
+    "vip_call": {
+      "title": "Appel prioritaire",
+      "body": "Revenu élevé et risque supérieur à la moyenne : le service rétention appelle sous 48 heures avec une offre personnalisée."
+    },
+    "dormant": {
+      "title": "Réactiver une ligne dormante",
+      "body": "La plupart des champs d'usage sont vides. Envoyez une offre de réactivation à faible coût (par ex. bonus sur la prochaine recharge) et suivez le réveil de la ligne."
+    },
+    "verify_record": {
+      "title": "Compléter le dossier client",
+      "body": "Aucune région n'est renseignée, ce que le modèle lit comme un fort signal de départ. Vérifiez le dossier ; un profil incomplet signale souvent une SIM inactive ou secondaire."
+    },
+    "activity": {
+      "title": "Relance d'activité",
+      "body": "Le faible nombre de jours actifs explique ce score. Un bonus d'usage court et limité dans le temps peut relancer l'activité ; faites un suivi après deux semaines."
+    },
+    "recharge": {
+      "title": "Incitation à la recharge",
+      "body": "Le comportement de recharge augmente le risque. Proposez un bonus sur les prochaines recharges ou un plan de recharge automatique."
+    },
+    "data": {
+      "title": "Essai data",
+      "body": "L'usage data augmente le risque. Un petit forfait data d'essai peu coûteux peut créer une habitude qui retient le client."
+    },
+    "onnet": {
+      "title": "Forfait on-net",
+      "body": "Le faible nombre d'appels on-net augmente le risque. Un forfait d'appels on-net renforce les liens au sein du réseau Expresso."
+    },
+    "allnet": {
+      "title": "Forfait tous réseaux",
+      "body": "Les appels vers les réseaux concurrents augmentent le risque. Un pack tous réseaux réduit l'attrait d'un passage chez Orange ou Tigo."
+    },
+    "pack": {
+      "title": "Adéquation du pack",
+      "body": "Le profil de pack du client augmente le risque. Proposez un pack mieux adapté à son usage."
+    },
+    "monitor": {
+      "title": "Surveiller",
+      "body": "Aucun comportement ne se détache. Gardez le client sous surveillance et réévaluez-le à la prochaine période."
+    }
+  },
+  "wi": {
+    "eyebrow": "Prédire · scénarios",
+    "title": "Simulateur de scénarios",
+    "sub": "Modifiez le comportement d'un client et voyez comment la probabilité de churn évoluerait. Cela montre la réaction du modèle ; cela ne prouve pas qu'un changement de comportement fera rester le client.",
+    "source": {
+      "label": "Client de départ",
+      "last": "Dernier diagnostic client ({id})",
+      "preset": "{name} type",
+      "no_last": "Astuce : évaluez d'abord un client dans le Diagnostic client pour repartir de ce client ici."
+    },
+    "levers": {
+      "title": "Leviers",
+      "sub": "Les comportements qu'une offre de rétention peut plausiblement influencer.",
+      "more": "Plus de leviers",
+      "keep_na": "Laisser {name} non renseigné(e)",
+      "ranges_eda": "Les plages des curseurs proviennent de la distribution d'entraînement (eda_summary.json).",
+      "ranges_fallback": "Les plages des curseurs s'adaptent aux valeurs du client et aux médianes des segments. Exportez eda_summary.json pour utiliser la distribution d'entraînement."
+    },
+    "compare": {
+      "title": "Référence vs scénario",
+      "sub": "Le même client, avant et après vos changements.",
+      "baseline": "Référence",
+      "scenario": "Scénario",
+      "change": "Variation de la probabilité de churn",
+      "relative": "variation relative de {rel}",
+      "levers_moved": "Leviers modifiés",
+      "none": "aucun pour l'instant"
+    },
+    "sweep": {
+      "title": "Quel levier aide le plus ?",
+      "sub": "Chaque levier parcourt sa plage pendant que tout le reste garde les valeurs du scénario (courbe de dépendance partielle individuelle).",
+      "bar_title": "Plus forte baisse possible par levier",
+      "bar_axis": "Baisse de la probabilité de churn",
+      "hover_gain": "Plus forte baisse (pp)",
+      "hover_best": "À la valeur",
+      "col_lever": "Levier",
+      "so_what": "{name} est le levier le plus puissant pour ce client : le porter à environ {value} réduit la probabilité jusqu'à {gain} points.",
+      "so_what_none": "Aucun levier ne réduit seul la probabilité de ce client dans les plages affichées.",
+      "pick": "Afficher la courbe de",
+      "current": "Valeur actuelle",
+      "curve_title": "Probabilité de churn selon {name}",
+      "curve_so_what": "La probabilité la plus basse de cette courbe est {p}, pour {name} ≈ {value}. Les paliers plats indiquent que le modèle y est peu sensible.",
+      "caveat": "Les courbes montrent la sensibilité du modèle pour ce seul client, toutes choses égales par ailleurs. Dans la réalité les comportements évoluent ensemble : ce sont des tendances, pas des prévisions."
+    },
+    "back_to_cc": "Retour au diagnostic client"
   }
 }

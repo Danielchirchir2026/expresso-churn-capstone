@@ -39,3 +39,10 @@ def test_stylesheet_survives_st_html_sanitiser():
     # letter or slash, which silently removes every style in the file.
     css = (ROOT / "app" / "ui" / "style.css").read_text(encoding="utf-8")
     assert "<" not in css
+
+
+def test_pages_do_not_call_st_stop():
+    # st.stop() inside a page halts the router too, so the footer and tour
+    # never render. Pages use if/else instead.
+    offenders = [p.name for p in (ROOT / "app_pages").glob("*.py") if "st.stop()" in p.read_text(encoding="utf-8")]
+    assert not offenders, offenders

@@ -97,8 +97,9 @@ def style(fig: go.Figure, height: int = 380, legend: bool = True, ygrid: bool = 
     h = int(height * (1.3 if presenting() else 1.0))
     fig.update_layout(
         height=h,
-        margin=dict(l=8, r=12, t=48 if title else 28, b=8),
-        title=dict(text=title, x=0, xanchor="left", font=dict(size=15)) if title else None,
+        margin=dict(l=8, r=12, t=(78 if legend else 48) if title else 28, b=8),
+        title=dict(text=title, x=0, xanchor="left", y=0.985, yanchor="top", yref="container",
+                   font=dict(size=15)) if title else None,
         font=dict(family="Inter, system-ui, sans-serif", color=INK[m]["secondary"],
                   size=15 if presenting() else 13),
         hoverlabel=dict(font=dict(family="Inter, system-ui, sans-serif", size=13)),

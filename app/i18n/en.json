@@ -558,5 +558,191 @@
         "desc": "Low value, low churn: no special spend; nudge toward higher-value products."
       }
     }
+  },
+  "cc": {
+    "eyebrow": "Predict · one customer",
+    "title": "Customer Check",
+    "sub": "Score a single customer with the deployed model, see the reasons behind the score and get a suggested next action.",
+    "presets": {
+      "title": "Start from a typical customer",
+      "sub": "Fill the form with the median customer of a segment, then adjust.",
+      "button": "Typical {name}",
+      "help": "Loads that segment's medians into the form and scores it.",
+      "loaded": "Loaded: typical {name}. Filled from data: {fields}.",
+      "note_profile": "Other usage fields are not in segment_profiles.csv, so they are left as 'not recorded'. Region and tenure keep your current choice.",
+      "note_eda": "All fields come from per-segment medians in eda_summary.json."
+    },
+    "tab": {
+      "profile": "Profile",
+      "recharge": "Recharge & revenue",
+      "usage": "Usage",
+      "activity": "Activity"
+    },
+    "form": {
+      "customer_id": "Customer ID",
+      "customer_id_help": "Any label for this customer. It is not used by the model.",
+      "not_recorded": "Not recorded",
+      "not_recorded_help": "Tick when the value is empty in the customer's record. Empty values carry information for the model.",
+      "not_recorded_opt": "— not recorded —",
+      "other_pack": "Other / rare pack",
+      "mrg_note": "MRG is always 'NO' in the training data and is not used by the model, so it is fixed.",
+      "submit": "Score this customer"
+    },
+    "hint_run": "Pick a typical customer above or fill the form, then press 'Score this customer'.",
+    "result": {
+      "title": "Result for {id}",
+      "sub": "The model's churn probability, compared with the portfolio.",
+      "vs_portfolio": "vs portfolio churn rate",
+      "portfolio_is": "portfolio is {rate}",
+      "multiple": "Relative risk",
+      "multiple_help": "This customer's probability divided by the portfolio churn rate.",
+      "segment": "Behavioural segment",
+      "segment_rate": "segment churn rate {rate}",
+      "segment_help": "Assigned with the bundle's segmentation model (the silent-customer rule is reconstructed from its config).",
+      "no_bands": "No Low / Medium / High label is shown: business risk thresholds have not been approved. A typical (median) customer usually scores below its segment's average churn rate, because churn concentrates among the least active members."
+    },
+    "why": {
+      "title": "Why this score",
+      "raw_toggle": "Show individual model features",
+      "raw_help": "Off: engineered features are grouped by the raw column they come from. On: all 69 model features.",
+      "start": "Average customer (model baseline)",
+      "others": "All other factors",
+      "end": "This customer",
+      "axis": "Churn probability (log-odds scale)",
+      "hover_contrib": "Contribution (log-odds)",
+      "hover_after": "Probability after this step",
+      "col_factor": "Factor",
+      "dir_up": "raised",
+      "dir_down": "lowered",
+      "so_what": "{name} {dir} this customer's risk the most. Red bars push toward churn, blue bars pull away from it."
+    },
+    "reasons": {
+      "title": "In plain words",
+      "sub": "The five biggest reason codes, from the model's own contribution values."
+    },
+    "nba": {
+      "title": "Next best action",
+      "sub": "Suggestions driven by the reason codes and profile.",
+      "caption": "Business suggestions, not model output. Check offers against campaign policy and budget."
+    },
+    "to_whatif": "Try changes in the What-If Simulator"
+  },
+  "reason": {
+    "val": {
+      "REGULARITY": "Active on {v} of the last 90 days",
+      "REGION": "Region is {v}",
+      "REGION_missing": "No region recorded",
+      "REGION_unseen": "Region '{v}' is not one the model knows",
+      "TENURE": "Tenure band {v}",
+      "TOP_PACK": "Most used pack: {v}",
+      "TOP_PACK_missing": "No top pack recorded",
+      "MISSING_COUNT": "{v} of {n} usage fields are empty",
+      "ratio_missing": "{name} cannot be computed",
+      "numeric": "{name}: {v}",
+      "missing": "{name}: not recorded",
+      "text": "{name}: {v}"
+    },
+    "sentence": {
+      "up": "{what}: {strength} raised churn risk.",
+      "down": "{what}: {strength} lowered churn risk."
+    },
+    "strength": {
+      "strong": "strongly",
+      "moderate": "moderately",
+      "slight": "slightly"
+    },
+    "biggest": "(the biggest factor)"
+  },
+  "nba": {
+    "low_risk": {
+      "title": "No retention spend needed",
+      "body": "Risk is well below the portfolio rate. Keep this customer in normal loyalty communications."
+    },
+    "vip_call": {
+      "title": "Priority call",
+      "body": "High revenue at above-average risk: have the retention desk call within 48 hours with a personalised offer."
+    },
+    "dormant": {
+      "title": "Reactivate a dormant line",
+      "body": "Most usage fields are empty. Send a low-cost reactivation offer (e.g. bonus credit on the next recharge) and track whether the line wakes up."
+    },
+    "verify_record": {
+      "title": "Complete the customer record",
+      "body": "No region is recorded, which the model reads as a strong churn signal. Verify the record; a missing profile often means an inactive or secondary SIM."
+    },
+    "activity": {
+      "title": "Activity nudge",
+      "body": "Few active days drive this score. A short, time-limited usage bonus can bring activity back up; follow up after two weeks."
+    },
+    "recharge": {
+      "title": "Recharge incentive",
+      "body": "Recharge behaviour pushes risk up. Offer bonus credit on the next recharges or an automatic recharge plan."
+    },
+    "data": {
+      "title": "Data trial",
+      "body": "Data usage pushes risk up. A small, cheap data bundle trial can build a data habit that keeps customers on the network."
+    },
+    "onnet": {
+      "title": "On-net bundle",
+      "body": "Low on-net calling pushes risk up. An on-net calling bundle strengthens ties within the Expresso network."
+    },
+    "allnet": {
+      "title": "All-net bundle",
+      "body": "Calls to competitor networks push risk up. An all-net pack reduces the pull to switch to Orange or Tigo."
+    },
+    "pack": {
+      "title": "Pack fit review",
+      "body": "The customer's pack pattern pushes risk up. Suggest a pack that better matches their usage."
+    },
+    "monitor": {
+      "title": "Monitor",
+      "body": "No single behaviour stands out. Keep the customer under watch and rescore next period."
+    }
+  },
+  "wi": {
+    "eyebrow": "Predict · scenarios",
+    "title": "What-If Simulator",
+    "sub": "Change one customer's behaviour and see how the churn probability would move. This shows how the model responds; it does not prove that changing a behaviour causes a customer to stay.",
+    "source": {
+      "label": "Starting customer",
+      "last": "Last Customer Check ({id})",
+      "preset": "Typical {name}",
+      "no_last": "Tip: score someone on Customer Check first to start from that customer here."
+    },
+    "levers": {
+      "title": "Levers",
+      "sub": "The behaviours a retention offer could plausibly influence.",
+      "more": "More levers",
+      "keep_na": "Keep {name} as not recorded",
+      "ranges_eda": "Slider ranges come from the training distribution (eda_summary.json).",
+      "ranges_fallback": "Slider ranges scale with this customer's values and the segment medians. Export eda_summary.json to use the training distribution instead."
+    },
+    "compare": {
+      "title": "Baseline vs scenario",
+      "sub": "Same customer, before and after your changes.",
+      "baseline": "Baseline",
+      "scenario": "Scenario",
+      "change": "Change in churn probability",
+      "relative": "{rel} relative change",
+      "levers_moved": "Levers moved",
+      "none": "none yet"
+    },
+    "sweep": {
+      "title": "Which lever helps most?",
+      "sub": "Each lever is swept across its range while everything else stays at the scenario values (an individual partial-dependence curve).",
+      "bar_title": "Largest possible drop per lever",
+      "bar_axis": "Reduction in churn probability",
+      "hover_gain": "Largest reduction (pp)",
+      "hover_best": "At value",
+      "col_lever": "Lever",
+      "so_what": "{name} is the strongest lever for this customer: moving it to about {value} lowers the probability by up to {gain} points.",
+      "so_what_none": "No single lever lowers this customer's probability within the ranges shown.",
+      "pick": "Show the curve for",
+      "current": "Current value",
+      "curve_title": "Churn probability as {name} changes",
+      "curve_so_what": "The lowest probability on this curve is {p}, at {name} ≈ {value}. Flat stretches mean the model is insensitive there.",
+      "caveat": "Curves show model sensitivity for this one customer, holding everything else fixed. Real behaviours move together, so treat these as directions, not forecasts."
+    },
+    "back_to_cc": "Back to Customer Check"
   }
 }

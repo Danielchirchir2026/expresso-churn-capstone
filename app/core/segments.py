@@ -79,7 +79,7 @@ def assign_segments(raw_df: pd.DataFrame, model_features: pd.DataFrame, bundle: 
     """Return a segment id (0-4) for each row."""
     seg_config = bundle["segmentation_config"]
     feats = segmentation_features(raw_df, seg_config)
-    scaled = bundle["segmentation_scaler"].transform(feats.to_numpy(dtype="float64"))
+    scaled = bundle["segmentation_scaler"].transform(feats.astype("float64"))
     clusters = bundle["segmentation_model"].predict(scaled)
     relabel = seg_config["segment_relabel"]
     segments = np.array([relabel[int(c)] for c in clusters], dtype="int8")

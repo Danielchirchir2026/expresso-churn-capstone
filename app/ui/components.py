@@ -121,20 +121,20 @@ def prob_gauge(p: float, reference: float | None = None, label: str | None = Non
     length = math.pi * r
     off = length * (1 - p)
     accent = color or "var(--hub-accent)"
-    ref_svg = ""
+    ref_svg, ref_html = "", ""
     if reference is not None:
         theta = math.pi * (1 - min(max(reference, 0.0), 1.0))
-        x1, y1 = cx + (r - 14) * math.cos(theta), cy - (r - 14) * math.sin(theta)
-        x2, y2 = cx + (r + 14) * math.cos(theta), cy - (r + 14) * math.sin(theta)
-        lx, ly = cx + (r + 24) * math.cos(theta), cy - (r + 24) * math.sin(theta)
-        anchor = "end" if theta > math.pi / 2 + 0.2 else ("start" if theta < math.pi / 2 - 0.2 else "middle")
+        x1, y1 = cx + (r - 13) * math.cos(theta), cy - (r - 13) * math.sin(theta)
+        x2, y2 = cx + (r + 13) * math.cos(theta), cy - (r + 13) * math.sin(theta)
         ref_svg = (f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="currentColor" '
-                   f'stroke-width="2.5" opacity=".85"/>'
-                   f'<text x="{lx:.1f}" y="{ly:.1f}" font-size="9" fill="currentColor" opacity=".8" '
-                   f'text-anchor="{anchor}">{_e(t("ui.gauge.portfolio"))} {reference * 100:.1f}%</text>')
+                   f'stroke-width="3" stroke-linecap="round" opacity=".9"/>')
+        ref_html = (f'<div style="text-align:center;font-size:.8rem;opacity:.75;margin-top:-.2rem">'
+                    f'<span style="display:inline-block;width:3px;height:.8rem;background:currentColor;'
+                    f'vertical-align:-2px;margin-right:.35rem;border-radius:2px"></span>'
+                    f'{_e(t("ui.gauge.portfolio"))} {reference * 100:.2f}%</div>')
     lbl = label or t("ui.gauge.label")
     svg = (
-        f'<svg class="hub-gauge" viewBox="-20 0 240 128" role="img" '
+        f'<svg class="hub-gauge" viewBox="0 0 200 128" role="img" '
         f'aria-label="{_e(lbl)}: {p * 100:.1f}%">'
         f'<path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="currentColor" stroke-opacity=".14" '
         f'stroke-width="16" stroke-linecap="round"/>'
@@ -148,7 +148,7 @@ def prob_gauge(p: float, reference: float | None = None, label: str | None = Non
         f'<text x="180" y="122" text-anchor="middle" font-size="9" fill="currentColor" opacity=".6">100%</text>'
         f'</svg>'
     )
-    raw_html(f'<div style="color:inherit">{svg}</div>')
+    raw_html(f'<div style="color:inherit">{svg}{ref_html}</div>')
 
 
 def churn_ring(share: float, label_top: str, label_bottom: str, color_a: str, color_b: str) -> str:
