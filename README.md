@@ -26,20 +26,38 @@ role sees its most useful pages first. Everything is available in **English and 
 | Section | Page | What it does |
 |---|---|---|
 | Overview | **Home** | Hero with the four headline KPIs, routes for each persona, guided tour, team. |
+| | **The Problem** | Why churn matters to Expresso, who uses the app and for which decisions, success criteria measured against the evidence, clickable CRISP-DM steps. |
 | | **Executive Dashboard** | Six KPIs, churn-vs-size-vs-value bubble chart, treemap, churners vs revenue, computed insights, model drivers, one-click **Executive Brief (PDF)**. |
+| | **Data Explorer** | Training-data overview, missingness (and why it predicts churn), a "churn rate by…" explorer, churner vs non-churner distributions, computed key findings. *Needs exported files.* |
 | Predict | **Customer Check** | Score one customer; animated gauge vs the portfolio rate; **reason codes** from LightGBM's own contributions (waterfall + plain sentences); rule-based **next best action**; presets from segment medians. |
 | | **What-If Simulator** | Move behaviour levers and compare baseline vs scenario; per-lever sensitivity sweep ("which lever helps most?"). |
-| | **Batch Scoring** | CSV template, synthetic demo data, plain-language validation report, chunked scoring with progress, risk deciles, exploratory bands, filters, charts by region/tenure/segment, **Customer 360**, CSV/Excel/priority-call-list downloads. |
+| | **Batch Scoring** | CSV template, synthetic demo data, plain-language validation report, chunked scoring with progress, risk deciles, exploratory bands, **alerts**, filters, charts by region/tenure/segment, **Customer 360**, CSV/Excel/priority-call-list downloads. |
+| | **Data Quality & Drift** | PSI per column against the training data (traffic lights), missing-rate changes, unseen categories, plain-English warnings. *Needs exported files.* |
 | Act | **Retention Planner** | ROI by campaign size under your assumptions, recommended K within capacity, expected gains/lift, target list export; flags when probability ranking loses money and offers value ranking. |
-| | **Segment Explorer** | Two-segment comparison, radar, benchmark deltas, generated interpretation, the team's playbook, 2×2 strategy matrix with adjustable cut-offs. |
-| Trust | **Model & Explainability** | Model card (intended use, limitations), gain/split importance grouped back to raw columns, all 69 features explained. |
-| | **Model Evaluation** | ROC, precision-recall, calibration, confusion matrix with a threshold slider in business words, gains/lift, on the exported validation predictions or any labelled upload. |
-| Assistant | **Churn Copilot** | Chat answered by Claude using aggregate-only tools over the app's data, with sources shown; offline FAQ mode without an API key. |
+| | **Revenue at Risk** | Segment waterfall (customers × churn × median revenue) and expected revenue at risk (probability × REVENUE) in a scored batch by region and tenure. |
+| | **Segment Explorer** | Two-segment comparison, radar, benchmark deltas, generated interpretation, the team's playbook, 2×2 strategy matrix. |
+| | **Experiment Designer** | A/B test sample size, seeded treatment/control split of the call list with achieved power, weeks needed, and results analysis (uplift, CI, p-value, verdict). |
+| | **Campaign Tracker** | Campaign log (CSV export/import), one-click row from the Retention Planner, realised vs planned retention and ROI. |
+| Trust | **Methodology** | Feature-engineering table generated from the config, class imbalance, validation strategy, why ROC-AUC, limitations and ethics. |
+| | **Model & Explainability** | Model card (intended use, limitations), gain/split importance grouped back to raw columns, all 69 features explained. |
+| | **Model Evaluation** | Model comparison leaderboard, ROC, precision-recall, calibration, confusion matrix with a threshold slider in business words, gains/lift, **threshold advisor** (cost-based, for discussion), **fairness** by region and tenure. |
+| Assistant | **Churn Copilot** | Chat answered by Claude using 13 aggregate-only tools over the app's data, with sources shown; one-click **executive summary** (PDF); offline FAQ mode without an API key. |
 | Reports | **Reports** | Executive Brief PDF, scored files, call list, data dictionary, model metadata, segment profiles, feature list, deployment summary. |
 
-Global extras: sidebar model-status and data-in-session badges, glossary, presentation mode, guided tour, optional
-password gate, an error boundary around every page, light and dark themes, colour-blind-safe palette with a "So what?"
-caption, screen-reader text and a table view under every chart.
+Pages marked *needs exported files* show an empty state naming the file and the command until
+`scripts/export_artifacts.py` has been run (see below).
+
+Global extras:
+
+- **English / French** toggle in the sidebar: every string, chart label, insight, PDF and the Copilot's answers switch,
+  and numbers use French formatting in French.
+- **View as** Executive / Retention team / Analyst reorders the navigation around each role.
+- **Guided tour** ("Take the tour" on Home) walks through the key pages with step cards.
+- **Presentation mode** hides the sidebar and controls and enlarges KPIs and charts for a defence.
+- Sidebar model-status and data-in-session badges, glossary popover, optional password gate, an error boundary around
+  every page, footer with the decision-support disclaimer.
+- Accessibility: colour-blind-safe palette validated in both themes, status never shown by colour alone, a "So what?"
+  caption, screen-reader text and a table view under every chart, light and dark themes with sufficient contrast.
 
 ### Screenshots
 
@@ -82,7 +100,37 @@ Copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml` (git-ignored
 
 Keys are only ever read from `st.secrets`; none are hard-coded.
 
-### Exporting validation predictions (for Model Evaluation)
+### Exporting the evidence files (run once)
+
+The repository holds no customer data. The evidence pages (Data Explorer, Model Evaluation's comparison, curves and
+fairness, Data Quality & Drift, richer Customer Check presets) read small aggregate files produced once from the Zindi
+`Train.csv`:
+
+```bash
+python scripts/export_artifacts.py --train path/to/Train.csv
+# options: --test-size 0.2   --no-stratify   --baseline-sample 400000   --holdout-refit   --out artifacts/
+```
+
+| File | Contents |
+|---|---|
+| `eda_summary.json` | Row counts, churn rate, missing % per column, numeric statistics by churn class, per-segment medians, a check of the segment rule |
+| `eda_breakdowns.parquet` | Churn rate and counts by tenure, region, MRG, active-day bins, top 15 packs and value deciles |
+| `validation_predictions.parquet` | `y_true`, `y_prob`, `REGION`, `TENURE` for the validation split (no customer IDs) |
+| `model_comparison.csv` | Dummy, Logistic Regression and the deployed LightGBM on the validation split |
+| `reference_stats.json` | Training distributions for drift (PSI) checks |
+| `export_manifest.json` | Split settings, sanity checks, file sizes |
+
+Notes for the team:
+
+- The script reuses `app/utils/prediction.py` and seed 42. Pass the same `--test-size` and stratification your notebook
+  used. It writes aggregates only (about 0.4 MB per 300k rows; well under 20 MB for the full file).
+- The deployed model appears to have been refit on all rows (379 trees vs best iteration 345). The script warns if the
+  deployed model scores above the recorded AUC on the split; add `--holdout-refit` to train a copy with the same
+  settings on the training split only, and the app will use those honest predictions for evaluation.
+- It checks the reconstructed segment rule against `segment_profiles.csv` and records the result in the manifest.
+- Tested end to end on synthetic data shaped like Train.csv (300k rows in about 2 minutes on a laptop).
+
+### Exporting validation predictions from the notebook (alternative)
 
 Model Evaluation reads `artifacts/validation_predictions.parquet` (columns `y_true`, `y_prob`, optionally `REGION`,
 `TENURE`). Export it from the training notebook **with the model fitted on the training split only** (before any final
@@ -107,7 +155,8 @@ Without this file you can still upload any labelled file (with a `CHURN` column)
 
 ```bash
 pip install -r requirements-dev.txt
-pytest                                   # unit tests + AppTest smoke tests of every page in EN and FR
+pytest   # 100+ tests: parity, preprocessing, scoring, metrics, PSI, A/B statistics, Copilot tools and loop,
+         # export script end to end, AppTest smoke tests of every page in EN and FR, with and without exports
 python scripts/benchmark_batch.py --rows 100000   # time and peak memory of a 100k-row batch
 ```
 
@@ -126,11 +175,11 @@ Home.py                  entrypoint: theme, password gate, st.navigation router,
 app_pages/               one file per page
 app/utils/prediction.py  canonical preprocessing (unchanged model logic, 69 features)
 app/core/                scoring, explanations, segments, metrics, validation, demo data, PDF, ...
-app/copilot/             Copilot tools, Claude streaming loop, offline FAQ
+app/copilot/             Copilot tools, Claude streaming loop, executive summary, offline FAQ
 app/ui/                  components (KPI cards, callouts, gauge), Plotly house style, layout, style.css
 app/i18n/                en.json and fr.json: every UI string
 artifacts/               model bundle, metadata, segment profiles, feature list, preprocessing config
-scripts/                 benchmark (and the artifact export script)
+scripts/                 export_artifacts.py (evidence files) and benchmark_batch.py
 tests/                   pytest suite
 ```
 

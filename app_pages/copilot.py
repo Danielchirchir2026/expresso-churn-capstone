@@ -5,7 +5,7 @@ import json
 import anthropic
 import streamlit as st
 
-from app.copilot import faq, llm
+from app.copilot import faq, llm, summary
 from app.copilot import tools as T
 from app.core import artifacts, fmt, state
 from app.i18n import current_lang, t
@@ -25,6 +25,36 @@ data_badge = badge(t("sidebar.batch_loaded", rows=fmt.num(batch["rows"])), "ok")
 st.html(f'<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin:-.2rem 0 .6rem 0">{mode_badge}{data_badge}</div>')
 if not client:
     st.caption(t("copilot.mode.offline_help"))
+
+# ---------------------------------------------------------------------------
+# Executive summary of the current state
+# ---------------------------------------------------------------------------
+with st.container(border=True):
+    st.markdown(f"**{t('summary.title')}**")
+    st.caption(t("summary.sub"))
+    if st.button(t("summary.generate"), icon=":material/summarize:", type="primary", key="cp_sum_go"):
+        ctx_s = T.Context(batch=state.get_batch(), last_customer=state.get_last_customer(),
+                          thresholds=st.session_state.get("band_thresholds"), lang=lang)
+        f, srcs = summary.facts(ctx_s)
+        text = None
+        if client:
+            try:
+                text = st.write_stream(summary.stream_llm_summary(client, model, effort, lang, f))
+            except anthropic.APIError:
+                st.warning(t("copilot.err.status", code="API"), icon=":material/cloud_off:")
+        st.session_state["cp_summary"] = (text if isinstance(text, str) else summary.template_summary(f, lang), srcs,
+                                          bool(text))
+    if st.session_state.get("cp_summary"):
+        sum_text, sum_sources, by_llm = st.session_state["cp_summary"]
+        st.markdown(sum_text)
+        st.caption(t("summary.by_llm", model=model) if by_llm else t("summary.by_template"))
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            st.download_button(t("summary.pdf"), data=lambda: summary.summary_pdf(sum_text, lang),
+                               file_name=f"expresso_executive_summary_{lang}.pdf", mime="application/pdf",
+                               icon=":material/picture_as_pdf:", on_click="ignore", key="cp_sum_pdf")
+        with c2:
+            st.caption(t("copilot.sources") + ": " + ", ".join(t(f"copilot.tool.{n}") for n, _, _ in sum_sources))
 
 # ---------------------------------------------------------------------------
 # Conversation state (display history + API history kept separately)

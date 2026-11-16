@@ -1275,7 +1275,16 @@
       "revenue": "Le revenu est concentré : le segment Actifs à forte valeur génère {share} du revenu du portefeuille. La page Revenu à risque montre le revenu porté par les clients susceptibles de partir.",
       "segments": "Les cinq segments comportementaux :",
       "rev_word": "revenu",
-      "help": "En mode hors ligne, je peux répondre sur : le segment à prioriser, les raisons du départ des Silencieux / Inactifs, votre lot scoré et ses clients les plus risqués, la signification de la ROC-AUC, les facteurs du modèle, les seuils de risque, le revenu et les segments. Essayez une des suggestions ci-dessus."
+      "help": "En mode hors ligne, je peux répondre sur : le segment à prioriser, les raisons du départ des Silencieux / Inactifs, votre lot scoré et ses clients les plus risqués, la signification de la ROC-AUC, les facteurs du modèle, les seuils de risque, le revenu et les segments. Essayez une des suggestions ci-dessus.",
+      "rar": "Selon l'estimation fondée sur les médianes, environ {v} de revenu mensuel repose sur des clients susceptibles de partir.",
+      "drift_missing": "Le contrôle de dérive nécessite reference_stats.json, qui n'a pas encore été exporté.",
+      "drift_green": "Votre lot ressemble aux données d'entraînement : toutes les colonnes sont stables. La colonne qui a le plus bougé est {col} (PSI {psi}).",
+      "drift_amber": "{amber} colonne(s) de votre lot ont modérément changé par rapport à l'entraînement ; la plus forte est {col} (PSI {psi}). Les prédictions restent utilisables, mais vérifiez ces colonnes dans Qualité et dérive des données.",
+      "drift_red": "{red} colonne(s) de votre lot sont très différentes des données d'entraînement, à commencer par {col} (PSI {psi}). Utilisez les prédictions de ce lot avec prudence et examinez le fichier.",
+      "experiment": "Pour détecter une baisse du churn de {base} à {target} (baisse relative de 20 %) avec le seuil usuel de 5 % et une puissance de 80 %, il faut environ {n} clients dans chacun des groupes test et témoin. La Conception d'expériences permet de modifier ces hypothèses et de répartir votre liste d'appels.",
+      "comparison": "Sur l'échantillon de validation, le modèle déployé se compare ainsi aux modèles de référence :",
+      "comparison_missing": "La comparaison de modèles (model_comparison.csv) n'a pas encore été exportée : je n'ai pas cette donnée.",
+      "threshold_eval": "Sur les données de validation, signaler les clients à partir de 50 % donnerait une précision de {p} et un rappel de {r}."
     }
   },
   "pdf": {
@@ -1795,5 +1804,39 @@
     "drift_red": "Dérive des données : {red} colonne(s) ont fortement changé ; les prédictions peuvent être moins fiables.",
     "drift_link": "Ouvrir Qualité et dérive des données",
     "rules": "Règles : Élevé = le seuil « Élevé à partir de » ci-dessus ; forte valeur = 10 % des clients payants au REVENUE le plus élevé ; région inhabituelle = probabilité moyenne supérieure à {factor}× la moyenne du lot avec au moins {min} clients."
+  },
+  "summary": {
+    "title": "Synthèse pour la direction",
+    "sub": "Une synthèse d'une page de la situation actuelle : portefeuille, modèle, dernier lot et santé des données, actions recommandées. Construite uniquement à partir des données et outils de l'application.",
+    "generate": "Générer la synthèse",
+    "by_llm": "Rédigée par Claude ({model}) à partir des faits listés ci-dessous.",
+    "by_template": "Rédigée à partir de modèles fixes remplis avec les chiffres de l'application (sans clé API).",
+    "pdf": "Télécharger en PDF",
+    "pdf_title": "Expresso Churn - Synthèse pour la direction",
+    "pdf_sub": "Générée le {date} par le Churn Intelligence Hub · Équipe Spartans",
+    "h": {
+      "portfolio": "Portefeuille",
+      "model": "Modèle",
+      "batch": "Dernier lot et santé des données",
+      "actions": "Actions recommandées"
+    },
+    "portfolio": "{n} clients, churn global de {rate} (environ {churners} partants). Les Actifs à forte valeur génèrent {rev} du revenu, tandis que les Silencieux / Inactifs représentent {silent} des partants.",
+    "model": "Le modèle LightGBM classe les partants avec une ROC-AUC de validation de {auc} ; ses signaux les plus forts sont {d1} et {d2}.",
+    "baseline": "Il dépasse la référence régression logistique (ROC-AUC {lr}).",
+    "revenue": "Environ {v} de revenu mensuel repose sur des clients susceptibles de partir (estimation fondée sur les médianes).",
+    "batch": "{n} clients scorés, probabilité moyenne de churn {mean}, environ {exp} départs attendus.",
+    "no_batch": "Aucun lot n'a été scoré dans cette session.",
+    "drift_green": "Santé des données : le lot ressemble aux données d'entraînement.",
+    "drift_amber": "Santé des données : {amber} colonne(s) ont modérément changé par rapport à l'entraînement.",
+    "drift_red": "Santé des données : {red} colonne(s) ont fortement changé ; les prédictions de ce lot demandent de la prudence.",
+    "drift_na": "Santé des données : non vérifiée (reference_stats.json non exporté).",
+    "act": {
+      "reactivate": "Mener une réactivation à faible coût pour les {seg}, le segment au churn le plus élevé ({rate}).",
+      "protect": "Protéger {seg} : il combine {rev} du revenu et un churn significatif, la plus forte exposition du revenu.",
+      "calls": "Utiliser la liste d'appels prioritaires du lot scoré : environ {n} départs y sont attendus.",
+      "drift": "Examiner les {n} colonne(s) en dérive avant d'agir sur les scores de ce lot.",
+      "thresholds": "Valider des seuils de risque métier (le conseiller de seuil en propose un pour discussion).",
+      "test": "Tester toute nouvelle offre avec un groupe témoin avant de la généraliser (Conception d'expériences)."
+    }
   }
 }

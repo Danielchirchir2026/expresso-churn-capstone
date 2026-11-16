@@ -14,6 +14,11 @@ from app.core import fmt
 from app.i18n import t
 
 TOPICS = [
+    ("drift", ["drift", "shift", "psi", "data quality", "derive", "qualite des donnees", "stable"]),
+    ("experiment", ["a/b", "ab test", "sample size", "experiment", "how many customers", "echantillon", "experience",
+                    "test a/b"]),
+    ("comparison", ["baseline", "logistic", "compare the model", "other model", "leaderboard", "comparaison",
+                    "reference"]),
     ("prioritise", ["priorit", "focus", "first", "which segment", "cibl", "concentr", "quel segment", "d'abord"]),
     ("silent", ["silent", "inactive", "silencieux", "inactif", "dormant"]),
     ("batch", ["batch", "upload", "my file", "summar", "lot", "fichier", "resum"]),
@@ -110,13 +115,40 @@ def answer(question: str, ctx: T.Context) -> tuple[str, list]:
     elif topic == "threshold":
         use("model_card")
         text = t("copilot.faq.threshold", lang)
+        ev = use("evaluation_at_threshold", threshold=0.5)
+        if ev:
+            text += " " + t("copilot.faq.threshold_eval", lang, p=pct(ev["precision_pct"], 0), r=pct(ev["recall_pct"], 0))
     elif topic == "revenue":
         po = use("portfolio_overview")
+        rar = use("revenue_at_risk")
         text = t("copilot.faq.revenue", lang, share=pct(po["high_value_active_revenue_share_pct"], 1))
-        if ctx.batch:
-            bs = use("batch_summary")
-            if bs.get("expected_monthly_revenue_at_risk_fcfa") is not None:
-                text += " " + t("copilot.faq.batch_rev", lang, rev=money(bs["expected_monthly_revenue_at_risk_fcfa"]))
+        if rar:
+            text += " " + t("copilot.faq.rar", lang, v=money(rar["portfolio_monthly_revenue_at_risk_fcfa"]))
+            if rar.get("batch"):
+                text += " " + t("copilot.faq.batch_rev", lang, rev=money(rar["batch"]["expected_monthly_revenue_at_risk_fcfa"]))
+    elif topic == "drift":
+        if not ctx.batch:
+            text = t("copilot.faq.no_batch", lang)
+        else:
+            dr = use("drift_report")
+            if dr is None:
+                text = t("copilot.faq.drift_missing", lang)
+            else:
+                top = dr["columns"][0]
+                text = t(f"copilot.faq.drift_{dr['overall']}", lang, col=top["column"], psi=num(top["psi"], 3),
+                         red=dr["counts"].get("red", 0), amber=dr["counts"].get("amber", 0))
+    elif topic == "experiment":
+        ss = use("sample_size", reduction=20)
+        text = t("copilot.faq.experiment", lang, n=num(ss["customers_per_group"]), base=pct(ss["baseline_churn_pct"], 2),
+                 target=pct(ss["target_churn_pct"], 2))
+    elif topic == "comparison":
+        mc = use("model_comparison")
+        if mc is None:
+            text = t("copilot.faq.comparison_missing", lang)
+        else:
+            lines = [f"- **{m['model']}**: ROC-AUC {num(m['roc_auc'], 4)} · PR-AUC {num(m['pr_auc'], 4)}"
+                     for m in mc["models"]]
+            text = t("copilot.faq.comparison", lang) + "\n\n" + "\n".join(lines)
     elif topic == "segments":
         po = use("portfolio_overview")
         lines = [f"- **{s['segment']}**: {pct(s['pct_customers'], 1)} · churn {pct(s['churn_rate_pct'], 2)} · "

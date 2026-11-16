@@ -125,3 +125,64 @@ def test_stream_loop_handles_refusal_without_fallback_model():
                                     T.Context(lang="fr"), []))
     assert "Je ne peux pas" in out
     assert "fallbacks" not in log[0]
+
+
+# ---------------------------------------------------------------------------
+# Phase 14: tools over exported artifacts, summary, new FAQ topics
+# ---------------------------------------------------------------------------
+def test_extra_tools_without_exports_say_so():
+    for name, args in [("model_comparison", {}), ("eda_breakdown", {"column": "TENURE"}),
+                       ("evaluation_at_threshold", {"threshold": 0.5})]:
+        result, err = T.call(name, args, T.Context())
+        if err:  # repo artifacts/ has no exported files
+            assert "I don't have that data" in result["error"]
+    ss, err = T.call("sample_size", {"reduction": 20}, T.Context())
+    assert not err and ss["customers_per_group"] > 0
+
+
+def test_extra_tools_with_exports(exported, ctx_with_batch, monkeypatch):
+    from app.core import artifacts
+
+    monkeypatch.setattr(artifacts, "OPTIONAL_DIR", exported)
+    for name, args in [("model_comparison", {}), ("eda_breakdown", {"column": "TENURE"}),
+                       ("evaluation_at_threshold", {"threshold": 0.4}), ("revenue_at_risk", {}),
+                       ("drift_report", {})]:
+        result, err = T.call(name, args, ctx_with_batch)
+        assert not err, (name, result)
+        json.dumps(result)
+
+
+def test_executive_summary_template_and_pdf(ctx_with_batch):
+    from app.copilot import summary
+
+    facts, sources = summary.facts(ctx_with_batch)
+    assert {"portfolio", "model", "batch"} <= set(facts) and sources
+    for lang in ("en", "fr"):
+        text = summary.template_summary(facts, lang)
+        assert "###" in text and ("18.75%" in text or "18,75" in text)
+        pdf = summary.summary_pdf(text, lang)
+        assert pdf[:5] == b"%PDF-"
+
+
+@pytest.mark.parametrize("question,topic", [
+    ("Is my batch drifting from the training data?", "drift"),
+    ("How big should an A/B test be?", "experiment"),
+    ("How does the model compare with the baseline?", "comparison"),
+])
+def test_faq_routing_new_topics(question, topic):
+    assert faq.match(question) == topic
+
+
+def test_llm_summary_streams_with_fake_client(ctx_with_batch):
+    from app.copilot import summary
+
+    facts, _ = summary.facts(ctx_with_batch)
+    final = SimpleNamespace(stop_reason="end_turn", content=[SimpleNamespace(type="text", text="### Portfolio")])
+    log: list = []
+    client = SimpleNamespace(beta=SimpleNamespace(messages=FakeMessages([(["### Portfolio", " ok"], final)], log)),
+                             messages=None)
+    text = "".join(summary.stream_llm_summary(client, "claude-opus-5-5", "medium", "fr", facts))
+    assert text == "### Portfolio ok"
+    sent = log[0]
+    assert sent["fallbacks"] == "default" and sent["output_config"] == {"effort": "medium"}
+    assert "Write in French" in sent["system"] and "rule_based_recommendations" in sent["messages"][0]["content"]

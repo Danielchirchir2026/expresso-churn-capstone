@@ -1275,7 +1275,16 @@
       "revenue": "Revenue is concentrated: the High-Value Active segment generates {share} of portfolio revenue. The Revenue at Risk page shows how much revenue sits in likely churners.",
       "segments": "The five behavioural segments:",
       "rev_word": "revenue",
-      "help": "In offline mode I can answer questions about: which segment to prioritise, why Silent / Inactive customers churn, your scored batch and its riskiest customers, what ROC-AUC means, the model's drivers, risk thresholds, revenue and the segments. Try one of the suggestions above."
+      "help": "In offline mode I can answer questions about: which segment to prioritise, why Silent / Inactive customers churn, your scored batch and its riskiest customers, what ROC-AUC means, the model's drivers, risk thresholds, revenue and the segments. Try one of the suggestions above.",
+      "rar": "By the median-based estimate, about {v} of monthly revenue sits with customers expected to churn.",
+      "drift_missing": "Drift checks need reference_stats.json, which has not been exported yet.",
+      "drift_green": "Your batch looks like the training data: every column is stable. The column that moved most is {col} (PSI {psi}).",
+      "drift_amber": "{amber} column(s) in your batch shifted moderately from the training data; the largest is {col} (PSI {psi}). Predictions are usable, but check those columns on Data Quality & Drift.",
+      "drift_red": "{red} column(s) in your batch look very different from the training data, led by {col} (PSI {psi}). Treat this batch's predictions with caution and investigate the file.",
+      "experiment": "To detect a drop from {base} to {target} churn (a 20% relative reduction) with the usual 5% significance and 80% power, you need about {n} customers in each of the treatment and control groups. The Experiment Designer lets you change these assumptions and split your call list.",
+      "comparison": "On the validation split, the deployed model compares with the baselines as follows:",
+      "comparison_missing": "The model comparison (model_comparison.csv) has not been exported yet, so I don't have that data.",
+      "threshold_eval": "On the validation data, flagging customers at 50% or more would give {p} precision and {r} recall."
     }
   },
   "pdf": {
@@ -1795,5 +1804,39 @@
     "drift_red": "Data drift: {red} column(s) shifted strongly; predictions may be less reliable.",
     "drift_link": "Open Data Quality & Drift",
     "rules": "Rules: High = the 'High from' threshold above; high value = top 10% of paying customers by REVENUE; unusual region = average probability more than {factor}× the batch average with at least {min} customers."
+  },
+  "summary": {
+    "title": "Executive summary",
+    "sub": "A one-page summary of the current state: portfolio, model, latest batch and data health, and recommended actions. Built only from the app's data and tools.",
+    "generate": "Generate executive summary",
+    "by_llm": "Written by Claude ({model}) from the facts listed below.",
+    "by_template": "Written from fixed templates filled with the app's numbers (no API key needed).",
+    "pdf": "Download as PDF",
+    "pdf_title": "Expresso Churn - Executive summary",
+    "pdf_sub": "Generated {date} by the Churn Intelligence Hub · Team Spartans",
+    "h": {
+      "portfolio": "Portfolio",
+      "model": "Model",
+      "batch": "Latest batch and data health",
+      "actions": "Recommended actions"
+    },
+    "portfolio": "{n} customers, overall churn {rate} (about {churners} churners). High-Value Active customers generate {rev} of revenue, while Silent / Inactive customers account for {silent} of churners.",
+    "model": "The LightGBM model ranks churners with a validation ROC-AUC of {auc}; its strongest signals are {d1} and {d2}.",
+    "baseline": "It beats the Logistic Regression baseline (ROC-AUC {lr}).",
+    "revenue": "About {v} of monthly revenue sits with customers expected to churn (median-based estimate).",
+    "batch": "{n} customers scored, average churn probability {mean}, about {exp} expected churners.",
+    "no_batch": "No batch has been scored in this session.",
+    "drift_green": "Data health: the batch looks like the training data.",
+    "drift_amber": "Data health: {amber} column(s) shifted moderately from the training data.",
+    "drift_red": "Data health: {red} column(s) shifted strongly; predictions for this batch need caution.",
+    "drift_na": "Data health: not checked (reference_stats.json not exported).",
+    "act": {
+      "reactivate": "Run low-cost reactivation for {seg} customers, the segment with the highest churn ({rate}).",
+      "protect": "Protect {seg}: it combines {rev} of revenue with meaningful churn, the largest revenue exposure.",
+      "calls": "Use the priority call list from the scored batch: about {n} churners are expected in it.",
+      "drift": "Investigate the {n} drifted column(s) before acting on this batch's scores.",
+      "thresholds": "Agree business risk thresholds (the Threshold advisor proposes one for discussion).",
+      "test": "Test any new offer with a control group before scaling it (Experiment Designer)."
+    }
   }
 }

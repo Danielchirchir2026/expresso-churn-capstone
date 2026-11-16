@@ -309,3 +309,7 @@ def call(name: str, args, ctx: Context) -> tuple[dict, bool]:
         return {"error": str(exc)}, True
     except Exception as exc:  # never crash the chat on a tool failure
         return {"error": f"{type(exc).__name__}: {exc}"}, True
+
+
+# Tools over exported artifacts, drift, revenue and experiments (registers itself).
+from app.copilot import tools_extra  # noqa: E402,F401
