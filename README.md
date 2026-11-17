@@ -61,7 +61,8 @@ Global extras:
 
 ### Screenshots
 
-Captured from the running app with the artifacts in this repository (dark theme, 1440 × 900). Batch Scoring and the
+Captured from the running app with the artifacts in this repository (dark theme, 1440 × 900). Data Explorer, Model
+Evaluation and Fairness use the evidence files exported from the full Zindi `Train.csv`. Batch Scoring and the
 Retention Planner use the app's built-in synthetic demo batch, which the app labels as synthetic on every page.
 
 | Home | Executive Dashboard | Customer Check |
@@ -69,6 +70,8 @@ Retention Planner use the app's built-in synthetic demo batch, which the app lab
 | ![Home](docs/screenshots/home.png) | ![Executive Dashboard](docs/screenshots/executive.png) | ![Customer Check](docs/screenshots/customer_check.png) |
 | **Batch Scoring** | **Retention Planner** | **Churn Copilot** |
 | ![Batch Scoring](docs/screenshots/batch.png) | ![Retention Planner](docs/screenshots/retention.png) | ![Churn Copilot](docs/screenshots/copilot.png) |
+| **Data Explorer** | **Model Evaluation** | **Fairness by region** |
+| ![Data Explorer](docs/screenshots/data_explorer.png) | ![Model Evaluation](docs/screenshots/evaluation.png) | ![Fairness by region](docs/screenshots/fairness.png) |
 
 ---
 
@@ -103,13 +106,13 @@ Keys are only ever read from `st.secrets`; none are hard-coded.
 
 ### Exporting the evidence files (run once)
 
-The repository holds no customer data. The evidence pages (Data Explorer, Model Evaluation's comparison, curves and
-fairness, Data Quality & Drift, richer Customer Check presets) read small aggregate files produced once from the Zindi
-`Train.csv`:
+The repository holds no raw customer data and no customer IDs. The evidence pages (Data Explorer, Model Evaluation's
+comparison, curves and fairness, Data Quality & Drift, richer Customer Check presets) read small files produced once
+from the Zindi `Train.csv`. The files in `artifacts/` were produced from the full file (2,154,048 rows) with:
 
 ```bash
-python scripts/export_artifacts.py --train path/to/Train.csv
-# options: --test-size 0.2   --no-stratify   --baseline-sample 400000   --holdout-refit   --out artifacts/
+python scripts/export_artifacts.py --train path/to/Train.csv --holdout-refit
+# other options: --test-size 0.2 (default)   --no-stratify   --baseline-sample 400000   --out artifacts/
 ```
 
 | File | Contents |
@@ -117,19 +120,23 @@ python scripts/export_artifacts.py --train path/to/Train.csv
 | `eda_summary.json` | Row counts, churn rate, missing % per column, numeric statistics by churn class, per-segment medians, a check of the segment rule |
 | `eda_breakdowns.parquet` | Churn rate and counts by tenure, region, MRG, active-day bins, top 15 packs and value deciles |
 | `validation_predictions.parquet` | `y_true`, `y_prob`, `REGION`, `TENURE` for the validation split (no customer IDs) |
-| `model_comparison.csv` | Dummy, Logistic Regression and the deployed LightGBM on the validation split |
+| `model_comparison.csv` | Dummy, Logistic Regression, the deployed LightGBM and (with `--holdout-refit`) the holdout refit, on the validation split |
 | `reference_stats.json` | Training distributions for drift (PSI) checks |
 | `export_manifest.json` | Split settings, sanity checks, file sizes |
 
 Notes for the team:
 
-- The script reuses `app/utils/prediction.py` and seed 42. Pass the same `--test-size` and stratification your notebook
-  used. It writes aggregates only (about 0.4 MB per 300k rows; well under 20 MB for the full file).
-- The deployed model appears to have been refit on all rows (379 trees vs best iteration 345). The script warns if the
-  deployed model scores above the recorded AUC on the split; add `--holdout-refit` to train a copy with the same
-  settings on the training split only, and the app will use those honest predictions for evaluation.
-- It checks the reconstructed segment rule against `segment_profiles.csv` and records the result in the manifest.
-- Tested end to end on synthetic data shaped like Train.csv (300k rows in about 2 minutes on a laptop).
+- The script reuses `app/utils/prediction.py` and the notebook's split: seed 42 (recorded in `model_metadata.json`),
+  20% validation, stratified on churn (the defaults). The full run took about 2 minutes and wrote 2.3 MB.
+- The deployed model was refit on all 2,154,048 rows, so it has seen the validation rows: it scores 0.9338 on them
+  against 0.9317 recorded at training. Hence `--holdout-refit`: a copy with the deployed settings, trained on the
+  training split only, scores ROC-AUC 0.9317, exactly the notebook's recorded validation score, which confirms the
+  split matches the notebook's. Model Evaluation uses these honest holdout predictions and marks the deployed model's
+  own score as optimistic.
+- The reconstructed segment rule matches `segment_profiles.csv` (checked by the script, recorded in the manifest).
+- `validation_predictions.parquet` is the only per-row file (430,810 rows: label, probability, region, tenure; no IDs).
+  Check Zindi's data-use rules before publishing it in a public repository.
+- Keep `Train.csv` / `Test.csv` out of git: `.gitignore` excludes them at the repository root.
 
 ### Exporting validation predictions from the notebook (alternative)
 
