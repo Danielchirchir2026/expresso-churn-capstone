@@ -61,7 +61,8 @@ Global extras:
 
 ### Screenshots
 
-Add screenshots to `docs/screenshots/` and they will render here.
+Captured from the running app with the artifacts in this repository (dark theme, 1440 × 900). Batch Scoring and the
+Retention Planner use the app's built-in synthetic demo batch, which the app labels as synthetic on every page.
 
 | Home | Executive Dashboard | Customer Check |
 |---|---|---|
