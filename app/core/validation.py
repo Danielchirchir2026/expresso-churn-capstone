@@ -7,6 +7,8 @@ from dataclasses import dataclass, field
 import numpy as np
 import pandas as pd
 
+from app.core import fmt
+
 NUMERIC = ["MONTANT", "FREQUENCE_RECH", "REVENUE", "ARPU_SEGMENT", "FREQUENCE", "DATA_VOLUME", "ON_NET", "ORANGE",
            "TIGO", "ZONE1", "ZONE2", "REGULARITY", "FREQ_TOP_PACK"]
 SAMPLE = 8  # rows listed per issue
@@ -125,7 +127,7 @@ def validate(df: pd.DataFrame, config: dict) -> Report:
     usage = df[NUMERIC[:-2] + ["FREQ_TOP_PACK"]].apply(pd.to_numeric, errors="coerce")
     silent = usage.isna().all(axis=1)
     if silent.any():
-        issues.append(Issue("info", "silent_rows", {"share": f"{silent.mean() * 100:.1f}"}, count=int(silent.sum())))
+        issues.append(Issue("info", "silent_rows", {"share": fmt.num(silent.mean() * 100, 1)}, count=int(silent.sum())))
     return Report(len(df), df.shape[1], issues)
 
 

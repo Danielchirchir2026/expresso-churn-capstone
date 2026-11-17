@@ -13,6 +13,8 @@ import math
 import numpy as np
 import pandas as pd
 
+from app.core import fmt
+
 GREEN, AMBER = 0.10, 0.25
 EPS = 1e-4
 
@@ -101,4 +103,4 @@ def distribution_frame(df: pd.DataFrame, reference: dict, col: str, missing_labe
 def _fmt(x: float) -> str:
     if math.isinf(x):
         return "-∞" if x < 0 else "+∞"
-    return f"{x:,.0f}" if abs(x) >= 10 else f"{x:,.2f}"
+    return fmt.num(x, 0) if abs(x) >= 10 else fmt.num(x, 2)

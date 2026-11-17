@@ -44,7 +44,7 @@ if reference is not None and batch:
                                                                                                          ascending=[True, False])
     body = "".join(
         f"<tr><td><b>{html.escape(friendly(r.column))}</b><br><span style='opacity:.6;font-size:.8rem'>{r.column}</span></td>"
-        f"<td style='font-variant-numeric:tabular-nums'>{r.psi:.3f}</td>"
+        f"<td style='font-variant-numeric:tabular-nums'>{fmt.num(r.psi, 3)}</td>"
         f"<td><span style='color:{color[r.status]};font-weight:700'>{icon[r.status]} {html.escape(t(f'drift.status.{r.status}'))}</span></td>"
         f"<td>{fmt.pct(r.missing_ref * 100, 1)} → {fmt.pct(r.missing_new * 100, 1)}"
         f" <span style='opacity:.7'>({fmt.pp((r.missing_new - r.missing_ref) * 100, 1)})</span></td>"

@@ -944,6 +944,7 @@
       "best": "Contact the top {k} customers: expected net value {net}, about {saved} customers kept (capacity {cap}).",
       "none": "At these assumptions no campaign size is profitable: the offer costs more than the revenue it is expected to save. Lower the cost, raise the save rate, or rank by value.",
       "alt_tag": "Try this instead",
+      "best_tag": "Recommended",
       "alt_value": "Ranking by expected value at risk is profitable: contact {k} customers for an expected net value of {net}. Under probability ranking, {zero} of the customers within capacity record no revenue, so saving them earns nothing.",
       "alt_prob": "Ranking by churn probability is profitable here: contact {k} customers for an expected net value of {net}.",
       "switch_value": "Rank by expected value at risk",
@@ -951,6 +952,8 @@
     },
     "kpi": {
       "contact": "Customers to contact",
+      "contact_cap": "Contacts at full capacity",
+      "not_recommended": "Not recommended: this campaign loses money",
       "reached": "Expected churners reached",
       "reached_help": "Sum of churn probabilities of the contacted customers.",
       "saved": "Expected customers kept",
@@ -1792,7 +1795,7 @@
   "alerts": {
     "title": "Alerts",
     "sub": "Raised automatically after scoring, with fixed rules.",
-    "tag": "Alert",
+    "tag": {"risk": "Alert", "warn": "Watch", "good": "All clear"},
     "above": "{n} customers ({share}) are at or above the High threshold of {high}.",
     "vip": "{n} customers are both in the top 10% by revenue (at least {cut} per month) and in the riskiest decile: priority calls for the retention desk.",
     "vip_none": "No customer is in both the top revenue decile and the riskiest decile.",

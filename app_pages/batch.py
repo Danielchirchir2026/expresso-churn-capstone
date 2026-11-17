@@ -165,11 +165,12 @@ else:
     # Alerts (rule-based, rules stated below)
     section_header(t("alerts.title"), t("alerts.sub"))
     al = alerts.batch_alerts(df, high, ID)
+    alert_tone = "risk" if al["above"] else "good"
     insight_callout(t("alerts.above", n=fmt.num(al["above"]), share=fmt.pct(al["above_share"] * 100, 1),
-                      high=fmt.num(high, 3)), "risk" if al["above"] else "good", tag=t("alerts.tag"))
+                      high=fmt.num(high, 3)), alert_tone, tag=t(f"alerts.tag.{alert_tone}"))
     if al["vip_count"]:
         insight_callout(t("alerts.vip", n=fmt.num(al["vip_count"]), cut=fmt.money(al["vip_revenue_cut"])), "risk",
-                        tag=t("alerts.tag"))
+                        tag=t("alerts.tag.risk"))
         vip = al["vip"]
         st.download_button(t("alerts.vip_dl", n=fmt.num(len(vip))),
                            data=lambda: vip.drop(columns=[c for c in vip.columns if c.endswith("_logodds")])
@@ -177,18 +178,19 @@ else:
                            file_name="high_value_high_risk_customers.csv", mime="text/csv", on_click="ignore",
                            icon=":material/workspace_premium:", key="alerts_vip_dl")
     else:
-        insight_callout(t("alerts.vip_none"), "good", tag=t("alerts.tag"))
+        insight_callout(t("alerts.vip_none"), "good", tag=t("alerts.tag.good"))
     if al["regions"]:
         listing = ", ".join(f"{r} ({fmt.pct(m * 100, 1)}, n={fmt.num(n)})" for r, m, n in al["regions"][:6])
         insight_callout(t("alerts.regions", regions=listing, mean=fmt.pct(al["overall_mean"] * 100, 1)), "warn",
-                        tag=t("alerts.tag"))
+                        tag=t("alerts.tag.warn"))
     else:
-        insight_callout(t("alerts.regions_none", mean=fmt.pct(al["overall_mean"] * 100, 1)), "good", tag=t("alerts.tag"))
+        insight_callout(t("alerts.regions_none", mean=fmt.pct(al["overall_mean"] * 100, 1)), "good", tag=t("alerts.tag.good"))
     drift_rep = batch.get("drift")
     if drift_rep:
         c = drift_rep["counts"]
+        alert_tone = {"green": "good", "amber": "warn", "red": "risk"}[drift_rep["overall"]]
         insight_callout(t(f"alerts.drift_{drift_rep['overall']}", red=c.get("red", 0), amber=c.get("amber", 0)),
-                        {"green": "good", "amber": "warn", "red": "risk"}[drift_rep["overall"]], tag=t("alerts.tag"))
+                        alert_tone, tag=t(f"alerts.tag.{alert_tone}"))
         navigation.link("drift", label=t("alerts.drift_link"))
     st.caption(t("alerts.rules", factor=fmt.num(alerts.REGION_FACTOR, 2), min=alerts.MIN_REGION))
 

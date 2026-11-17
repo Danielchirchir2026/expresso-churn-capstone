@@ -8,11 +8,18 @@ from app import navigation
 from app.core import artifacts, fmt, portfolio
 from app.core import state
 from app.core.features import friendly, global_importance, grouped_importance
-from app.core.pdf import executive_brief
 from app.core.segments import with_names
 from app.i18n import current_lang, t
 from app.ui import charts
 from app.ui.components import insight_callout, kpi_row, page_header, section_header
+
+
+def _brief_pdf(profiles_raw, meta, lang, batch) -> bytes:
+    """Build the Executive Brief; fpdf2 takes about a second to import, so load it only when a PDF is requested."""
+    from app.core.pdf import executive_brief
+
+    return executive_brief(profiles_raw, meta, lang, batch)
+
 
 profiles = with_names(artifacts.get_segment_profiles())
 meta = artifacts.get_metadata()
@@ -24,7 +31,7 @@ page_header(t("exec.title"), t("exec.sub"), t("exec.eyebrow"))
 _lang = current_lang()
 _raw_profiles = artifacts.get_segment_profiles()
 _batch = state.get_batch()  # captured now: the deferred callable runs outside the script context
-st.download_button(t("exec.brief_btn"), data=lambda: executive_brief(_raw_profiles, meta, _lang, _batch),
+st.download_button(t("exec.brief_btn"), data=lambda: _brief_pdf(_raw_profiles, meta, _lang, _batch),
                    file_name=f"expresso_executive_brief_{_lang}.pdf", mime="application/pdf",
                    icon=":material/picture_as_pdf:", on_click="ignore", key="exec_pdf", help=t("exec.brief_help"))
 

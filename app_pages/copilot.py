@@ -2,7 +2,6 @@
 
 import json
 
-import anthropic
 import streamlit as st
 
 from app.copilot import faq, llm, summary
@@ -14,6 +13,8 @@ from app.ui.components import badge, page_header
 
 lang = current_lang()
 client, model, effort = llm.client_from_secrets(layout.get_secret)
+if client:  # the SDK is only needed with an API key (it is slow to import, so the offline mode skips it)
+    import anthropic
 meta = artifacts.get_metadata()
 
 page_header(t("copilot.title"), t("copilot.sub"), t("copilot.eyebrow"))

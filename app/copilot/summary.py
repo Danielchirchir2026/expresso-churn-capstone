@@ -13,11 +13,8 @@ import re
 from datetime import datetime, timezone
 from typing import Iterator
 
-from fpdf import FPDF
-
 from app.copilot import tools as T
 from app.core import fmt
-from app.core.pdf import INK, MUTED, NAVY, clean
 from app.i18n import t
 
 
@@ -121,6 +118,10 @@ def stream_llm_summary(client, model: str, effort: str, lang: str, f: dict) -> I
 
 
 def summary_pdf(markdown_text: str, lang: str) -> bytes:
+    from fpdf import FPDF  # imported here: fpdf2 is slow to import and only needed for the download
+
+    from app.core.pdf import INK, MUTED, NAVY, clean
+
     pdf = FPDF(orientation="P", unit="mm", format="A4")
     pdf.set_auto_page_break(True, margin=16)
     pdf.set_margins(16, 16, 16)

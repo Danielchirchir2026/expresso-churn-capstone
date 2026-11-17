@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from app.core.segments import SEGMENT_COLORS
-from app.i18n import t
+from app.i18n import current_lang, t
 
 INK = {
     "dark": dict(primary="#E6EDF7", secondary="#AEBBD0", muted="#7F8BA3", grid="#1F2A40", axis="#33415E",
@@ -95,8 +95,10 @@ def style(fig: go.Figure, height: int = 380, legend: bool = True, ygrid: bool = 
     """Apply the house style to a figure."""
     m = mode()
     h = int(height * (1.3 if presenting() else 1.0))
+    french = current_lang() == "fr"
     fig.update_layout(
         height=h,
+        separators=",\u202f" if french else ".,",  # decimal, thousands (matches app.core.fmt)
         margin=dict(l=8, r=12, t=(78 if legend else 48) if title else 28, b=8),
         title=dict(text=title, x=0, xanchor="left", y=0.985, yanchor="top", yref="container",
                    font=dict(size=15)) if title else None,
@@ -117,10 +119,11 @@ def style(fig: go.Figure, height: int = 380, legend: bool = True, ygrid: bool = 
     fig.update_yaxes(showgrid=ygrid, gridcolor=INK[m]["grid"], gridwidth=1, zeroline=False,
                      linecolor=INK[m]["axis"], tickfont=dict(color=INK[m]["muted"]),
                      title_font=dict(color=INK[m]["secondary"]))
+    suffix = "\u202f%" if french else "%"
     if pct_y:
-        fig.update_yaxes(ticksuffix="%")
+        fig.update_yaxes(ticksuffix=suffix)
     if pct_x:
-        fig.update_xaxes(ticksuffix="%")
+        fig.update_xaxes(ticksuffix=suffix)
     return fig
 
 

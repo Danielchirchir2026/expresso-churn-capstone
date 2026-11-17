@@ -52,3 +52,18 @@ def test_feature_groups_cover_all_69_features_once(config):
     groups = [source_of(f, config["raw_source_columns"]) for f in config["feature_columns"]]
     assert set(groups) <= set(config["raw_source_columns"]) | set(OWN_GROUPS)
     assert len(groups) == 69
+
+
+def test_pdf_library_loaded_lazily():
+    """fpdf2 costs about a second to import; pages and the Copilot load it only when a PDF is requested."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    code = ("import sys; import app.copilot.summary, app.copilot.tools, app.core.portfolio; "
+            "assert 'fpdf' not in sys.modules, 'fpdf imported eagerly'")
+    subprocess.run([sys.executable, "-c", code], cwd=root, check=True)
+    for page in ("executive.py", "reports.py"):
+        text = (root / "app_pages" / page).read_text(encoding="utf-8")
+        assert "\nfrom app.core.pdf import" not in text, page

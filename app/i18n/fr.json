@@ -268,13 +268,13 @@
         "who": "Direction",
         "title": "Où perdons-nous des clients et du revenu ?",
         "desc": "Indicateurs du portefeuille, économie des segments et revenu exposé au churn, sur un seul écran.",
-        "cta": "Ouvrir le tableau de bord direction"
+        "cta": "Ouvrir le tableau de bord"
       },
       "retention": {
         "who": "Équipe rétention / CRM",
         "title": "Qui appeler cette semaine ?",
         "desc": "Scorer un fichier clients, planifier une campagne au meilleur rendement attendu et suivre les résultats.",
-        "cta": "Planifier une campagne de rétention"
+        "cta": "Planifier une campagne"
       },
       "analyst": {
         "who": "Analyste",
@@ -944,6 +944,7 @@
       "best": "Contactez les {k} premiers clients : valeur nette attendue {net}, environ {saved} clients conservés (capacité {cap}).",
       "none": "Avec ces hypothèses, aucune taille de campagne n'est rentable : l'offre coûte plus que le revenu qu'elle devrait sauver. Réduisez le coût, augmentez le taux de rétention ou classez par valeur.",
       "alt_tag": "Essayez plutôt",
+      "best_tag": "Recommandé",
       "alt_value": "Le classement par valeur attendue à risque est rentable : contactez {k} clients pour une valeur nette attendue de {net}. Avec le classement par probabilité, {zero} des clients dans la limite de capacité n'ont aucun revenu enregistré : les retenir ne rapporte rien.",
       "alt_prob": "Le classement par probabilité de churn est rentable ici : contactez {k} clients pour une valeur nette attendue de {net}.",
       "switch_value": "Classer par valeur attendue à risque",
@@ -951,6 +952,8 @@
     },
     "kpi": {
       "contact": "Clients à contacter",
+      "contact_cap": "Contacts à pleine capacité",
+      "not_recommended": "Déconseillé : cette campagne est à perte",
       "reached": "Partants attendus atteints",
       "reached_help": "Somme des probabilités de churn des clients contactés.",
       "saved": "Clients conservés attendus",
@@ -1792,7 +1795,7 @@
   "alerts": {
     "title": "Alertes",
     "sub": "Déclenchées automatiquement après le scoring, selon des règles fixes.",
-    "tag": "Alerte",
+    "tag": {"risk": "Alerte", "warn": "À surveiller", "good": "Rien à signaler"},
     "above": "{n} clients ({share}) sont au-dessus du seuil Élevé de {high}.",
     "vip": "{n} clients sont à la fois dans les 10 % de revenu les plus élevés (au moins {cut} par mois) et dans le décile le plus risqué : appels prioritaires pour le service rétention.",
     "vip_none": "Aucun client n'est à la fois dans le décile de revenu le plus élevé et le décile le plus risqué.",

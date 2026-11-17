@@ -186,3 +186,16 @@ def test_llm_summary_streams_with_fake_client(ctx_with_batch):
     sent = log[0]
     assert sent["fallbacks"] == "default" and sent["output_config"] == {"effort": "medium"}
     assert "Write in French" in sent["system"] and "rule_based_recommendations" in sent["messages"][0]["content"]
+
+
+def test_offline_copilot_does_not_import_sdk():
+    """Without an API key the Copilot never needs the Anthropic SDK, which is slow to import."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    code = ("import sys; from app.copilot import faq, llm, summary, tools; "
+            "c, m, e = llm.client_from_secrets(lambda k: None); "
+            "assert c is None and m == llm.DEFAULT_MODEL; "
+            "assert 'anthropic' not in sys.modules, 'anthropic imported without a key'")
+    subprocess.run([sys.executable, "-c", code], cwd=Path(__file__).resolve().parents[1], check=True)

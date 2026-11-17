@@ -140,7 +140,7 @@ if data is not None:
         with c1:
             roc = evaluation.roc_points(data)
             f = go.Figure()
-            f.add_trace(go.Scatter(x=roc["fpr"], y=roc["tpr"], mode="lines", name=f"ROC (AUC {s['auc']:.4f})",
+            f.add_trace(go.Scatter(x=roc["fpr"], y=roc["tpr"], mode="lines", name=f"ROC (AUC {fmt.num(s['auc'], 4)})",
                                    line=dict(color=charts.accent(), width=2), customdata=roc["threshold"],
                                    hovertemplate="FPR %{x:.3f} · TPR %{y:.3f}<br>t = %{customdata:.3f}<extra></extra>"))
             f.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", name=t("ret.gains.random"),
@@ -153,7 +153,7 @@ if data is not None:
         with c2:
             pr = evaluation.pr_points(data)
             f = go.Figure()
-            f.add_trace(go.Scatter(x=pr["recall"], y=pr["precision"], mode="lines", name=f"AP {s['ap']:.4f}",
+            f.add_trace(go.Scatter(x=pr["recall"], y=pr["precision"], mode="lines", name=f"AP {fmt.num(s['ap'], 4)}",
                                    line=dict(color=charts.accent(), width=2), customdata=pr["threshold"],
                                    hovertemplate=t("eval.pr.hover") + "<extra></extra>"))
             f.add_hline(y=s["rate"], line=dict(color=charts.ink("muted"), width=1),
@@ -236,10 +236,10 @@ if data is not None:
         a1, a2 = st.columns(2)
         with a1:
             c_fp = st.number_input(t("eval.adv.cost_fp"), 0.0, 1e7, float(st.session_state.get("ret_cost", 500.0)),
-                                   50.0, key="adv_fp", help=t("eval.adv.cost_fp_help"))
+                                   50.0, key="adv_fp", format="%.0f", help=t("eval.adv.cost_fp_help"))
         with a2:
             c_fn = st.number_input(t("eval.adv.cost_fn"), 0.0, 1e8, float(round(typical * 3)), 100.0, key="adv_fn",
-                                   help=t("eval.adv.cost_fn_help", typical=fmt.num(typical)))
+                                   format="%.0f", help=t("eval.adv.cost_fn_help", typical=fmt.num(typical)))
         costs = metrics.threshold_cost(data.y, data.p, c_fp, c_fn)
         best_t = metrics.best_cost_threshold(costs)
         best = costs.loc[costs["threshold"] == best_t].iloc[0]

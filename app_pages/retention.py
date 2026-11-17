@@ -39,10 +39,10 @@ if batch:
                             help=t("ret.inputs.value_mode_help"))
             flat = st.number_input(t("ret.inputs.flat"), 0.0, 1e7,
                                    float(round(median_rev)) if np.isfinite(median_rev) else 0.0, 100.0, key="ret_flat",
-                                   disabled=mode != "flat",
+                                   format="%.0f", disabled=mode != "flat",
                                    help=t("ret.inputs.flat_help", median=fmt.num(median_rev)))
         with c2:
-            cost = st.number_input(t("ret.inputs.cost"), 0.0, 1e6, 500.0, 50.0, key="ret_cost",
+            cost = st.number_input(t("ret.inputs.cost"), 0.0, 1e6, 500.0, 50.0, key="ret_cost", format="%.0f",
                                    help=t("ret.inputs.cost_help"))
             save = st.slider(t("ret.inputs.save"), 0.0, 1.0, 0.20, 0.01, key="ret_save", format="%.2f",
                              help=t("ret.inputs.save_help"))
@@ -79,10 +79,15 @@ if batch:
     else:
         row = plan.iloc[k_best - 1]
         insight_callout(t("ret.rec.best", k=fmt.num(k_best), net=fmt.money(row["net"]),
-                          saved=fmt.num(row["saved"], 0), cap=fmt.num(capacity)), "good")
+                          saved=fmt.num(row["saved"], 0), cap=fmt.num(capacity)), "good",
+                        tag=t("ret.rec.best_tag"))
     roi = row["net"] / row["cost"] * 100 if row["cost"] > 0 else float("nan")
+    # With no profitable size the cards describe the full-capacity campaign (to show the loss), so say so.
+    contact_card = (dict(label=t("ret.kpi.contact"), value=fmt.num(k_best)) if k_best else
+                    dict(label=t("ret.kpi.contact_cap"), value=fmt.num(min(int(capacity), n)),
+                         foot=t("ret.kpi.not_recommended")))
     kpi_row([
-        dict(label=t("ret.kpi.contact"), value=fmt.num(k_best)),
+        contact_card,
         dict(label=t("ret.kpi.reached"), value=fmt.num(row["reached"], 0), help=t("ret.kpi.reached_help")),
         dict(label=t("ret.kpi.saved"), value=fmt.num(row["saved"], 0), help=t("ret.kpi.saved_help")),
         dict(label=t("ret.kpi.revenue"), value=fmt.money(row["revenue_saved"])),

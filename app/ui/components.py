@@ -7,6 +7,7 @@ import math
 
 import streamlit as st
 
+from app.core import fmt
 from app.i18n import t
 
 TONE_TAG = {"info": "ui.tone.info", "good": "ui.tone.good", "warn": "ui.tone.warn", "risk": "ui.tone.risk"}
@@ -117,6 +118,7 @@ def prob_gauge(p: float, reference: float | None = None, label: str | None = Non
     ``reference`` (0-1) draws a tick, e.g. the portfolio churn rate.
     """
     p = min(max(float(p), 0.0), 1.0)
+    shown = fmt.pct(p * 100, 1)  # language-aware: 13.2% in English, 13,2 % in French
     r, cx, cy = 80.0, 100.0, 100.0
     length = math.pi * r
     off = length * (1 - p)
@@ -131,21 +133,21 @@ def prob_gauge(p: float, reference: float | None = None, label: str | None = Non
         ref_html = (f'<div style="text-align:center;font-size:.8rem;opacity:.75;margin-top:-.2rem">'
                     f'<span style="display:inline-block;width:3px;height:.8rem;background:currentColor;'
                     f'vertical-align:-2px;margin-right:.35rem;border-radius:2px"></span>'
-                    f'{_e(t("ui.gauge.portfolio"))} {reference * 100:.2f}%</div>')
+                    f'{_e(t("ui.gauge.portfolio"))} {fmt.pct(reference * 100, 2)}</div>')
     lbl = label or t("ui.gauge.label")
     svg = (
         f'<svg class="hub-gauge" viewBox="0 0 200 128" role="img" '
-        f'aria-label="{_e(lbl)}: {p * 100:.1f}%">'
+        f'aria-label="{_e(lbl)}: {shown}">'
         f'<path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="currentColor" stroke-opacity=".14" '
         f'stroke-width="16" stroke-linecap="round"/>'
         f'<path class="arc" d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="{accent}" stroke-width="16" '
         f'stroke-linecap="round" style="--len:{length:.2f};--off:{off:.2f}"/>'
         f'{ref_svg}'
         f'<text x="100" y="88" text-anchor="middle" font-size="30" font-weight="800" fill="currentColor">'
-        f'{p * 100:.1f}%</text>'
+        f'{shown}</text>'
         f'<text x="100" y="108" text-anchor="middle" font-size="10" fill="currentColor" opacity=".7">{_e(lbl)}</text>'
-        f'<text x="20" y="122" text-anchor="middle" font-size="9" fill="currentColor" opacity=".6">0%</text>'
-        f'<text x="180" y="122" text-anchor="middle" font-size="9" fill="currentColor" opacity=".6">100%</text>'
+        f'<text x="20" y="122" text-anchor="middle" font-size="9" fill="currentColor" opacity=".6">{fmt.pct(0, 0)}</text>'
+        f'<text x="180" y="122" text-anchor="middle" font-size="9" fill="currentColor" opacity=".6">{fmt.pct(100, 0)}</text>'
         f'</svg>'
     )
     raw_html(f'<div style="color:inherit">{svg}{ref_html}</div>')

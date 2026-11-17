@@ -8,15 +8,16 @@ Uses the official Anthropic Python SDK. The API key comes only from
 from __future__ import annotations
 
 import json
-from typing import Iterator
-
-import anthropic
+from typing import TYPE_CHECKING, Iterator
 
 from app.copilot import tools as T
 from app.core import artifacts, portfolio
 from app.core.features import friendly, global_importance, grouped_importance
 from app.core.segments import with_names
 from app.i18n import catalog
+
+if TYPE_CHECKING:  # the SDK is slow to import; load it only when a key is configured
+    import anthropic
 
 DEFAULT_MODEL = "claude-opus-5-5"
 DEFAULT_EFFORT = "medium"
@@ -85,6 +86,8 @@ def client_from_secrets(get_secret) -> tuple[anthropic.Anthropic | None, str, st
     effort = get_secret("COPILOT_EFFORT") or DEFAULT_EFFORT
     if not key:
         return None, model, effort
+    import anthropic
+
     return anthropic.Anthropic(api_key=str(key)), str(model), str(effort)
 
 

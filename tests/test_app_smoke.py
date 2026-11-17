@@ -37,3 +37,32 @@ def test_page_loads_english(key):
 @pytest.mark.parametrize("key", BUILT)
 def test_page_loads_french(key):
     assert_clean(load(key, "fr"), "fr")
+
+
+def test_copilot_with_api_key_handles_api_errors(monkeypatch):
+    """With a key the page goes online; an API failure shows a warning and falls back to the offline answer.
+
+    The streaming call is replaced, so no request leaves the machine.
+    """
+    import anthropic
+
+    try:  # the pinned SDK (2.9) uses httpx2 as its transport; older releases used httpx
+        import httpx2 as httpx
+    except ImportError:  # pragma: no cover
+        import httpx
+
+    from app.copilot import llm
+
+    def failing_stream(*args, **kwargs):
+        raise anthropic.APIConnectionError(request=httpx.Request("POST", "https://api.anthropic.com/v1/messages"))
+        yield  # pragma: no cover - makes this a generator like the real one
+
+    monkeypatch.setattr(llm, "stream_answer", failing_stream)
+    monkeypatch.setattr("app.ui.layout.get_secret",
+                        lambda name, default=None: {"ANTHROPIC_API_KEY": "sk-test-not-a-real-key"}.get(name, default))
+    at = load("copilot", "en")
+    assert_clean(at, "en")
+    assert t("copilot.mode.offline_help", "en") not in [c.value for c in at.caption]  # online mode
+    at.chat_input[0].set_value("Which segment should we prioritise?").run()
+    assert_clean(at, "en")
+    assert t("copilot.err.connection", "en") in [w.value for w in at.warning]

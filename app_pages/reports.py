@@ -11,10 +11,17 @@ from app import navigation
 from app.core import artifacts, fmt, state
 from app.core.dictionary import data_dictionary
 from app.core.features import friendly
-from app.core.pdf import executive_brief
 from app.core.segments import segment_name
 from app.i18n import current_lang, t
 from app.ui.components import empty_state, page_header, section_header, synthetic_banner
+
+
+def _brief_pdf(profiles_raw, meta, lang, batch) -> bytes:
+    """Build the Executive Brief; fpdf2 takes about a second to import, so load it only when a PDF is requested."""
+    from app.core.pdf import executive_brief
+
+    return executive_brief(profiles_raw, meta, lang, batch)
+
 
 lang = current_lang()
 meta = artifacts.get_metadata()
@@ -38,7 +45,7 @@ def card(title: str, body: str):
 # ---------------------------------------------------------------------------
 section_header(t("rep.brief.title"), t("rep.brief.sub"))
 with card(t("rep.brief.pdf"), t("rep.brief.pdf_desc")):
-    st.download_button(t("rep.brief.download"), data=lambda: executive_brief(profiles, meta, lang, batch),
+    st.download_button(t("rep.brief.download"), data=lambda: _brief_pdf(profiles, meta, lang, batch),
                        file_name=f"expresso_executive_brief_{lang}.pdf", mime="application/pdf",
                        icon=":material/picture_as_pdf:", type="primary", on_click="ignore", key="rep_pdf")
 
