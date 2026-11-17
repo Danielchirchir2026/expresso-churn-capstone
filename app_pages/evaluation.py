@@ -225,7 +225,7 @@ if data is not None:
         f = go.Figure()
         for col, name, color in (("precision", t("eval.thr.precision"), charts.series(0)),
                                  ("recall", t("eval.thr.recall"), charts.series(1)),
-                                 ("f1", "F1", charts.accent())):
+                                 ("f1", "F1", charts.ink("secondary"))):  # graphite: precision is already blue
             f.add_trace(go.Scatter(x=sweep["threshold"], y=sweep[col], mode="lines", name=name,
                                    line=dict(color=color, width=2),
                                    hovertemplate=name + " %{y:.3f} at t = %{x:.3f}<extra></extra>"))

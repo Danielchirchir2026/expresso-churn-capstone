@@ -17,11 +17,11 @@ from app.core import fmt, portfolio
 from app.core.segments import SEGMENT_COLORS, with_names
 from app.i18n import t
 
-NAVY = (11, 18, 32)
-TEAL = (15, 118, 110)
-INK = (11, 18, 32)
-MUTED = (107, 119, 140)
-GRID = (227, 232, 240)
+NAVY = (27, 31, 36)  # header band: graphite (#1B1F24), name kept for the modules that import it
+TEAL = (31, 91, 181)  # accent: cobalt (#1F5BB5)
+INK = (27, 31, 36)
+MUTED = (90, 98, 112)
+GRID = (225, 228, 232)
 REPLACE = {" ": " ", " ": " ", "—": "-", "–": "-", "’": "'", "‘": "'",
            "“": '"', "”": '"', "−": "-", "≥": ">=", "≤": "<=", "…": "...",
            "▲": "+", "▼": "-", "≈": "~", "œ": "oe", "Œ": "OE", "→": "->",
@@ -62,7 +62,7 @@ def _kpis(pdf: Brief, cards: list[tuple[str, str]]) -> None:
     for i, (label, value) in enumerate(cards):
         x = x0 + (i % 3) * (w + gap)
         y = y0 + (i // 3) * (h + gap)
-        pdf.set_fill_color(244, 247, 251)
+        pdf.set_fill_color(243, 244, 246)
         pdf.set_draw_color(*GRID)
         pdf.rect(x, y, w, h, style="DF", round_corners=True, corner_radius=2.5)
         pdf.set_fill_color(*TEAL)
@@ -143,7 +143,7 @@ def executive_brief(profiles_raw: pd.DataFrame, meta: dict, lang: str = "en", ba
     pdf.cell(0, 8, clean(t("pdf.title", lang)))
     pdf.set_xy(15, 17)
     pdf.set_font("Helvetica", "", 9)
-    pdf.set_text_color(173, 233, 223)
+    pdf.set_text_color(200, 208, 220)
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     pdf.cell(0, 6, clean(t("pdf.subtitle", lang, date=today)))
     pdf.set_y(37)
@@ -184,7 +184,7 @@ def executive_brief(profiles_raw: pd.DataFrame, meta: dict, lang: str = "en", ba
             (t("exec.axis.churn_rate", lang), 30), (t("exec.share.churners", lang), 34),
             (t("exec.share.revenue", lang), 34)]
     pdf.set_font("Helvetica", "B", 8)
-    pdf.set_fill_color(234, 240, 247)
+    pdf.set_fill_color(233, 235, 239)
     for name, wd in cols:
         pdf.cell(wd, 6, clean(name), border=0, fill=True)
     pdf.ln(6)

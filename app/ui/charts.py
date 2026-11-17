@@ -19,19 +19,20 @@ from app.core.segments import SEGMENT_COLORS
 from app.i18n import current_lang, t
 
 INK = {
-    "dark": dict(primary="#E6EDF7", secondary="#AEBBD0", muted="#7F8BA3", grid="#1F2A40", axis="#33415E",
-                 surface="#0B1220"),
-    "light": dict(primary="#0B1220", secondary="#45526B", muted="#6B778C", grid="#E3E8F0", axis="#C3CCDA",
-                  surface="#F7F9FC"),
+    "dark": dict(primary="#E8EAED", secondary="#B4BAC3", muted="#8D949F", grid="#26292E", axis="#3A3F46",
+                 surface="#16181B"),
+    "light": dict(primary="#1B1F24", secondary="#4A515C", muted="#6B7380", grid="#E1E4E8", axis="#C5CAD2",
+                  surface="#F3F4F6"),
 }
-ACCENT = {"dark": "#2DD4BF", "light": "#0F766E"}
+ACCENT = {"dark": "#6E9EEB", "light": "#1F5BB5"}
+FONT = "'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif"
 # Diverging pair: risk-up (red) vs risk-down (blue); neutral grey midpoint.
 RISK_UP = {"dark": "#e66767", "light": "#e34948"}
 RISK_DOWN = {"dark": "#3987e5", "light": "#2a78d6"}
-NEUTRAL = {"dark": "#55607A", "light": "#B4BDCB"}
+NEUTRAL = {"dark": "#5A606A", "light": "#B8BDC6"}
 STATUS = {"good": "#0ca30c", "warning": "#fab219", "serious": "#ec835a", "critical": "#d03b3b"}
 # Sequential single-hue blue ramp; dark mode runs dark->light so large
-# values gain contrast against the navy surface.
+# values gain contrast against the graphite surface.
 SEQ_LIGHT = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#104281"]
 SEQ_DARK = ["#184f95", "#1c5cab", "#256abf", "#2a78d6", "#5598e7", "#86b6ef", "#b7d3f6"]
 SERIES = {
@@ -45,7 +46,7 @@ def mode() -> str:
         value = st.context.theme.type
     except Exception:
         value = None
-    return value if value in ("light", "dark") else "dark"
+    return value if value in ("light", "dark") else "light"
 
 
 def segment_color(seg_id) -> str:
@@ -102,9 +103,9 @@ def style(fig: go.Figure, height: int = 380, legend: bool = True, ygrid: bool = 
         margin=dict(l=8, r=12, t=(78 if legend else 48) if title else 28, b=8),
         title=dict(text=title, x=0, xanchor="left", y=0.985, yanchor="top", yref="container",
                    font=dict(size=15)) if title else None,
-        font=dict(family="Inter, system-ui, sans-serif", color=INK[m]["secondary"],
+        font=dict(family=FONT, color=INK[m]["secondary"],
                   size=15 if presenting() else 13),
-        hoverlabel=dict(font=dict(family="Inter, system-ui, sans-serif", size=13)),
+        hoverlabel=dict(font=dict(family=FONT, size=13)),
         showlegend=legend,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, title=None,
                     font=dict(size=12)),

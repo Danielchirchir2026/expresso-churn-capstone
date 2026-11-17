@@ -17,13 +17,14 @@ from app.ui.components import badge
 
 CSS_PATH = Path(__file__).resolve().parent / "style.css"
 
+# "Cobalt & Graphite": the accent and card colours per mode (the rest of style.css is mode-neutral).
 THEME_VARS = {
-    "dark": ("--hub-accent:#2DD4BF;--hub-accent-a40:rgba(45,212,191,.45);--hub-accent-a18:rgba(45,212,191,.16);"
-             "--hub-accent-a10:rgba(45,212,191,.08);--hub-good-text:#34d399;--hub-bad-text:#f87171;--hub-warn-text:#fbbf24;"
-             "--hub-card-bg:rgba(19,28,46,.72);"),
-    "light": ("--hub-accent:#0F766E;--hub-accent-a40:rgba(15,118,110,.45);--hub-accent-a18:rgba(15,118,110,.12);"
-              "--hub-accent-a10:rgba(15,118,110,.07);--hub-good-text:#006300;--hub-bad-text:#b42318;--hub-warn-text:#8a5a00;"
-              "--hub-card-bg:rgba(255,255,255,.9);"),
+    "dark": ("--hub-accent:#6E9EEB;--hub-on-accent:#0E1420;--hub-accent-a18:rgba(110,158,235,.16);"
+             "--hub-accent-a10:rgba(110,158,235,.09);--hub-good-text:#4cc38a;--hub-bad-text:#f08080;--hub-warn-text:#f0b43c;"
+             "--hub-card-bg:#1F2226;--hub-line:#30343A;--hub-soft:#1B1D21;"),
+    "light": ("--hub-accent:#1F5BB5;--hub-on-accent:#FFFFFF;--hub-accent-a18:rgba(31,91,181,.12);"
+              "--hub-accent-a10:rgba(31,91,181,.06);--hub-good-text:#006300;--hub-bad-text:#b42318;--hub-warn-text:#8a5a00;"
+              "--hub-card-bg:#FFFFFF;--hub-line:#D5D9E0;--hub-soft:#E9EBEF;"),
 }
 
 PRESENT_CSS = """
@@ -93,9 +94,9 @@ def password_gate() -> bool:
 def render_sidebar() -> None:
     with st.sidebar:
         st.html(f'<div style="display:flex;align-items:center;gap:.6rem;margin:.2rem 0 .6rem 0">'
-                f'<div style="width:2.1rem;height:2.1rem;border-radius:.6rem;display:grid;place-items:center;'
-                f'font-weight:800;background:var(--hub-accent);color:#0B1220">EX</div>'
-                f'<div><div style="font-weight:800;line-height:1.1">{t("app.short_name")}</div>'
+                f'<div style="width:2.1rem;height:2.1rem;border-radius:.2rem;display:grid;place-items:center;'
+                f'font-weight:700;background:var(--hub-accent);color:var(--hub-on-accent)">EX</div>'
+                f'<div><div style="font-weight:700;line-height:1.1">{t("app.short_name")}</div>'
                 f'<div style="font-size:.75rem;opacity:.7">{t("app.tagline")}</div></div></div>')
 
         c1, c2 = st.columns(2)

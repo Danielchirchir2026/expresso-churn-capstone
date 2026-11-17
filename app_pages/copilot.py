@@ -98,7 +98,7 @@ if not st.session_state["cp_display"]:
         st.markdown(t("copilot.welcome"))
 
 for msg in st.session_state["cp_display"]:
-    with st.chat_message(msg["role"], avatar=":material/smart_toy:" if msg["role"] == "assistant" else None):
+    with st.chat_message(msg["role"], avatar=":material/smart_toy:" if msg["role"] == "assistant" else ":material/person:"):
         st.markdown(msg["text"])
         if msg["role"] == "assistant" and msg.get("sources") is not None:
             render_sources(msg["sources"])
@@ -108,7 +108,7 @@ prompt = st.session_state.pop("cp_pending", None) or prompt
 
 if prompt:
     st.session_state["cp_display"].append({"role": "user", "text": prompt})
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar=":material/person:"):
         st.markdown(prompt)
     ctx = T.Context(batch=state.get_batch(), last_customer=state.get_last_customer(),
                     thresholds=st.session_state.get("band_thresholds"), lang=lang)

@@ -218,7 +218,9 @@ def render_result() -> None:
         wf = go.Figure(go.Waterfall(
             orientation="h", y=labels, x=values, measure=measures, base=bias,
             increasing=dict(marker=dict(color=charts.risk_up())), decreasing=dict(marker=dict(color=charts.risk_down())),
-            totals=dict(marker=dict(color=charts.accent())), connector=dict(line=dict(color=charts.ink("axis"), width=1)),
+            # Totals in graphite: the accent is also blue, like the "lowers risk" bars.
+            totals=dict(marker=dict(color=charts.ink("secondary"))),
+            connector=dict(line=dict(color=charts.ink("axis"), width=1)),
             customdata=np.array([hover_contrib, hover_p]).T,
             hovertemplate="<b>%{y}</b><br>" + t("cc.why.hover_contrib") + ": %{customdata[0]:+.2f}<br>"
                           + t("cc.why.hover_after") + ": %{customdata[1]:.1f}%<extra></extra>",

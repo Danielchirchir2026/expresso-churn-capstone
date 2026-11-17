@@ -16,42 +16,49 @@ toolbarMode = "minimal"
 magicEnabled = false
 
 # ---------------------------------------------------------------------------
-# Theme: deep navy with one confident teal accent. Both modes are defined so
-# viewers can switch in the app menu; dark is the default.
+# Theme "Cobalt & Graphite": cool grey page, white cards with thin borders,
+# small corners and one cobalt accent; IBM Plex Sans. Light is the default;
+# dark mode (graphite, not navy) stays available in the app menu.
+# Chart colours are the colour-blind-safe palettes validated against both
+# page backgrounds (#F3F4F6 and #16181B).
 # ---------------------------------------------------------------------------
 [theme]
-base = "dark"
-font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-headingFont = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-headingFontWeights = [800, 700, 700, 600, 600, 600]
-baseRadius = "0.75rem"
-buttonRadius = "0.6rem"
+base = "light"
+font = "IBM Plex Sans:https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+headingFont = "IBM Plex Sans:https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+headingFontWeights = [700, 600, 600, 600, 600, 600]
+baseRadius = "0.25rem"
+buttonRadius = "0.2rem"
 showWidgetBorder = true
 
-[theme.dark]
-primaryColor = "#2DD4BF"
-backgroundColor = "#0B1220"
-secondaryBackgroundColor = "#131C2E"
-textColor = "#E6EDF7"
-borderColor = "#24324D"
-linkColor = "#5EEAD4"
-codeBackgroundColor = "#101827"
-dataframeHeaderBackgroundColor = "#131C2E"
-chartCategoricalColors = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9085e9", "#e66767"]
-
-[theme.dark.sidebar]
-backgroundColor = "#0E1626"
-secondaryBackgroundColor = "#16213A"
-
 [theme.light]
-primaryColor = "#0F766E"
-backgroundColor = "#F7F9FC"
-secondaryBackgroundColor = "#EAF0F7"
-textColor = "#0B1220"
-borderColor = "#D3DCE8"
-linkColor = "#0F766E"
-dataframeHeaderBackgroundColor = "#EAF0F7"
+primaryColor = "#1F5BB5"
+backgroundColor = "#F3F4F6"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#1B1F24"
+borderColor = "#D5D9E0"
+linkColor = "#1F5BB5"
+codeBackgroundColor = "#E9EBEF"
+dataframeHeaderBackgroundColor = "#E9EBEF"
 chartCategoricalColors = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
 
 [theme.light.sidebar]
-backgroundColor = "#EEF3F9"
+backgroundColor = "#E9EBEF"
+secondaryBackgroundColor = "#FFFFFF"
+
+[theme.dark]
+# Buttons put white text on the primary colour: #3A72D0 keeps it at 4.7:1. Accent text in dark mode
+# uses the lighter #6E9EEB (layout.THEME_VARS), which reads at 6.6:1 on the graphite page.
+primaryColor = "#3A72D0"
+backgroundColor = "#16181B"
+secondaryBackgroundColor = "#1F2226"
+textColor = "#E8EAED"
+borderColor = "#30343A"
+linkColor = "#8DB4F0"
+codeBackgroundColor = "#1B1D21"
+dataframeHeaderBackgroundColor = "#1F2226"
+chartCategoricalColors = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9085e9", "#e66767"]
+
+[theme.dark.sidebar]
+backgroundColor = "#1A1C20"
+secondaryBackgroundColor = "#23262B"

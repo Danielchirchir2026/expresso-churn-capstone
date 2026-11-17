@@ -1,13 +1,11 @@
-/* Expresso Churn Intelligence Hub: shared component styles.
-   Colours are expressed relative to the active theme (currentColor and
-   translucent overlays) so the same CSS works in light and dark mode.
-   The accent is injected as --hub-accent by layout.inject_theme_vars(). */
+/* Expresso Churn Intelligence Hub: shared component styles ("Cobalt & Graphite").
+   Flat white cards with thin borders, small corners, no gradients or glows.
+   Mode-specific colours (--hub-accent, --hub-on-accent, --hub-card-bg,
+   --hub-line, --hub-soft, status text colours) are injected per light/dark
+   mode by layout.inject_css() from THEME_VARS. */
 
 :root {
-  --hub-radius: 16px;
-  --hub-line: rgba(128, 144, 170, 0.28);
-  --hub-soft: rgba(128, 144, 170, 0.08);
-  --hub-shadow: 0 1px 2px rgba(5, 10, 20, 0.18), 0 8px 24px rgba(5, 10, 20, 0.14);
+  --hub-radius: 4px;
   --hub-good: #0ca30c;
   --hub-warn: #fab219;
   --hub-serious: #ec835a;
@@ -21,27 +19,22 @@
   text-transform: uppercase; letter-spacing: .14em; font-size: .72rem;
   font-weight: 700; color: var(--hub-accent); margin: 0 0 .35rem 0;
 }
-.hub-page-title { font-size: 2.15rem; font-weight: 800; line-height: 1.12;
-  letter-spacing: -.02em; margin: 0 0 .4rem 0; }
+.hub-page-title { font-size: 2.15rem; font-weight: 700; line-height: 1.15;
+  letter-spacing: -.01em; margin: 0 0 .4rem 0; }
 .hub-page-sub { opacity: .78; font-size: 1.02rem; line-height: 1.55; max-width: 60rem; margin: 0; }
 .hub-section { margin: 1.6rem 0 .6rem 0; }
-.hub-section h3 { font-size: 1.22rem; font-weight: 700; margin: 0; padding: 0; letter-spacing: -.01em; }
+.hub-section h3 { font-size: 1.22rem; font-weight: 600; margin: 0; padding: 0; letter-spacing: -.01em; }
 .hub-section p { opacity: .72; margin: .2rem 0 0 0; font-size: .95rem; }
 
 /* ---------- cards ---------- */
 .hub-card {
-  position: relative; border-radius: var(--hub-radius); padding: 1.05rem 1.15rem;
-  background:
-    linear-gradient(var(--hub-card-bg, rgba(128,144,170,.06)), var(--hub-card-bg, rgba(128,144,170,.06))) padding-box,
-    linear-gradient(135deg, var(--hub-accent-a40, rgba(45,212,191,.45)), var(--hub-line) 45%, var(--hub-line)) border-box;
-  border: 1px solid transparent; box-shadow: var(--hub-shadow);
-  transition: transform .18s ease, box-shadow .18s ease; height: 100%;
+  position: relative; border-radius: var(--hub-radius); padding: 1rem 1.1rem;
+  background: var(--hub-card-bg); border: 1px solid var(--hub-line); height: 100%;
 }
-.hub-card:hover { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(5,10,20,.2), 0 14px 32px rgba(5,10,20,.2); }
 .hub-kpi-label { font-size: .8rem; font-weight: 600; opacity: .75; letter-spacing: .02em;
   display: flex; align-items: center; gap: .35rem; }
-.hub-kpi-value { font-size: 1.85rem; font-weight: 800; line-height: 1.15; margin-top: .3rem;
-  letter-spacing: -.02em; font-variant-numeric: tabular-nums; word-break: break-word; }
+.hub-kpi-value { font-size: 1.85rem; font-weight: 600; line-height: 1.15; margin-top: .3rem;
+  letter-spacing: -.01em; font-variant-numeric: tabular-nums; word-break: break-word; }
 .hub-kpi-delta { font-size: .82rem; font-weight: 600; margin-top: .3rem; }
 .hub-kpi-delta.good { color: var(--hub-good-text, #22c55e); }
 .hub-kpi-delta.bad { color: var(--hub-bad-text, #f87171); }
@@ -54,9 +47,9 @@
 .hub-grid { display: grid; gap: .9rem; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); margin: .4rem 0 .8rem 0; }
 
 /* ---------- callouts ---------- */
-.hub-callout { border-radius: 12px; padding: .8rem 1rem; margin: .45rem 0;
-  background: var(--hub-soft); border: 1px solid var(--hub-line); border-left: 4px solid var(--tone, var(--hub-accent)); }
-.hub-callout .tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 800;
+.hub-callout { border-radius: 2px; padding: .8rem 1rem; margin: .45rem 0;
+  background: var(--hub-card-bg); border: 1px solid var(--hub-line); border-left: 3px solid var(--tone, var(--hub-accent)); }
+.hub-callout .tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 700;
   color: var(--tag, var(--tone, var(--hub-accent))); margin-bottom: .2rem; display: block; }
 .hub-callout .body { line-height: 1.5; font-size: .96rem; }
 .hub-callout.good { --tone: var(--hub-good); --tag: var(--hub-good-text, var(--hub-good)); }
@@ -70,7 +63,7 @@
 .hub-empty .ico { font-size: 1.9rem; opacity: .7; }
 .hub-empty .msg { font-size: 1.02rem; font-weight: 600; margin-top: .4rem; }
 .hub-empty .sub { opacity: .72; margin-top: .3rem; font-size: .93rem; line-height: 1.5; }
-.hub-empty code { font-size: .85rem; padding: .15rem .4rem; border-radius: 6px; background: var(--hub-soft); }
+.hub-empty code { font-size: .85rem; padding: .15rem .4rem; border-radius: 2px; background: var(--hub-soft); }
 
 /* ---------- so-what caption ---------- */
 .hub-sowhat { font-size: .9rem; line-height: 1.5; margin: -.3rem 0 .9rem 0; padding-left: .7rem;
@@ -79,14 +72,12 @@
 
 /* ---------- hero ---------- */
 .hub-hero { display: grid; grid-template-columns: 1.45fr 1fr; gap: 2rem; align-items: center;
-  padding: 1.6rem 1.8rem; border-radius: 22px; margin-bottom: 1rem;
-  background: radial-gradient(1200px 400px at 0% 0%, var(--hub-accent-a18, rgba(45,212,191,.18)), transparent 60%),
-              radial-gradient(800px 300px at 100% 100%, rgba(57,135,229,.16), transparent 60%), var(--hub-soft);
-  border: 1px solid var(--hub-line); }
-.hub-hero h1 { font-size: 2.6rem; font-weight: 800; line-height: 1.08; letter-spacing: -.025em; margin: 0 0 .7rem 0; padding: 0; }
+  padding: 1.6rem 1.8rem; border-radius: var(--hub-radius); margin-bottom: 1rem;
+  background: var(--hub-card-bg); border: 1px solid var(--hub-line); }
+.hub-hero h1 { font-size: 2.5rem; font-weight: 700; line-height: 1.1; letter-spacing: -.015em; margin: 0 0 .7rem 0; padding: 0; }
 .hub-hero .lede { font-size: 1.08rem; line-height: 1.6; opacity: .82; margin: 0; max-width: 36rem; }
 .hub-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .9rem; }
-.hub-chip { padding: .3rem .75rem; border-radius: 999px; border: 1px solid var(--hub-line);
+.hub-chip { padding: .3rem .7rem; border-radius: 3px; border: 1px solid var(--hub-line);
   font-size: .84rem; background: var(--hub-soft); }
 .hub-chip b { color: var(--hub-accent); }
 
@@ -98,7 +89,7 @@
 @keyframes hubring { to { stroke-dasharray: var(--len) var(--c); } }
 .hub-ring-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
   justify-content: center; text-align: center; }
-.hub-ring-label b { font-size: 2rem; font-weight: 800; }
+.hub-ring-label b { font-size: 2rem; font-weight: 700; }
 .hub-ring-label span { opacity: .75; font-size: .86rem; line-height: 1.3; }
 
 /* probability gauge */
@@ -108,26 +99,26 @@
 @keyframes hubgauge { to { stroke-dashoffset: var(--off); } }
 
 /* persona / module cards */
-.hub-persona h4 { margin: .2rem 0 .3rem 0; font-size: 1.06rem; font-weight: 700; padding: 0; }
+.hub-persona h4 { margin: .2rem 0 .3rem 0; font-size: 1.06rem; font-weight: 600; padding: 0; }
 .hub-persona p { margin: 0; opacity: .75; font-size: .92rem; line-height: 1.45; }
-.hub-persona .who { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; color: var(--hub-accent); }
+.hub-persona .who { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--hub-accent); }
 
 /* steps (CRISP-DM, tour) */
 .hub-steps { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: .6rem; margin: .4rem 0 .4rem 0; }
-.hub-step { border-radius: 14px; padding: .8rem .8rem; border: 1px solid var(--hub-line); background: var(--hub-soft); }
-.hub-step .n { font-size: .72rem; font-weight: 800; color: var(--hub-accent); letter-spacing: .1em; }
-.hub-step .t { font-weight: 700; font-size: .95rem; margin-top: .15rem; }
+.hub-step { border-radius: var(--hub-radius); padding: .8rem .8rem; border: 1px solid var(--hub-line); background: var(--hub-card-bg); }
+.hub-step .n { font-size: .72rem; font-weight: 700; color: var(--hub-accent); letter-spacing: .1em; }
+.hub-step .t { font-weight: 600; font-size: .95rem; margin-top: .15rem; }
 .hub-step .d { opacity: .72; font-size: .82rem; margin-top: .2rem; line-height: 1.35; }
 
 /* reason list */
 .hub-reason { display: flex; gap: .6rem; align-items: flex-start; padding: .45rem 0; border-bottom: 1px solid var(--hub-line); }
 .hub-reason:last-child { border-bottom: none; }
-.hub-reason .dir { font-weight: 800; min-width: 1.2rem; }
+.hub-reason .dir { font-weight: 700; min-width: 1.2rem; }
 .hub-reason .dir.up { color: var(--hub-bad-text, #f87171); }
 .hub-reason .dir.down { color: var(--hub-good-text, #22c55e); }
 
 /* badges */
-.hub-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .18rem .6rem; border-radius: 999px;
+.hub-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .18rem .55rem; border-radius: 3px;
   font-size: .76rem; font-weight: 700; border: 1px solid var(--hub-line); }
 .hub-badge .dot { width: .5rem; height: .5rem; border-radius: 50%; display: inline-block; background: currentColor; }
 .hub-badge.ok { color: var(--hub-good-text, #22c55e); }
@@ -136,10 +127,10 @@
 .hub-badge.warn { color: var(--hub-warn-text, #c98500); }
 
 /* tour card */
-.hub-tour { border-radius: 16px; padding: 1rem 1.2rem; margin-bottom: .6rem;
-  border: 1px solid var(--hub-accent); background: var(--hub-accent-a10, rgba(45,212,191,.1)); }
-.hub-tour .n { font-size: .74rem; font-weight: 800; letter-spacing: .12em; color: var(--hub-accent); text-transform: uppercase; }
-.hub-tour .t { font-size: 1.1rem; font-weight: 700; margin-top: .15rem; }
+.hub-tour { border-radius: var(--hub-radius); padding: 1rem 1.2rem; margin-bottom: .6rem;
+  border: 1px solid var(--hub-accent); background: var(--hub-accent-a10); }
+.hub-tour .n { font-size: .74rem; font-weight: 700; letter-spacing: .12em; color: var(--hub-accent); text-transform: uppercase; }
+.hub-tour .t { font-size: 1.1rem; font-weight: 600; margin-top: .15rem; }
 .hub-tour .d { opacity: .85; margin-top: .25rem; line-height: 1.5; }
 
 /* plain data table with wrapping cells */
@@ -155,7 +146,7 @@
   display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: space-between; font-size: .82rem; opacity: .7; }
 
 /* synthetic data banner */
-.hub-synthetic { border-radius: 10px; padding: .45rem .8rem; font-size: .85rem; font-weight: 600;
+.hub-synthetic { border-radius: var(--hub-radius); padding: .45rem .8rem; font-size: .85rem; font-weight: 600;
   border: 1px dashed var(--hub-warn-text, #c98500); color: var(--hub-warn-text, #c98500); margin: .2rem 0 .8rem 0; }
 
 /* ---------- responsive: stack columns on narrow screens ---------- */
@@ -175,5 +166,4 @@
 @media (prefers-reduced-motion: reduce) {
   .hub-ring-wrap .seg { animation: none; stroke-dasharray: var(--len) var(--c); }
   .hub-gauge .arc { animation: none; stroke-dashoffset: var(--off); }
-  .hub-card, .hub-card:hover { transition: none; transform: none; }
 }
