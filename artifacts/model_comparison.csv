@@ -1,0 +1,5 @@
+model,roc_auc,pr_auc,log_loss,f1_at_0_5,train_seconds,note
+Dummy (prior),0.5,0.18754671432882244,0.4826463760814916,0.0,0.03188219998264685,"fit on 400,000 training rows"
+Logistic Regression,0.9276890782038275,0.6938319652821834,0.26142704829453717,0.6888623469692445,12.192526200029533,"median imputation + scaling, fit on 400,000 training rows"
+LightGBM (deployed),0.9338153685075196,0.7079454626199766,0.2469190296120382,0.6737334451816264,,saved bundle; training time not recorded; scores optimistic (saw validation rows)
+"LightGBM (holdout refit, deployed settings)",0.9316996372403265,0.704983002800335,0.25087489038416383,0.6719753109938468,64.51916650001658,n_estimators = best iteration 345; trained on the training split only

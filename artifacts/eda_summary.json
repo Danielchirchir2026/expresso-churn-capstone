@@ -1,0 +1,631 @@
+{
+ "source": "Train (2).csv",
+ "rows": 2154048,
+ "columns": 19,
+ "churners": 403986,
+ "churn_rate": 0.1875473527052322,
+ "missing_pct": {
+  "REGION": 39.42804431470422,
+  "TENURE": 0.0,
+  "MONTANT": 35.13101843598657,
+  "FREQUENCE_RECH": 35.13101843598657,
+  "REVENUE": 33.70621267492647,
+  "ARPU_SEGMENT": 33.70621267492647,
+  "FREQUENCE": 33.70621267492647,
+  "DATA_VOLUME": 49.22977575244377,
+  "ON_NET": 36.52077391033069,
+  "ORANGE": 41.561190836973,
+  "TIGO": 59.88798764001545,
+  "ZONE1": 92.1208348189084,
+  "ZONE2": 93.64805241108833,
+  "MRG": 0.0,
+  "REGULARITY": 0.0,
+  "TOP_PACK": 41.90222316308643,
+  "FREQ_TOP_PACK": 41.90222316308643,
+  "CHURN": 0.0
+ },
+ "numeric": {
+  "MONTANT": {
+   "all": {
+    "count": 1397309,
+    "min": 10.0,
+    "p01": 100.0,
+    "q1": 1000.0,
+    "median": 3000.0,
+    "q3": 7350.0,
+    "p99": 33000.0,
+    "max": 470000.0,
+    "mean": 5532.11699774352
+   },
+   "churn_0": {
+    "count": 1327395,
+    "min": 10.0,
+    "p01": 100.0,
+    "q1": 1100.0,
+    "median": 3250.0,
+    "q3": 7500.0,
+    "p99": 33500.0,
+    "max": 470000.0,
+    "mean": 5703.556609750677
+   },
+   "churn_1": {
+    "count": 69914,
+    "min": 20.0,
+    "p01": 100.0,
+    "q1": 500.0,
+    "median": 1000.0,
+    "q3": 2500.0,
+    "p99": 18500.0,
+    "max": 286500.0,
+    "mean": 2277.145407214578
+   }
+  },
+  "FREQUENCE_RECH": {
+   "all": {
+    "count": 1397309,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 2.0,
+    "median": 7.0,
+    "q3": 16.0,
+    "p99": 62.0,
+    "max": 133.0,
+    "mean": 11.529119901181485
+   },
+   "churn_0": {
+    "count": 1327395,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 3.0,
+    "median": 7.0,
+    "q3": 16.0,
+    "p99": 63.0,
+    "max": 133.0,
+    "mean": 11.905163873602055
+   },
+   "churn_1": {
+    "count": 69914,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 1.0,
+    "median": 2.0,
+    "q3": 5.0,
+    "p99": 33.0,
+    "max": 91.0,
+    "mean": 4.389507108733587
+   }
+  },
+  "REVENUE": {
+   "all": {
+    "count": 1428000,
+    "min": 1.0,
+    "p01": 10.0,
+    "q1": 1000.0,
+    "median": 3000.0,
+    "q3": 7368.0,
+    "p99": 33322.0,
+    "max": 532177.0,
+    "mean": 5510.810334033614
+   },
+   "churn_0": {
+    "count": 1350807,
+    "min": 1.0,
+    "p01": 16.0,
+    "q1": 1002.0,
+    "median": 3200.0,
+    "q3": 7600.0,
+    "p99": 33799.0,
+    "max": 532177.0,
+    "mean": 5706.809091898399
+   },
+   "churn_1": {
+    "count": 77193,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 205.0,
+    "median": 826.0,
+    "q3": 2225.0,
+    "p99": 18000.0,
+    "max": 323541.0,
+    "mean": 2081.0110761338465
+   }
+  },
+  "ARPU_SEGMENT": {
+   "all": {
+    "count": 1428000,
+    "min": 0.0,
+    "p01": 3.0,
+    "q1": 333.0,
+    "median": 1000.0,
+    "q3": 2456.0,
+    "p99": 11107.0,
+    "max": 177392.0,
+    "mean": 1836.942893557423
+   },
+   "churn_0": {
+    "count": 1350807,
+    "min": 0.0,
+    "p01": 5.0,
+    "q1": 334.0,
+    "median": 1067.0,
+    "q3": 2533.0,
+    "p99": 11266.0,
+    "max": 177392.0,
+    "mean": 1902.2757914343056
+   },
+   "churn_1": {
+    "count": 77193,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 68.0,
+    "median": 275.0,
+    "q3": 742.0,
+    "p99": 6000.0,
+    "max": 107847.0,
+    "mean": 693.6768489370797
+   }
+  },
+  "FREQUENCE": {
+   "all": {
+    "count": 1428000,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 3.0,
+    "median": 9.0,
+    "q3": 20.0,
+    "p99": 67.0,
+    "max": 91.0,
+    "mean": 13.978141456582634
+   },
+   "churn_0": {
+    "count": 1350807,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 4.0,
+    "median": 9.0,
+    "q3": 20.0,
+    "p99": 68.0,
+    "max": 91.0,
+    "mean": 14.467674508645572
+   },
+   "churn_1": {
+    "count": 77193,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 1.0,
+    "median": 2.0,
+    "q3": 6.0,
+    "p99": 38.0,
+    "max": 88.0,
+    "mean": 5.411760133690879
+   }
+  },
+  "DATA_VOLUME": {
+   "all": {
+    "count": 1093615,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 257.0,
+    "q3": 2895.0,
+    "p99": 37300.8600000001,
+    "max": 1823866.0,
+    "mean": 3366.4501666491406
+   },
+   "churn_0": {
+    "count": 1013755,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 286.0,
+    "q3": 3114.0,
+    "p99": 38089.45999999996,
+    "max": 1823866.0,
+    "mean": 3487.5194519385846
+   },
+   "churn_1": {
+    "count": 79860,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 75.0,
+    "q3": 1024.0,
+    "p99": 22702.410000000003,
+    "max": 1238915.0,
+    "mean": 1829.5782243926872
+   }
+  },
+  "ON_NET": {
+   "all": {
+    "count": 1367373,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 5.0,
+    "median": 27.0,
+    "q3": 156.0,
+    "p99": 4285.0,
+    "max": 50809.0,
+    "mean": 277.6891404174282
+   },
+   "churn_0": {
+    "count": 1296264,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 5.0,
+    "median": 30.0,
+    "q3": 169.0,
+    "p99": 4391.0,
+    "max": 50809.0,
+    "mean": 289.68677985348666
+   },
+   "churn_1": {
+    "count": 71109,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 1.0,
+    "median": 5.0,
+    "q3": 15.0,
+    "p99": 1165.0,
+    "max": 12912.0,
+    "mean": 58.98112756472458
+   }
+  },
+  "ORANGE": {
+   "all": {
+    "count": 1258800,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 7.0,
+    "median": 29.0,
+    "q3": 99.0,
+    "p99": 927.0,
+    "max": 21323.0,
+    "mean": 95.41871067683508
+   },
+   "churn_0": {
+    "count": 1207882,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 8.0,
+    "median": 30.0,
+    "q3": 103.0,
+    "p99": 943.0,
+    "max": 21323.0,
+    "mean": 98.08705486131923
+   },
+   "churn_1": {
+    "count": 50918,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 2.0,
+    "median": 9.0,
+    "q3": 26.0,
+    "p99": 395.0,
+    "max": 5283.0,
+    "mean": 32.11997721827252
+   }
+  },
+  "TIGO": {
+   "all": {
+    "count": 864032,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 2.0,
+    "median": 6.0,
+    "q3": 20.0,
+    "p99": 256.6899999999441,
+    "max": 4174.0,
+    "mean": 23.109252898040815
+   },
+   "churn_0": {
+    "count": 837438,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 2.0,
+    "median": 6.0,
+    "q3": 21.0,
+    "p99": 260.0,
+    "max": 4174.0,
+    "mean": 23.513369347939786
+   },
+   "churn_1": {
+    "count": 26594,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 1.0,
+    "median": 3.0,
+    "q3": 9.0,
+    "p99": 119.0,
+    "max": 2056.0,
+    "mean": 10.383733172896141
+   }
+  },
+  "ZONE1": {
+   "all": {
+    "count": 169721,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 1.0,
+    "q3": 3.0,
+    "p99": 137.79999999998836,
+    "max": 4792.0,
+    "mean": 8.170132158071187
+   },
+   "churn_0": {
+    "count": 162116,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 1.0,
+    "q3": 3.0,
+    "p99": 136.0,
+    "max": 4792.0,
+    "mean": 8.083421747390757
+   },
+   "churn_1": {
+    "count": 7605,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 1.0,
+    "q3": 4.0,
+    "p99": 168.92000000000007,
+    "max": 894.0,
+    "mean": 10.018540433925049
+   }
+  },
+  "ZONE2": {
+   "all": {
+    "count": 136824,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 2.0,
+    "q3": 5.0,
+    "p99": 101.0,
+    "max": 3697.0,
+    "mean": 7.553309360930831
+   },
+   "churn_0": {
+    "count": 129513,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 2.0,
+    "q3": 5.0,
+    "p99": 101.0,
+    "max": 3143.0,
+    "mean": 7.526425918633651
+   },
+   "churn_1": {
+    "count": 7311,
+    "min": 0.0,
+    "p01": 0.0,
+    "q1": 0.0,
+    "median": 2.0,
+    "q3": 5.0,
+    "p99": 94.0,
+    "max": 3697.0,
+    "mean": 8.029544521953222
+   }
+  },
+  "REGULARITY": {
+   "all": {
+    "count": 2154048,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 6.0,
+    "median": 24.0,
+    "q3": 51.0,
+    "p99": 62.0,
+    "max": 62.0,
+    "mean": 28.0425050880946
+   },
+   "churn_0": {
+    "count": 1750062,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 12.0,
+    "median": 34.0,
+    "q3": 55.0,
+    "p99": 62.0,
+    "max": 62.0,
+    "mean": 33.182215258659404
+   },
+   "churn_1": {
+    "count": 403986,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 1.0,
+    "median": 2.0,
+    "q3": 6.0,
+    "p99": 48.0,
+    "max": 62.0,
+    "mean": 5.777348720005149
+   }
+  },
+  "FREQ_TOP_PACK": {
+   "all": {
+    "count": 1251454,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 2.0,
+    "median": 5.0,
+    "q3": 12.0,
+    "p99": 59.0,
+    "max": 713.0,
+    "mean": 9.272461472814822
+   },
+   "churn_0": {
+    "count": 1201194,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 2.0,
+    "median": 5.0,
+    "q3": 12.0,
+    "p99": 59.0,
+    "max": 713.0,
+    "mean": 9.486246185045879
+   },
+   "churn_1": {
+    "count": 50260,
+    "min": 1.0,
+    "p01": 1.0,
+    "q1": 1.0,
+    "median": 2.0,
+    "q3": 4.0,
+    "p99": 33.0,
+    "max": 259.0,
+    "mean": 4.163091922005571
+   }
+  }
+ },
+ "segment_medians": {
+  "0": {
+   "MONTANT": null,
+   "FREQUENCE_RECH": null,
+   "REVENUE": null,
+   "ARPU_SEGMENT": null,
+   "FREQUENCE": null,
+   "DATA_VOLUME": null,
+   "ON_NET": null,
+   "ORANGE": null,
+   "TIGO": null,
+   "ZONE1": null,
+   "ZONE2": null,
+   "REGULARITY": 3.0,
+   "FREQ_TOP_PACK": null
+  },
+  "1": {
+   "MONTANT": 8500.0,
+   "FREQUENCE_RECH": 17.0,
+   "REVENUE": 8600.0,
+   "ARPU_SEGMENT": 2867.0,
+   "FREQUENCE": 21.0,
+   "DATA_VOLUME": 36.0,
+   "ON_NET": 279.0,
+   "ORANGE": 130.0,
+   "TIGO": 18.0,
+   "ZONE1": null,
+   "ZONE2": null,
+   "REGULARITY": 58.0,
+   "FREQ_TOP_PACK": 12.0
+  },
+  "2": {
+   "MONTANT": 4500.0,
+   "FREQUENCE_RECH": 10.0,
+   "REVENUE": 4699.0,
+   "ARPU_SEGMENT": 1566.0,
+   "FREQUENCE": 14.0,
+   "DATA_VOLUME": 4227.0,
+   "ON_NET": 10.0,
+   "ORANGE": 16.0,
+   "TIGO": 3.0,
+   "ZONE1": null,
+   "ZONE2": null,
+   "REGULARITY": 50.0,
+   "FREQ_TOP_PACK": 6.0
+  },
+  "3": {
+   "MONTANT": 1200.0,
+   "FREQUENCE_RECH": 3.0,
+   "REVENUE": 1193.0,
+   "ARPU_SEGMENT": 398.0,
+   "FREQUENCE": 4.0,
+   "DATA_VOLUME": null,
+   "ON_NET": 13.0,
+   "ORANGE": 14.0,
+   "TIGO": 3.0,
+   "ZONE1": null,
+   "ZONE2": null,
+   "REGULARITY": 24.0,
+   "FREQ_TOP_PACK": 2.0
+  },
+  "4": {
+   "MONTANT": null,
+   "FREQUENCE_RECH": null,
+   "REVENUE": null,
+   "ARPU_SEGMENT": null,
+   "FREQUENCE": null,
+   "DATA_VOLUME": 13.0,
+   "ON_NET": 4.0,
+   "ORANGE": null,
+   "TIGO": null,
+   "ZONE1": null,
+   "ZONE2": null,
+   "REGULARITY": 10.0,
+   "FREQ_TOP_PACK": null
+  }
+ },
+ "segment_modes": {
+  "0": {
+   "TENURE": "K > 24 month",
+   "REGION": null,
+   "TOP_PACK": null
+  },
+  "1": {
+   "TENURE": "K > 24 month",
+   "REGION": "DAKAR",
+   "TOP_PACK": "All-net 500F=2000F;5d"
+  },
+  "2": {
+   "TENURE": "K > 24 month",
+   "REGION": "DAKAR",
+   "TOP_PACK": "Data:490F=1GB,7d"
+  },
+  "3": {
+   "TENURE": "K > 24 month",
+   "REGION": "DAKAR",
+   "TOP_PACK": "All-net 500F=2000F;5d"
+  },
+  "4": {
+   "TENURE": "K > 24 month",
+   "REGION": "DAKAR",
+   "TOP_PACK": null
+  }
+ },
+ "segment_check": {
+  "0": {
+   "expected_customers": 511179,
+   "reconstructed": 511179,
+   "expected_churn_rate": 53.06888585016208,
+   "reconstructed_churn_rate": 53.068885850162076,
+   "expected_pct": 23.73108677243961,
+   "reconstructed_pct": 23.73108677243961
+  },
+  "1": {
+   "expected_customers": 448597,
+   "reconstructed": 448597,
+   "expected_churn_rate": 0.8189978978905342,
+   "reconstructed_churn_rate": 0.8189978978905342,
+   "expected_pct": 20.825766185340346,
+   "reconstructed_pct": 20.825766185340346
+  },
+  "2": {
+   "expected_customers": 324678,
+   "reconstructed": 324678,
+   "expected_churn_rate": 3.2903368876240457,
+   "reconstructed_churn_rate": 3.2903368876240457,
+   "expected_pct": 15.07292316605758,
+   "reconstructed_pct": 15.072923166057581
+  },
+  "3": {
+   "expected_customers": 488694,
+   "reconstructed": 488694,
+   "expected_churn_rate": 6.696624063319787,
+   "reconstructed_churn_rate": 6.696624063319787,
+   "expected_pct": 22.6872381673946,
+   "reconstructed_pct": 22.6872381673946
+  },
+  "4": {
+   "expected_customers": 380900,
+   "reconstructed": 380900,
+   "expected_churn_rate": 22.47991598844841,
+   "reconstructed_churn_rate": 22.47991598844841,
+   "expected_pct": 17.682985708767866,
+   "reconstructed_pct": 17.682985708767863
+  }
+ },
+ "segment_check_ok": true
+}

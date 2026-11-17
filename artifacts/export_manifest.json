@@ -1,0 +1,27 @@
+{
+ "created_utc": "2026-11-17T09:51:42+00:00",
+ "source": "Train (2).csv",
+ "rows": 2154048,
+ "split": {
+  "seed": 42,
+  "test_size": 0.2,
+  "stratified": true,
+  "train_rows": 1723238,
+  "validation_rows": 430810
+ },
+ "validation_model": "holdout_refit",
+ "deployed_auc_on_split": 0.9338153685075196,
+ "recorded_auc": 0.9316996372403265,
+ "deployed_scores_optimistic": true,
+ "segment_check_ok": true,
+ "baseline_training_rows": 400000,
+ "files": {
+  "eda_summary.json": 12511,
+  "eda_breakdowns.parquet": 7042,
+  "validation_predictions.parquet": 2262847,
+  "model_comparison.csv": 741,
+  "reference_stats.json": 8575
+ },
+ "total_mb": 2.29,
+ "seconds": 129.3
+}
