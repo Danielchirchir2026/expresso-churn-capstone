@@ -24,38 +24,45 @@ section_header(t("eval.cmp.title"), t("eval.cmp.sub"))
 comparison = require_artifact("model_comparison", "eval.cmp.missing")
 if comparison is not None:
     comp = comparison.copy()
-    deployed = comp[comp["model"].str.contains("deployed", case=False)]
-    honest = comp[comp["model"].str.contains("holdout", case=False)]
+    is_holdout = comp["model"].str.contains("holdout", case=False)
+    # The holdout row is named "... (holdout refit, deployed settings)": exclude it from the deployed match.
+    deployed = comp[comp["model"].str.contains("deployed", case=False) & ~is_holdout]
+    honest = comp[is_holdout]
     lgb = honest.iloc[0] if len(honest) else (deployed.iloc[0] if len(deployed) else None)
     base = comp[comp["model"].str.contains("Logistic", case=False)]
     order = comp.sort_values("roc_auc")
-    fig = go.Figure(go.Bar(
-        y=order["model"], x=order["roc_auc"], orientation="h",
-        marker_color=[charts.accent() if "LightGBM" in m else charts.neutral() for m in order["model"]],
-        text=[fmt.num(v, 4) for v in order["roc_auc"]], textposition="outside",
+    # Dot plot: AUC lives on a zoomed axis (0.5 = random), where bar lengths would mislead.
+    # The deployed model's own score is optimistic when it saw the validation rows: hollow marker + label.
+    optimistic = [m in set(deployed["model"]) and len(honest) > 0 for m in order["model"]]
+    dot_colors = [charts.accent() if "LightGBM" in m else charts.neutral() for m in order["model"]]
+    fig = go.Figure(go.Scatter(
+        y=order["model"], x=order["roc_auc"], mode="markers+text",
+        marker=dict(size=13, color=dot_colors, symbol=["circle-open" if o else "circle" for o in optimistic],
+                    line=dict(width=2.5, color=dot_colors)),
+        text=[fmt.num(v, 4) + (f" ({t('eval.cmp.optimistic')})" if o else "")
+              for v, o in zip(order["roc_auc"], optimistic)],
+        textposition="middle right", textfont=dict(color=charts.ink("secondary")),
         customdata=order[["pr_auc", "log_loss", "f1_at_0_5"]],
         hovertemplate="<b>%{y}</b><br>ROC-AUC %{x:.4f}<br>PR-AUC %{customdata[0]:.4f}<br>"
                       "log loss %{customdata[1]:.4f}<br>F1@0.5 %{customdata[2]:.3f}<extra></extra>"))
-    charts.style(fig, height=110 + 48 * len(order), legend=False, xgrid=True, ygrid=False)
-    fig.update_xaxes(range=[0.45, 1.06], title="ROC-AUC")
+    charts.style(fig, height=110 + 48 * len(order), legend=False, xgrid=True, ygrid=True)
+    fig.update_xaxes(range=[0.45, 1.08], title="ROC-AUC")
     so = t("eval.cmp.so_what_nobase")
     if lgb is not None and len(base):
         b = base.iloc[0]
         so = t("eval.cmp.so_what", auc=fmt.num(lgb["roc_auc"], 4), lr=fmt.num(b["roc_auc"], 4),
                ap=fmt.num(lgb["pr_auc"], 3), lrap=fmt.num(b["pr_auc"], 3), gain=fmt.num(lgb["roc_auc"] - b["roc_auc"], 3))
-    c1, c2 = st.columns([1.2, 1])
-    with c1:
-        charts.show(fig, so, key="ev_cmp")
-    with c2:
-        st.dataframe(comp, hide_index=True, width="stretch", column_config={
-            "model": st.column_config.TextColumn(t("eval.cmp.col_model"), width="medium"),
-            "roc_auc": st.column_config.NumberColumn("ROC-AUC", format="%.4f"),
-            "pr_auc": st.column_config.NumberColumn("PR-AUC", format="%.4f"),
-            "log_loss": st.column_config.NumberColumn(t("eval.cmp.col_logloss"), format="%.4f"),
-            "f1_at_0_5": st.column_config.NumberColumn("F1 @ 0.5", format="%.3f"),
-            "train_seconds": st.column_config.NumberColumn(t("eval.cmp.col_time"), format="%.1f s"),
-            "note": st.column_config.TextColumn(t("eval.cmp.col_note"), width="large"),
-        })
+    charts.show(fig, so, key="ev_cmp")
+    # Full-width table below the chart, so long model names are not cut off.
+    st.dataframe(comp, hide_index=True, width="stretch", column_config={
+        "model": st.column_config.TextColumn(t("eval.cmp.col_model"), width="large"),
+        "roc_auc": st.column_config.NumberColumn("ROC-AUC", format="%.4f"),
+        "pr_auc": st.column_config.NumberColumn("PR-AUC", format="%.4f"),
+        "log_loss": st.column_config.NumberColumn(t("eval.cmp.col_logloss"), format="%.4f"),
+        "f1_at_0_5": st.column_config.NumberColumn("F1 @ 0.5", format="%.3f"),
+        "train_seconds": st.column_config.NumberColumn(t("eval.cmp.col_time"), format="%.1f s"),
+        "note": st.column_config.TextColumn(t("eval.cmp.col_note"), width="large"),
+    })
     insight_callout(t("eval.cmp.why"), "info", tag=t("eval.cmp.why_tag"))
     if len(honest) and len(deployed):
         insight_callout(t("eval.cmp.honest", dep=fmt.num(deployed.iloc[0]["roc_auc"], 4),
@@ -307,19 +314,25 @@ if data is not None:
                 else:
                     insight_callout(t("eval.fair.ok", overall=fmt.num(s["auc"], 3)), "good")
                 show = gm[~gm["too_small"]].sort_values("auc")
-                f = go.Figure(go.Bar(
-                    y=show["group"], x=show["auc"], orientation="h",
-                    marker_color=[charts.risk_up() if fl else charts.accent() for fl in show["flagged"]],
+                # Dot plot on a zoomed AUC axis; flagged groups differ by shape as well as colour.
+                f = go.Figure(go.Scatter(
+                    y=show["group"], x=show["auc"], mode="markers",
+                    marker=dict(size=12, color=[charts.risk_up() if fl else charts.accent() for fl in show["flagged"]],
+                                symbol=["diamond" if fl else "circle" for fl in show["flagged"]]),
                     customdata=show[["n", "recall", "mean_pred", "churn_rate"]],
                     hovertemplate="<b>%{y}</b><br>AUC %{x:.3f}<br>n = %{customdata[0]:,}<br>"
                                   + t("eval.thr.recall") + " %{customdata[1]:.2f}<br>"
                                   + t("eval.fair.mean_pred") + " %{customdata[2]:.3f}<br>"
                                   + t("eval.kpi.rate") + " %{customdata[3]:.3f}<extra></extra>"))
+                label_font = dict(size=11, color=charts.ink("secondary"))
                 f.add_vline(x=s["auc"], line=dict(color=charts.ink("muted"), width=1),
                             annotation_text=t("eval.fair.overall", auc=fmt.num(s["auc"], 3)),
-                            annotation_font=dict(size=11, color=charts.ink("secondary")))
-                f.add_vline(x=s["auc"] - 0.05, line=dict(color=charts.risk_up(), width=1))
-                charts.style(f, height=max(260, 26 * len(show) + 80), legend=False, xgrid=True, ygrid=False)
+                            annotation_position="top", annotation_yanchor="bottom", annotation_font=label_font)
+                f.add_vline(x=s["auc"] - 0.05, line=dict(color=charts.risk_up(), width=1.5, dash="dash"),
+                            annotation_text=t("eval.fair.tolerance", tol=fmt.num(0.05, 2)),
+                            annotation_position="top", annotation_yanchor="bottom", annotation_font=label_font)
+                charts.style(f, height=max(260, 26 * len(show) + 100), legend=False, xgrid=True, ygrid=True)
+                f.update_layout(margin=dict(t=44))
                 lo = max(0.5, float(show["auc"].min()) - 0.03) if len(show) else 0.5
                 f.update_xaxes(range=[lo, 1.0], title="ROC-AUC")
                 if len(show):

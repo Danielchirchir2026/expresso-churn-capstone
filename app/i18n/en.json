@@ -1185,7 +1185,8 @@
       "so_what_nobase": "LightGBM is compared with the baselines exported in model_comparison.csv.",
       "why_tag": "Why LightGBM",
       "why": "Gradient-boosted trees handle the heavy missingness, skewed usage values and interactions in this data without manual feature crossing, train fast on two million rows, and expose exact per-customer contributions for reason codes.",
-      "honest": "The deployed model scores {dep} on this split but saw these rows during its final refit; the holdout refit with the same settings scores {hon}, the honest estimate."
+      "honest": "The deployed model scores {dep} on this split but saw these rows during its final refit; the holdout refit with the same settings scores {hon}, the honest estimate.",
+      "optimistic": "optimistic"
     },
     "data": {
       "title": "Detailed evaluation",
@@ -1214,7 +1215,8 @@
       "ok": "No group falls more than 0.05 below the overall AUC ({overall}): ranking quality is consistent across groups.",
       "mean_pred": "Mean probability",
       "overall": "Overall {auc}",
-      "so_what": "The weakest group is {worst} with AUC {auc} against {overall} overall; the red line marks the 0.05 tolerance.",
+      "tolerance": "Tolerance (−{tol})",
+      "so_what": "The weakest group is {worst} with AUC {auc} against {overall} overall; the dashed line marks the 0.05 tolerance.",
       "caption": "Fairness here means comparable ranking quality and recall across groups. Differences in average probability can be legitimate (different churn rates) and are shown next to the observed churn rate."
     }
   },

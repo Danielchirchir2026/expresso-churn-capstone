@@ -43,3 +43,27 @@ def test_pages_with_exported_artifacts(page, exported, monkeypatch):
     at.switch_page(f"app_pages/{page}.py").run()
     assert not at.exception, [e.value for e in at.exception]
     assert "Something went wrong on this page." not in [e.value for e in at.error]
+
+
+def test_only_deployed_model_marked_optimistic(exported, tmp_path, monkeypatch):
+    """With a holdout refit, only the deployed model's own score is flagged optimistic, not the holdout row
+    (whose name also contains "deployed settings")."""
+    import shutil
+
+    folder = tmp_path / "artifacts"
+    shutil.copytree(exported, folder)
+    comp = pd.read_csv(folder / "model_comparison.csv")
+    dep = comp[comp["model"] == "LightGBM (deployed)"].iloc[0]
+    holdout = dep.copy()
+    holdout["model"] = "LightGBM (holdout refit, deployed settings)"
+    holdout["roc_auc"] = dep["roc_auc"] - 0.002
+    pd.concat([comp, holdout.to_frame().T], ignore_index=True).to_csv(folder / "model_comparison.csv", index=False)
+
+    monkeypatch.setattr(artifacts, "OPTIONAL_DIR", folder)
+    at = AppTest.from_file(str(ROOT / "Home.py"), default_timeout=300).run()
+    at.switch_page("app_pages/evaluation.py").run()
+    assert not at.exception, [e.value for e in at.exception]
+    spec = json.loads(at.get("plotly_chart")[0].proto.spec)
+    trace = spec["data"][0]
+    labelled = [y for y, text in zip(trace["y"], trace["text"]) if "optimistic" in text]
+    assert labelled == ["LightGBM (deployed)"], labelled

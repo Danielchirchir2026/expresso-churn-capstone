@@ -1185,7 +1185,8 @@
       "so_what_nobase": "LightGBM est comparé aux modèles de référence exportés dans model_comparison.csv.",
       "why_tag": "Pourquoi LightGBM",
       "why": "Les arbres boostés gèrent les nombreuses valeurs manquantes, les usages très asymétriques et les interactions sans croisement manuel de variables, s'entraînent vite sur deux millions de lignes et fournissent les contributions exactes par client pour les codes motifs.",
-      "honest": "Le modèle déployé obtient {dep} sur cet échantillon mais a vu ces lignes lors de son réentraînement final ; la copie réentraînée sur l'échantillon d'apprentissage avec les mêmes réglages obtient {hon}, l'estimation honnête."
+      "honest": "Le modèle déployé obtient {dep} sur cet échantillon mais a vu ces lignes lors de son réentraînement final ; la copie réentraînée sur l'échantillon d'apprentissage avec les mêmes réglages obtient {hon}, l'estimation honnête.",
+      "optimistic": "optimiste"
     },
     "data": {
       "title": "Évaluation détaillée",
@@ -1214,7 +1215,8 @@
       "ok": "Aucun groupe n'est inférieur de plus de 0,05 à l'AUC globale ({overall}) : la qualité du classement est homogène entre groupes.",
       "mean_pred": "Probabilité moyenne",
       "overall": "Global {auc}",
-      "so_what": "Le groupe le plus faible est {worst} avec une AUC de {auc} contre {overall} au global ; la ligne rouge marque la tolérance de 0,05.",
+      "tolerance": "Tolérance (−{tol})",
+      "so_what": "Le groupe le plus faible est {worst} avec une AUC de {auc} contre {overall} au global ; la ligne en pointillés marque la tolérance de 0,05.",
       "caption": "L'équité est ici une qualité de classement et un rappel comparables entre groupes. Des écarts de probabilité moyenne peuvent être légitimes (taux de churn différents) et sont affichés à côté du taux de churn observé."
     }
   },

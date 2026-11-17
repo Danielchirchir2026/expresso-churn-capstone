@@ -25,6 +25,9 @@ Thumbs.db
 
 # Temporary test/upload data
 data/*.csv
+# Zindi competition files (customer-level data; never commit)
+/Train*.csv
+/Test*.csv
 
 # Local notebooks
 notebooks/*.ipynb
