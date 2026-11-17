@@ -56,12 +56,16 @@ Global extras:
 - **Presentation mode** hides the sidebar and controls and enlarges KPIs and charts for a defence.
 - Sidebar model-status and data-in-session badges, glossary popover, optional password gate, an error boundary around
   every page, footer with the decision-support disclaimer.
-- Accessibility: colour-blind-safe palette validated in both themes, status never shown by colour alone, a "So what?"
-  caption, screen-reader text and a table view under every chart, light and dark themes with sufficient contrast.
+- Look: a plain enterprise style ("Cobalt & Graphite"): cool grey page, white cards with thin borders, one cobalt
+  accent and IBM Plex Sans. The app opens in light or dark mode following the viewer's system setting, and the mode can
+  be switched in the app menu (⋮ → Settings).
+- Accessibility: colour-blind-safe chart palette validated against both page backgrounds, status never shown by colour
+  alone, a "So what?" caption, screen-reader text and a table view under every chart, and text contrast of at least
+  4.5:1 in both modes (including white text on buttons).
 
 ### Screenshots
 
-Captured from the running app with the artifacts in this repository (dark theme, 1440 × 900). Data Explorer, Model
+Captured from the running app with the artifacts in this repository (light mode, 1440 × 900). Data Explorer, Model
 Evaluation and Fairness use the evidence files exported from the full Zindi `Train.csv`. Batch Scoring and the
 Retention Planner use the app's built-in synthetic demo batch, which the app labels as synthetic on every page.
 
