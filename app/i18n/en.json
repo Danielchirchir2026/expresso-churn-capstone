@@ -568,7 +568,7 @@
     "presets": {
       "title": "Start from a typical customer",
       "sub": "Fill the form with the median customer of a segment, then adjust.",
-      "button": "Typical {name}",
+      "button": "{name}",
       "help": "Loads that segment's medians into the form and scores it.",
       "loaded": "Loaded: typical {name}. Filled from data: {fields}.",
       "note_profile": "Other usage fields are not in segment_profiles.csv, so they are left as 'not recorded'. Region and tenure keep your current choice.",

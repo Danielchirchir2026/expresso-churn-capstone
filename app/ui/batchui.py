@@ -26,7 +26,7 @@ def require_batch(key: str) -> dict | None:
             synthetic_banner()
         return batch
     empty_state(t("batchui.empty.msg"), t("batchui.empty.detail"), icon="▦")
-    c1, c2, _ = st.columns([1, 1, 1])
+    c1, c2 = st.columns([1, 2])  # wide enough for the full button label
     with c1:
         navigation.link("batch", label=t("batchui.empty.go"), icon=":material/upload_file:")
     with c2:

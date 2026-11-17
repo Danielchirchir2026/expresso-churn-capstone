@@ -568,7 +568,7 @@
     "presets": {
       "title": "Partir d'un client type",
       "sub": "Remplissez le formulaire avec le client médian d'un segment, puis ajustez.",
-      "button": "{name} type",
+      "button": "{name}",
       "help": "Charge les médianes de ce segment dans le formulaire et l'évalue.",
       "loaded": "Chargé : {name} type. Rempli à partir des données : {fields}.",
       "note_profile": "Les autres champs d'usage ne figurent pas dans segment_profiles.csv ; ils restent « non renseignés ». La région et l'ancienneté conservent votre choix.",
