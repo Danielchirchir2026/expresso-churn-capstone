@@ -2,7 +2,7 @@
 
 ``facts()`` gathers everything through the same aggregate-only tools the
 Copilot uses. Without an API key ``template_summary()`` writes the summary
-from fixed templates; with a key ``stream_llm_summary()`` asks Claude to write
+from fixed templates; with a key ``stream_llm_summary()`` asks the language model to write
 it from the facts alone. Both can be exported as a PDF.
 """
 
@@ -90,7 +90,7 @@ def template_summary(f: dict, lang: str) -> str:
 
 
 def stream_llm_summary(client, model: str, effort: str, lang: str, f: dict) -> Iterator[str]:
-    """Claude writes the summary from the facts only (single call, streamed)."""
+    """The language model writes the summary from the facts only (single call, streamed)."""
     from app.copilot.llm import FALLBACK_BETA, FALLBACK_MODELS, LANG_NAMES
 
     system = (

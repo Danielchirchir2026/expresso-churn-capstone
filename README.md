@@ -41,7 +41,7 @@ role sees its most useful pages first. Everything is available in **English and 
 | Trust | **Methodology** | Feature-engineering table generated from the config, class imbalance, validation strategy, why ROC-AUC, limitations and ethics. |
 | | **Model & Explainability** | Model card (intended use, limitations), gain/split importance grouped back to raw columns, all 69 features explained. |
 | | **Model Evaluation** | Model comparison leaderboard, ROC, precision-recall, calibration, confusion matrix with a threshold slider in business words, gains/lift, **threshold advisor** (cost-based, for discussion), **fairness** by region and tenure. |
-| Assistant | **Churn Copilot** | Chat answered by Claude using 13 aggregate-only tools over the app's data, with sources shown; one-click **executive summary** (PDF); offline FAQ mode without an API key. |
+| Assistant | **Churn Copilot** | Chat answered by an AI language model using 13 aggregate-only tools over the app's data, with sources shown; one-click **executive summary** (PDF); offline FAQ mode without an API key. |
 | Reports | **Reports** | Executive Brief PDF, scored files, call list, data dictionary, model metadata, segment profiles, feature list, deployment summary. |
 
 Pages marked *needs exported files* show an empty state naming the file and the command until
@@ -101,8 +101,8 @@ Copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml` (git-ignored
 
 | Key | Effect |
 |---|---|
-| `ANTHROPIC_API_KEY` | Enables free-form Copilot answers from Claude. Without it the Copilot uses its offline FAQ. |
-| `COPILOT_MODEL` | Claude model for the Copilot (default `claude-opus-5-5`). |
+| `ANTHROPIC_API_KEY` | Enables free-form Copilot answers from the AI model (Anthropic API). Without it the Copilot uses its offline FAQ. |
+| `COPILOT_MODEL` | Model ID for the Copilot (optional; the default is set in `app/copilot/llm.py`). |
 | `COPILOT_EFFORT` | `low` / `medium` / `high` (default `medium`). |
 | `APP_PASSWORD` | If set, viewers must enter it once per session. If unset, the app is open. |
 
@@ -187,7 +187,7 @@ Home.py                  entrypoint: theme, password gate, st.navigation router,
 app_pages/               one file per page
 app/utils/prediction.py  canonical preprocessing (unchanged model logic, 69 features)
 app/core/                scoring, explanations, segments, metrics, validation, demo data, PDF, ...
-app/copilot/             Copilot tools, Claude streaming loop, executive summary, offline FAQ
+app/copilot/             Copilot tools, LLM streaming loop, executive summary, offline FAQ
 app/ui/                  components (KPI cards, callouts, gauge), Plotly house style, layout, style.css
 app/i18n/                en.json and fr.json: every UI string
 artifacts/               model bundle, metadata, segment profiles, feature list, preprocessing config

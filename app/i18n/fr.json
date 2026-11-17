@@ -1225,7 +1225,7 @@
     "title": "Copilote churn",
     "sub": "Posez vos questions sur le churn, les segments, le modèle ou votre lot scoré en langage courant. Les réponses proviennent uniquement des données et outils de l'application, sources à l'appui.",
     "mode": {
-      "online": "Claude · {model}",
+      "online": "Assistant IA en ligne",
       "offline": "Mode FAQ hors ligne",
       "offline_help": "Aucune clé ANTHROPIC_API_KEY n'est configurée : le Copilote répond aux questions courantes avec des modèles de réponse remplis avec les chiffres de l'application. Ajoutez la clé dans .streamlit/secrets.toml pour activer les réponses libres."
     },
@@ -1261,10 +1261,10 @@
     "truncated": "La réponse a été coupée. Merci de poser une question plus ciblée.",
     "turn_limit": "Je me suis arrêté après plusieurs appels d'outils. Merci de reformuler ou de préciser la question.",
     "err": {
-      "auth": "La clé API Anthropic a été refusée. Réponse depuis la FAQ hors ligne.",
-      "rate": "L'API Claude limite les requêtes en ce moment. Réponse depuis la FAQ hors ligne.",
-      "status": "L'API Claude a renvoyé une erreur ({code}). Réponse depuis la FAQ hors ligne.",
-      "connection": "Impossible de joindre l'API Claude. Réponse depuis la FAQ hors ligne."
+      "auth": "Le service d'IA a refusé la clé API. Réponse depuis la FAQ hors ligne.",
+      "rate": "Le service d'IA limite les requêtes en ce moment. Réponse depuis la FAQ hors ligne.",
+      "status": "Le service d'IA a renvoyé une erreur ({code}). Réponse depuis la FAQ hors ligne.",
+      "connection": "Impossible de joindre le service d'IA. Réponse depuis la FAQ hors ligne."
     },
     "privacy": "Seuls des agrégats et au plus 20 identifiants clients avec leur score quittent l'application ; les lignes clients brutes ne sont jamais envoyées. Les réponses sont une aide à la décision, pas des verdicts.",
     "faq": {
@@ -1814,7 +1814,7 @@
     "title": "Synthèse pour la direction",
     "sub": "Une synthèse d'une page de la situation actuelle : portefeuille, modèle, dernier lot et santé des données, actions recommandées. Construite uniquement à partir des données et outils de l'application.",
     "generate": "Générer la synthèse",
-    "by_llm": "Rédigée par Claude ({model}) à partir des faits listés ci-dessous.",
+    "by_llm": "Rédigée par l'assistant IA à partir des faits listés ci-dessous.",
     "by_template": "Rédigée à partir de modèles fixes remplis avec les chiffres de l'application (sans clé API).",
     "pdf": "Télécharger en PDF",
     "pdf_title": "Expresso Churn - Synthèse pour la direction",

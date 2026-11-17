@@ -1,4 +1,4 @@
-"""Claude-backed Copilot: grounded system prompt + streaming tool loop.
+"""LLM-backed Copilot: grounded system prompt + streaming tool loop.
 
 Uses the official Anthropic Python SDK. The API key comes only from
 ``st.secrets["ANTHROPIC_API_KEY"]``; the model from ``COPILOT_MODEL``

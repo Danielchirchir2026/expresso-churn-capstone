@@ -1225,7 +1225,7 @@
     "title": "Churn Copilot",
     "sub": "Ask about churn, segments, the model or your scored batch in plain language. Answers come only from the app's data and tools, and each answer lists its sources.",
     "mode": {
-      "online": "Claude · {model}",
+      "online": "AI assistant online",
       "offline": "Offline FAQ mode",
       "offline_help": "No ANTHROPIC_API_KEY is configured, so the Copilot answers common questions from built-in templates filled with the app's own numbers. Add the key in .streamlit/secrets.toml to enable free-form answers."
     },
@@ -1261,10 +1261,10 @@
     "truncated": "The answer was cut short. Please ask a narrower question.",
     "turn_limit": "I stopped after several tool calls. Please rephrase or narrow the question.",
     "err": {
-      "auth": "The Anthropic API key was rejected. Answering from the offline FAQ instead.",
-      "rate": "The Claude API is rate limiting requests right now. Answering from the offline FAQ instead.",
-      "status": "The Claude API returned an error ({code}). Answering from the offline FAQ instead.",
-      "connection": "Could not reach the Claude API. Answering from the offline FAQ instead."
+      "auth": "The AI service rejected the API key. Answering from the offline FAQ instead.",
+      "rate": "The AI service is rate limiting requests right now. Answering from the offline FAQ instead.",
+      "status": "The AI service returned an error ({code}). Answering from the offline FAQ instead.",
+      "connection": "Could not reach the AI service. Answering from the offline FAQ instead."
     },
     "privacy": "Only aggregates and at most 20 customer IDs with their scores ever leave the app; raw customer rows are never sent. Answers are decision support, not verdicts.",
     "faq": {
@@ -1814,7 +1814,7 @@
     "title": "Executive summary",
     "sub": "A one-page summary of the current state: portfolio, model, latest batch and data health, and recommended actions. Built only from the app's data and tools.",
     "generate": "Generate executive summary",
-    "by_llm": "Written by Claude ({model}) from the facts listed below.",
+    "by_llm": "Written by the AI assistant from the facts listed below.",
     "by_template": "Written from fixed templates filled with the app's numbers (no API key needed).",
     "pdf": "Download as PDF",
     "pdf_title": "Expresso Churn - Executive summary",
