@@ -44,6 +44,25 @@ def section_header(title: str, subtitle: str | None = None) -> None:
     st.html(f'<div class="hub-section"><h3>{_e(title)}</h3>{sub}</div>')
 
 
+def step_header(n: int, title: str, subtitle: str | None = None, anchor: str | None = None) -> None:
+    """Numbered header for one step of a multi-step page; ``anchor`` is the id the summary strip links to."""
+    sub = f"<p>{_e(subtitle)}</p>" if subtitle else ""
+    aid = f' id="{_e(anchor)}"' if anchor else ""
+    st.html(f'<div class="hub-jstep"{aid}><span class="num">{int(n)}</span><div><h3>{_e(title)}</h3>{sub}</div></div>')
+
+
+def journey_strip(items: list[dict], label: str) -> str:
+    """Clickable at-a-glance summary of a multi-step page. Returns HTML.
+
+    Each item: n, title, value, detail, anchor (the id of that step's header).
+    """
+    cells = "".join(
+        f'<a class="hub-jcell" href="#{_e(i["anchor"])}" title="{_e(i.get("full", i["value"]))}">'
+        f'<span class="n">{int(i["n"])} · {_e(i["title"])}</span><span class="v">{_e(i["value"])}</span>'
+        f'<span class="d">{_e(i["detail"])}</span></a>' for i in items)
+    return f'<nav class="hub-journey" aria-label="{_e(label)}">{cells}</nav>'
+
+
 # ---------------------------------------------------------------------------
 # KPI cards
 # ---------------------------------------------------------------------------

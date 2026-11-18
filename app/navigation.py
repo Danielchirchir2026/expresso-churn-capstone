@@ -16,10 +16,8 @@ PAGES: dict[str, tuple[str, str, str]] = {
     "problem": ("app_pages/problem.py", ":material/flag:", "overview"),
     "executive": ("app_pages/executive.py", ":material/monitoring:", "overview"),
     "data_explorer": ("app_pages/data_explorer.py", ":material/query_stats:", "overview"),
-    "customer_check": ("app_pages/customer_check.py", ":material/person_search:", "predict"),
-    "what_if": ("app_pages/what_if.py", ":material/tune:", "predict"),
+    "journey": ("app_pages/journey.py", ":material/route:", "predict"),
     "batch": ("app_pages/batch.py", ":material/upload_file:", "predict"),
-    "drift": ("app_pages/drift.py", ":material/troubleshoot:", "predict"),
     "retention": ("app_pages/retention.py", ":material/savings:", "act"),
     "revenue_risk": ("app_pages/revenue_risk.py", ":material/payments:", "act"),
     "segments": ("app_pages/segments.py", ":material/groups:", "act"),
@@ -28,6 +26,7 @@ PAGES: dict[str, tuple[str, str, str]] = {
     "methodology": ("app_pages/methodology.py", ":material/schema:", "trust"),
     "model": ("app_pages/model.py", ":material/model_training:", "trust"),
     "evaluation": ("app_pages/evaluation.py", ":material/fact_check:", "trust"),
+    "drift": ("app_pages/drift.py", ":material/troubleshoot:", "trust"),
     "copilot": ("app_pages/copilot.py", ":material/smart_toy:", "assistant"),
     "reports": ("app_pages/reports.py", ":material/summarize:", "reports"),
 }
@@ -43,7 +42,7 @@ SECTION_ORDER = {
 ROLE_PRIORITY = {
     "all": [],
     "executive": ["executive", "problem", "revenue_risk", "retention", "segments", "campaigns"],
-    "retention": ["retention", "campaigns", "experiment", "segments", "batch", "customer_check", "what_if"],
+    "retention": ["retention", "campaigns", "experiment", "segments", "journey", "batch"],
     "analyst": ["model", "evaluation", "methodology", "data_explorer", "drift", "batch"],
 }
 ROLES = ["all", "executive", "retention", "analyst"]

@@ -133,8 +133,8 @@ def render_sidebar() -> None:
 # ---------------------------------------------------------------------------
 # Guided tour (session-state driven, no external JS)
 # ---------------------------------------------------------------------------
-TOUR = ["home", "problem", "executive", "segments", "customer_check", "what_if", "batch", "retention",
-        "evaluation", "copilot", "reports"]
+TOUR = ["home", "problem", "executive", "segments", "journey", "batch", "retention", "evaluation", "copilot",
+        "reports"]
 
 
 def tour_steps() -> list[str]:

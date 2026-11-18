@@ -207,7 +207,8 @@ def run_what_if(ctx: Context, base: str = "last_customer", changes: dict | None 
     config = artifacts.get_config()
     if base == "last_customer":
         if not ctx.last_customer:
-            raise ToolInputError("No customer has been scored on Customer Check yet; use a segment key as base.")
+            raise ToolInputError("No customer has been followed on the Customer Journey page yet; "
+                                 "use a segment key as base.")
         baseline = dict(ctx.last_customer)
     elif base in SEGMENT_KEYS.values():
         sid = [k for k, v in SEGMENT_KEYS.items() if v == base][0]
@@ -267,8 +268,8 @@ TOOLS: list[Tool] = [
     Tool("risk_by", "Average churn probability and expected churners in the session batch, grouped by a column.",
          _obj({"column": {"type": "string", "enum": RISK_BY_COLUMNS}}, ["column"]), risk_by),
     Tool("run_what_if", "Re-score one customer after changing behaviour levers. base is 'last_customer' (the "
-         "customer from Customer Check) or a segment key (silent, high_value, data_engaged, light_active, "
-         f"low_engagement). changes maps lever names {ACTIONABLE} to new numeric values.",
+         "customer followed on the Customer Journey page) or a segment key (silent, high_value, data_engaged, "
+         f"light_active, low_engagement). changes maps lever names {ACTIONABLE} to new numeric values.",
          _obj({"base": {"type": "string"},
                "changes": {"type": "object", "additionalProperties": {"type": "number"}}}, ["base", "changes"]),
          run_what_if),

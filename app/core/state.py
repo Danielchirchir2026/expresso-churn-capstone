@@ -48,7 +48,7 @@ def clear_batch() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Last single-customer input (Customer Check -> What-If Simulator)
+# Customer followed on the Customer Journey page (also the Copilot's what-if base)
 # ---------------------------------------------------------------------------
 def set_last_customer(raw_row: dict) -> None:
     st.session_state["last_customer"] = dict(raw_row)

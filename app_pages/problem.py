@@ -38,7 +38,8 @@ with c2:
 section_header(t("prob.users.title"), t("prob.users.sub"))
 cols = st.columns(3)
 for col, role, pages in zip(cols, ("executive", "retention", "analyst"),
-                            (["executive", "revenue_risk", "segments"], ["batch", "retention", "experiment", "campaigns"],
+                            (["executive", "revenue_risk", "segments"],
+                             ["journey", "batch", "retention", "experiment", "campaigns"],
                              ["model", "evaluation", "drift", "methodology"])):
     with col:
         with st.container(border=True, height="stretch"):

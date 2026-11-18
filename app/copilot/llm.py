@@ -75,7 +75,7 @@ Portfolio (segment_profiles.csv): {pf.total_customers:,} customers, overall chur
 Glossary:
 {glossary}
 
-App pages: Home, The Problem, Executive Dashboard, Data Explorer, Customer Check, What-If Simulator, Batch Scoring, \
+App pages: Home, The Problem, Executive Dashboard, Data Explorer, Customer Journey, Batch Scoring, \
 Data Quality & Drift, Retention Planner, Revenue at Risk, Segment Explorer, Experiment Designer, Campaign Tracker, \
 Methodology, Model & Explainability, Model Evaluation, Reports."""
 

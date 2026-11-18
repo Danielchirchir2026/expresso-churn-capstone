@@ -18,8 +18,7 @@
       "problem": "The Problem",
       "executive": "Executive Dashboard",
       "data_explorer": "Data Explorer",
-      "customer_check": "Customer Check",
-      "what_if": "What-If Simulator",
+      "journey": "Customer Journey",
       "batch": "Batch Scoring",
       "drift": "Data Quality & Drift",
       "retention": "Retention Planner",
@@ -39,8 +38,7 @@
     "problem": "Why churn matters to Expresso, who uses this app and how we measure success.",
     "executive": "Portfolio KPIs, segment economics and auto-generated insights.",
     "data_explorer": "What the training data looks like and how churn varies across it.",
-    "customer_check": "Score one customer, see why, and get a suggested action.",
-    "what_if": "Change a customer's behaviour and watch the churn probability move.",
+    "journey": "Follow one customer from risk score to reasons, what-if changes and a next action.",
     "batch": "Upload or generate a file of customers and score them all.",
     "drift": "Check whether a new file looks like the data the model learned from.",
     "retention": "Choose how many customers to contact for the best expected return.",
@@ -162,8 +160,7 @@
       "problem": "Why churn matters to Expresso, who this app is for, and the CRISP-DM path from business question to deployed model.",
       "executive": "One screen for management: where churn concentrates, where the revenue is, and insights written from the numbers.",
       "segments": "Five behavioural segments. Compare any two, benchmark them against the portfolio and read the recommended plays.",
-      "customer_check": "Score a single customer, see the reasons behind the score and a suggested next action.",
-      "what_if": "Move one lever at a time and see how much the churn probability would change.",
+      "journey": "One customer, end to end: find them, see the churn risk and why, try what-if changes and get a suggested next action, all on one page.",
       "batch": "Upload a file (or generate demo data), validate it, and score thousands of customers in chunks.",
       "retention": "Turn scores into a campaign: how many customers to call to maximise expected profit, under assumptions you set.",
       "evaluation": "Evidence the model works: ROC, precision-recall, calibration, a threshold advisor and a fairness check.",
@@ -561,12 +558,83 @@
       }
     }
   },
+  "jr": {
+    "eyebrow": "Predict · one customer, end to end",
+    "title": "Customer Journey",
+    "sub": "Follow one customer from start to finish: who they are, how likely they are to leave, why, what could change it and what to do next. Every step below describes the same customer.",
+    "s1": {
+      "title": "Who is the customer?",
+      "sub": "Start from a typical customer of a segment, pick someone from a scored batch, or type in a record by hand.",
+      "how": "Choose the customer",
+      "src_preset": "Typical customer",
+      "src_batch": "From a scored batch",
+      "src_manual": "Enter details by hand",
+      "batch_pick": "Riskiest 50 customers in the batch",
+      "batch_go": "Follow this customer",
+      "batch_note": "From batch {name} ({n} customers). Type an ID to find anyone else in it.",
+      "batch_none": "No batch has been scored in this session yet. Score a file on Batch Scoring, or generate a demo batch here in one click.",
+      "manual_note": "The form starts with the customer you are following. Change any value, then press 'Score this customer'.",
+      "following": "Following"
+    },
+    "origin": {
+      "preset": "Typical {name} customer, built from segment medians",
+      "batch": "Customer from the scored batch {name}",
+      "manual": "Entered by hand"
+    },
+    "s2": {
+      "title": "How likely are they to leave?",
+      "sub": "The deployed model's churn probability, compared with the whole portfolio.",
+      "verdict_up": "{id} has a {p} churn probability, {mult}× the portfolio rate of {rate}.",
+      "verdict_down": "{id} has a {p} churn probability, below the portfolio rate of {rate} ({mult}×).",
+      "tag_up": "Above the portfolio rate",
+      "tag_down": "Below the portfolio rate"
+    },
+    "s3": {
+      "title": "Why?",
+      "sub": "What pushed this customer's score up or down, from the model's own contribution values."
+    },
+    "s4": {
+      "title": "What would change it?",
+      "sub": "Move the levers to try changes for this customer. This shows how the model responds; it does not prove that changing a behaviour makes a customer stay."
+    },
+    "s5": {
+      "title": "What should we do?",
+      "sub": "Suggested next steps for this customer, a summary to save, and where to go next.",
+      "lever_title": "Strongest lever",
+      "lever_tag": "Talking point",
+      "lever": "{name}: in the model, moving it to about {value} lowers this customer's probability by up to {gain} points.",
+      "download": "Download the customer action card (.txt)",
+      "next_title": "Keep going",
+      "to_retention": "Plan a campaign for customers like this (Retention Planner)",
+      "to_batch": "Score many customers at once (Batch Scoring)",
+      "to_copilot": "Ask the Copilot about this customer"
+    },
+    "card": {
+      "title": "Customer action card",
+      "customer": "Customer",
+      "source": "Source",
+      "portfolio": "the portfolio rate of",
+      "generated": "Generated"
+    },
+    "strip": {
+      "label": "Journey at a glance",
+      "find": "Customer",
+      "find_preset": "Typical {name}",
+      "find_batch": "From the scored batch",
+      "risk": "Risk",
+      "risk_detail": "{mult}× the portfolio rate",
+      "why": "Top driver",
+      "why_up": "raises the risk most",
+      "why_down": "lowers the risk most",
+      "whatif": "Best lever",
+      "whatif_detail": "up to {gain}",
+      "whatif_none": "no single lever helps",
+      "act": "Next step",
+      "act_detail": "{n} suggestion(s)"
+    }
+  },
   "cc": {
-    "eyebrow": "Predict · one customer",
-    "title": "Customer Check",
-    "sub": "Score a single customer with the deployed model, see the reasons behind the score and get a suggested next action.",
     "presets": {
-      "title": "Start from a typical customer",
       "sub": "Fill the form with the median customer of a segment, then adjust.",
       "button": "{name}",
       "help": "Loads that segment's medians into the form and scores it.",
@@ -590,10 +658,7 @@
       "mrg_note": "MRG is always 'NO' in the training data and is not used by the model, so it is fixed.",
       "submit": "Score this customer"
     },
-    "hint_run": "Pick a typical customer above or fill the form, then press 'Score this customer'.",
     "result": {
-      "title": "Result for {id}",
-      "sub": "The model's churn probability, compared with the portfolio.",
       "vs_portfolio": "vs portfolio churn rate",
       "portfolio_is": "portfolio is {rate}",
       "multiple": "Relative risk",
@@ -626,8 +691,7 @@
       "title": "Next best action",
       "sub": "Suggestions driven by the reason codes and profile.",
       "caption": "Business suggestions, not model output. Check offers against campaign policy and budget."
-    },
-    "to_whatif": "Try changes in the What-If Simulator"
+    }
   },
   "reason": {
     "val": {
@@ -702,15 +766,6 @@
     }
   },
   "wi": {
-    "eyebrow": "Predict · scenarios",
-    "title": "What-If Simulator",
-    "sub": "Change one customer's behaviour and see how the churn probability would move. This shows how the model responds; it does not prove that changing a behaviour causes a customer to stay.",
-    "source": {
-      "label": "Starting customer",
-      "last": "Last Customer Check ({id})",
-      "preset": "Typical {name}",
-      "no_last": "Tip: score someone on Customer Check first to start from that customer here."
-    },
     "levers": {
       "title": "Levers",
       "sub": "The behaviours a retention offer could plausibly influence.",
@@ -720,8 +775,6 @@
       "ranges_fallback": "Slider ranges scale with this customer's values and the segment medians. Export eda_summary.json to use the training distribution instead."
     },
     "compare": {
-      "title": "Baseline vs scenario",
-      "sub": "Same customer, before and after your changes.",
       "baseline": "Baseline",
       "scenario": "Scenario",
       "change": "Change in churn probability",
@@ -744,8 +797,7 @@
       "curve_title": "Churn probability as {name} changes",
       "curve_so_what": "The lowest probability on this curve is {p}, at {name} ≈ {value}. Flat stretches mean the model is insensitive there.",
       "caveat": "Curves show model sensitivity for this one customer, holding everything else fixed. Real behaviours move together, so treat these as directions, not forecasts."
-    },
-    "back_to_cc": "Back to Customer Check"
+    }
   },
   "batchui": {
     "empty": {
@@ -1063,7 +1115,7 @@
       "step_1": "LightGBM computes each feature's exact contribution to one customer's score (TreeSHAP, via pred_contrib). Contributions plus a baseline add up to the model's log-odds score exactly.",
       "step_2": "Contributions of engineered features are added back to their raw column, so 'Recharge amount' combines MONTANT, its log and its missing flags.",
       "step_3": "The largest positive contributions become the customer's reason codes; the next-best-action rules read them to suggest an offer.",
-      "try": "See it on a customer (Customer Check)",
+      "try": "See it on a customer (Customer Journey)",
       "eval": "See how well the model performs (Model Evaluation)"
     }
   },
@@ -1401,7 +1453,7 @@
       "c2_target": "Within 5 pp of observed churn in every calibration bin",
       "c3": "Every score explained",
       "c3_target": "Reason codes for each customer",
-      "c3_done": "Model contributions on Customer Check, Batch Scoring and Customer 360",
+      "c3_done": "Model contributions on the Customer Journey, Batch Scoring and Customer 360",
       "c4": "Revenue protected",
       "c4_target": "Campaigns keep customers at a positive return",
       "c4_logged": "{n} customers retained in logged campaigns",

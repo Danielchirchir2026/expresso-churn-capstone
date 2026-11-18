@@ -7,7 +7,7 @@ Run once, locally, against the Zindi Train.csv:
 Writes into artifacts/ (or --out):
 
     eda_summary.json               counts, churn rate, missingness, numeric stats by churn,
-                                   per-segment medians (for Customer Check presets)
+                                   per-segment medians (for Customer Journey presets)
     eda_breakdowns.parquet         churn rate and counts by tenure, region, MRG,
                                    REGULARITY bins, top packs and value deciles
     validation_predictions.parquet y_true, y_prob, REGION, TENURE for the validation split (no IDs)

@@ -18,8 +18,7 @@
       "problem": "Le problème",
       "executive": "Tableau de bord direction",
       "data_explorer": "Explorateur de données",
-      "customer_check": "Diagnostic client",
-      "what_if": "Simulateur de scénarios",
+      "journey": "Parcours client",
       "batch": "Scoring par lot",
       "drift": "Qualité et dérive des données",
       "retention": "Planificateur de rétention",
@@ -39,8 +38,7 @@
     "problem": "Pourquoi le churn compte pour Expresso, à qui sert l'application et comment mesurer le succès.",
     "executive": "Indicateurs du portefeuille, économie des segments et constats générés automatiquement.",
     "data_explorer": "À quoi ressemblent les données d'entraînement et comment le churn y varie.",
-    "customer_check": "Évaluer un client, comprendre pourquoi et obtenir une action suggérée.",
-    "what_if": "Modifier le comportement d'un client et voir la probabilité de churn évoluer.",
+    "journey": "Suivre un client, du score de risque aux raisons, aux scénarios et à la prochaine action.",
     "batch": "Charger ou générer un fichier de clients et les évaluer tous.",
     "drift": "Vérifier qu'un nouveau fichier ressemble aux données d'apprentissage du modèle.",
     "retention": "Choisir combien de clients contacter pour le meilleur rendement attendu.",
@@ -162,8 +160,7 @@
       "problem": "Pourquoi le churn compte pour Expresso, à qui s'adresse l'application et le parcours CRISP-DM de la question métier au modèle déployé.",
       "executive": "Un écran pour la direction : où se concentre le churn, où se trouve le revenu, et des constats rédigés à partir des chiffres.",
       "segments": "Cinq segments comportementaux. Comparez-en deux, situez-les par rapport au portefeuille et lisez les actions recommandées.",
-      "customer_check": "Évaluez un client, voyez les raisons du score et une prochaine action suggérée.",
-      "what_if": "Modifiez un levier à la fois et voyez de combien la probabilité de churn changerait.",
+      "journey": "Un client de bout en bout : trouvez-le, voyez son risque de churn et pourquoi, testez des scénarios et obtenez une action suggérée, sur une seule page.",
       "batch": "Chargez un fichier (ou générez des données de démonstration), validez-le et évaluez des milliers de clients par paquets.",
       "retention": "Transformez les scores en campagne : combien de clients appeler pour maximiser le profit attendu, selon vos hypothèses.",
       "evaluation": "La preuve que le modèle fonctionne : ROC, précision-rappel, calibration, conseiller de seuil et contrôle d'équité.",
@@ -561,12 +558,83 @@
       }
     }
   },
+  "jr": {
+    "eyebrow": "Prédire · un client de bout en bout",
+    "title": "Parcours client",
+    "sub": "Suivez un client du début à la fin : qui il est, sa probabilité de partir, pourquoi, ce qui pourrait la changer et quoi faire ensuite. Chaque étape ci-dessous décrit le même client.",
+    "s1": {
+      "title": "Qui est le client ?",
+      "sub": "Partez d'un client type d'un segment, choisissez un client dans un lot évalué ou saisissez une fiche à la main.",
+      "how": "Choisir le client",
+      "src_preset": "Client type",
+      "src_batch": "Depuis un lot évalué",
+      "src_manual": "Saisie manuelle",
+      "batch_pick": "Les 50 clients les plus à risque du lot",
+      "batch_go": "Suivre ce client",
+      "batch_note": "Lot {name} ({n} clients). Saisissez un identifiant pour trouver n'importe quel autre client du lot.",
+      "batch_none": "Aucun lot n'a encore été évalué dans cette session. Évaluez un fichier dans Scoring par lot, ou générez ici un lot de démonstration en un clic.",
+      "manual_note": "Le formulaire reprend le client suivi. Modifiez une valeur, puis cliquez sur « Évaluer ce client ».",
+      "following": "Client suivi"
+    },
+    "origin": {
+      "preset": "Client type {name}, construit à partir des médianes du segment",
+      "batch": "Client du lot évalué {name}",
+      "manual": "Saisi à la main"
+    },
+    "s2": {
+      "title": "Quelle est sa probabilité de partir ?",
+      "sub": "La probabilité de churn du modèle déployé, comparée à l'ensemble du portefeuille.",
+      "verdict_up": "{id} a une probabilité de churn de {p}, soit {mult}× le taux du portefeuille ({rate}).",
+      "verdict_down": "{id} a une probabilité de churn de {p}, sous le taux du portefeuille ({rate}, {mult}×).",
+      "tag_up": "Au-dessus du taux du portefeuille",
+      "tag_down": "Sous le taux du portefeuille"
+    },
+    "s3": {
+      "title": "Pourquoi ?",
+      "sub": "Ce qui a fait monter ou baisser le score de ce client, d'après les contributions du modèle lui-même."
+    },
+    "s4": {
+      "title": "Qu'est-ce qui pourrait le changer ?",
+      "sub": "Déplacez les leviers pour tester des changements pour ce client. Cela montre comment le modèle réagit ; cela ne prouve pas qu'un changement de comportement fera rester le client."
+    },
+    "s5": {
+      "title": "Que faire ?",
+      "sub": "Les prochaines étapes suggérées pour ce client, un résumé à enregistrer et où aller ensuite.",
+      "lever_title": "Levier le plus fort",
+      "lever_tag": "Argument d'appel",
+      "lever": "{name} : dans le modèle, le porter à environ {value} réduit la probabilité de ce client de {gain} points au maximum.",
+      "download": "Télécharger la fiche d'action client (.txt)",
+      "next_title": "Pour aller plus loin",
+      "to_retention": "Planifier une campagne pour des clients similaires (Planificateur de rétention)",
+      "to_batch": "Évaluer de nombreux clients à la fois (Scoring par lot)",
+      "to_copilot": "Interroger le Copilote sur ce client"
+    },
+    "card": {
+      "title": "Fiche d'action client",
+      "customer": "Client",
+      "source": "Origine",
+      "portfolio": "le taux du portefeuille de",
+      "generated": "Générée le"
+    },
+    "strip": {
+      "label": "Le parcours en un coup d'œil",
+      "find": "Client",
+      "find_preset": "Client type {name}",
+      "find_batch": "Du lot évalué",
+      "risk": "Risque",
+      "risk_detail": "{mult}× le taux du portefeuille",
+      "why": "Facteur principal",
+      "why_up": "augmente le plus le risque",
+      "why_down": "réduit le plus le risque",
+      "whatif": "Meilleur levier",
+      "whatif_detail": "jusqu'à {gain}",
+      "whatif_none": "aucun levier seul n'aide",
+      "act": "Prochaine étape",
+      "act_detail": "{n} suggestion(s)"
+    }
+  },
   "cc": {
-    "eyebrow": "Prédire · un client",
-    "title": "Diagnostic client",
-    "sub": "Évaluez un client avec le modèle déployé, voyez les raisons du score et obtenez une prochaine action suggérée.",
     "presets": {
-      "title": "Partir d'un client type",
       "sub": "Remplissez le formulaire avec le client médian d'un segment, puis ajustez.",
       "button": "{name}",
       "help": "Charge les médianes de ce segment dans le formulaire et l'évalue.",
@@ -590,10 +658,7 @@
       "mrg_note": "MRG vaut toujours « NO » dans les données d'entraînement et n'est pas utilisé par le modèle ; il est donc fixé.",
       "submit": "Évaluer ce client"
     },
-    "hint_run": "Choisissez un client type ci-dessus ou remplissez le formulaire, puis cliquez sur « Évaluer ce client ».",
     "result": {
-      "title": "Résultat pour {id}",
-      "sub": "La probabilité de churn du modèle, comparée au portefeuille.",
       "vs_portfolio": "vs taux de churn du portefeuille",
       "portfolio_is": "portefeuille : {rate}",
       "multiple": "Risque relatif",
@@ -626,8 +691,7 @@
       "title": "Prochaine action",
       "sub": "Suggestions fondées sur les codes motifs et le profil.",
       "caption": "Suggestions métier, pas une sortie du modèle. Vérifiez les offres au regard de la politique de campagne et du budget."
-    },
-    "to_whatif": "Tester des changements dans le simulateur"
+    }
   },
   "reason": {
     "val": {
@@ -702,15 +766,6 @@
     }
   },
   "wi": {
-    "eyebrow": "Prédire · scénarios",
-    "title": "Simulateur de scénarios",
-    "sub": "Modifiez le comportement d'un client et voyez comment la probabilité de churn évoluerait. Cela montre la réaction du modèle ; cela ne prouve pas qu'un changement de comportement fera rester le client.",
-    "source": {
-      "label": "Client de départ",
-      "last": "Dernier diagnostic client ({id})",
-      "preset": "{name} type",
-      "no_last": "Astuce : évaluez d'abord un client dans le Diagnostic client pour repartir de ce client ici."
-    },
     "levers": {
       "title": "Leviers",
       "sub": "Les comportements qu'une offre de rétention peut plausiblement influencer.",
@@ -720,8 +775,6 @@
       "ranges_fallback": "Les plages des curseurs s'adaptent aux valeurs du client et aux médianes des segments. Exportez eda_summary.json pour utiliser la distribution d'entraînement."
     },
     "compare": {
-      "title": "Référence vs scénario",
-      "sub": "Le même client, avant et après vos changements.",
       "baseline": "Référence",
       "scenario": "Scénario",
       "change": "Variation de la probabilité de churn",
@@ -744,8 +797,7 @@
       "curve_title": "Probabilité de churn selon {name}",
       "curve_so_what": "La probabilité la plus basse de cette courbe est {p}, pour {name} ≈ {value}. Les paliers plats indiquent que le modèle y est peu sensible.",
       "caveat": "Les courbes montrent la sensibilité du modèle pour ce seul client, toutes choses égales par ailleurs. Dans la réalité les comportements évoluent ensemble : ce sont des tendances, pas des prévisions."
-    },
-    "back_to_cc": "Retour au diagnostic client"
+    }
   },
   "batchui": {
     "empty": {
@@ -1063,7 +1115,7 @@
       "step_1": "LightGBM calcule la contribution exacte de chaque variable au score d'un client (TreeSHAP, via pred_contrib). Contributions et référence s'additionnent exactement au score log-odds du modèle.",
       "step_2": "Les contributions des variables construites sont rattachées à leur colonne brute : « Montant rechargé » combine MONTANT, son logarithme et ses indicateurs de valeur manquante.",
       "step_3": "Les plus fortes contributions positives deviennent les codes motifs du client ; les règles de prochaine action s'en servent pour suggérer une offre.",
-      "try": "Voir sur un client (Diagnostic client)",
+      "try": "Voir sur un client (Parcours client)",
       "eval": "Voir la performance du modèle (Évaluation du modèle)"
     }
   },
@@ -1401,7 +1453,7 @@
       "c2_target": "À moins de 5 pp du churn observé dans chaque tranche de calibration",
       "c3": "Chaque score expliqué",
       "c3_target": "Des codes motifs pour chaque client",
-      "c3_done": "Contributions du modèle dans le Diagnostic client, le Scoring par lot et la vue 360",
+      "c3_done": "Contributions du modèle dans le Parcours client, le Scoring par lot et la vue 360",
       "c4": "Revenu protégé",
       "c4_target": "Les campagnes retiennent des clients avec un rendement positif",
       "c4_logged": "{n} clients retenus dans les campagnes enregistrées",
@@ -1797,7 +1849,11 @@
   "alerts": {
     "title": "Alertes",
     "sub": "Déclenchées automatiquement après le scoring, selon des règles fixes.",
-    "tag": {"risk": "Alerte", "warn": "À surveiller", "good": "Rien à signaler"},
+    "tag": {
+      "risk": "Alerte",
+      "warn": "À surveiller",
+      "good": "Rien à signaler"
+    },
     "above": "{n} clients ({share}) sont au-dessus du seuil Élevé de {high}.",
     "vip": "{n} clients sont à la fois dans les 10 % de revenu les plus élevés (au moins {cut} par mois) et dans le décile le plus risqué : appels prioritaires pour le service rétention.",
     "vip_none": "Aucun client n'est à la fois dans le décile de revenu le plus élevé et le décile le plus risqué.",

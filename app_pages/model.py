@@ -135,6 +135,6 @@ for i in range(1, 4):
     st.markdown(f"{i}. {t(f'model.reasons.step_{i}')}")
 c1, c2 = st.columns(2)
 with c1:
-    navigation.link("customer_check", label=t("model.reasons.try"))
+    navigation.link("journey", label=t("model.reasons.try"))
 with c2:
     navigation.link("evaluation", label=t("model.reasons.eval"))

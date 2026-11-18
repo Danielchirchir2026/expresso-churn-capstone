@@ -16,7 +16,7 @@ from app.i18n import t
 # Derived ratios / counts form their own groups.
 OWN_GROUPS = ("MISSING_COUNT", "REVENUE_PER_RECHARGE", "DATA_SHARE")
 
-# Columns customers can act on (used by the What-If simulator)
+# Columns customers can act on (the what-if levers on the Customer Journey page)
 ACTIONABLE = ["REGULARITY", "FREQUENCE_RECH", "MONTANT", "REVENUE", "ARPU_SEGMENT", "FREQUENCE",
               "DATA_VOLUME", "ON_NET", "ORANGE", "TIGO", "FREQ_TOP_PACK"]
 

@@ -33,7 +33,7 @@ def test_export_script_writes_every_file(exported):
     assert set(summary["segment_medians"]) == {"0", "1", "2", "3", "4"}
 
 
-PAGES_WITH_ARTIFACTS = ["data_explorer", "problem", "methodology", "evaluation", "customer_check", "what_if", "drift"]
+PAGES_WITH_ARTIFACTS = ["data_explorer", "problem", "methodology", "evaluation", "journey", "drift"]
 
 
 @pytest.mark.parametrize("page", PAGES_WITH_ARTIFACTS)

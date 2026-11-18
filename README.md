@@ -29,10 +29,8 @@ role sees its most useful pages first. Everything is available in **English and 
 | | **The Problem** | Why churn matters to Expresso, who uses the app and for which decisions, success criteria measured against the evidence, clickable CRISP-DM steps. |
 | | **Executive Dashboard** | Six KPIs, churn-vs-size-vs-value bubble chart, treemap, churners vs revenue, computed insights, model drivers, one-click **Executive Brief (PDF)**. |
 | | **Data Explorer** | Training-data overview, missingness (and why it predicts churn), a "churn rate by…" explorer, churner vs non-churner distributions, computed key findings. *Needs exported files.* |
-| Predict | **Customer Check** | Score one customer; animated gauge vs the portfolio rate; **reason codes** from LightGBM's own contributions (waterfall + plain sentences); rule-based **next best action**; presets from segment medians. |
-| | **What-If Simulator** | Move behaviour levers and compare baseline vs scenario; per-lever sensitivity sweep ("which lever helps most?"). |
+| Predict | **Customer Journey** | One customer followed end to end on a single page, in five numbered steps with a clickable at-a-glance strip: **1** find them (a typical customer from segment medians, someone from the scored batch, or a record typed by hand); **2** churn probability on an animated gauge vs the portfolio rate; **3** **reason codes** from LightGBM's own contributions (waterfall + plain sentences); **4** what-if levers that start from this customer, with a per-lever sensitivity sweep ("which lever helps most?"); **5** rule-based **next best action**, the strongest lever as a talking point, a downloadable action card and links onward. |
 | | **Batch Scoring** | CSV template, synthetic demo data, plain-language validation report, chunked scoring with progress, risk deciles, exploratory bands, **alerts**, filters, charts by region/tenure/segment, **Customer 360**, CSV/Excel/priority-call-list downloads. |
-| | **Data Quality & Drift** | PSI per column against the training data (traffic lights), missing-rate changes, unseen categories, plain-English warnings. *Needs exported files.* |
 | Act | **Retention Planner** | ROI by campaign size under your assumptions, recommended K within capacity, expected gains/lift, target list export; flags when probability ranking loses money and offers value ranking. |
 | | **Revenue at Risk** | Segment waterfall (customers × churn × median revenue) and expected revenue at risk (probability × REVENUE) in a scored batch by region and tenure. |
 | | **Segment Explorer** | Two-segment comparison, radar, benchmark deltas, generated interpretation, the team's playbook, 2×2 strategy matrix. |
@@ -41,6 +39,7 @@ role sees its most useful pages first. Everything is available in **English and 
 | Trust | **Methodology** | Feature-engineering table generated from the config, class imbalance, validation strategy, why ROC-AUC, limitations and ethics. |
 | | **Model & Explainability** | Model card (intended use, limitations), gain/split importance grouped back to raw columns, all 69 features explained. |
 | | **Model Evaluation** | Model comparison leaderboard, ROC, precision-recall, calibration, confusion matrix with a threshold slider in business words, gains/lift, **threshold advisor** (cost-based, for discussion), **fairness** by region and tenure. |
+| | **Data Quality & Drift** | PSI per column against the training data (traffic lights), missing-rate changes, unseen categories, plain-English warnings. *Needs exported files.* |
 | Assistant | **Churn Copilot** | Chat answered by an AI language model using 13 aggregate-only tools over the app's data, with sources shown; one-click **executive summary** (PDF); offline FAQ mode without an API key. |
 | Reports | **Reports** | Executive Brief PDF, scored files, call list, data dictionary, model metadata, segment profiles, feature list, deployment summary. |
 
@@ -69,9 +68,9 @@ Captured from the running app with the artifacts in this repository (light mode,
 Evaluation and Fairness use the evidence files exported from the full Zindi `Train.csv`. Batch Scoring and the
 Retention Planner use the app's built-in synthetic demo batch, which the app labels as synthetic on every page.
 
-| Home | Executive Dashboard | Customer Check |
+| Home | Executive Dashboard | Customer Journey |
 |---|---|---|
-| ![Home](docs/screenshots/home.png) | ![Executive Dashboard](docs/screenshots/executive.png) | ![Customer Check](docs/screenshots/customer_check.png) |
+| ![Home](docs/screenshots/home.png) | ![Executive Dashboard](docs/screenshots/executive.png) | ![Customer Journey](docs/screenshots/journey.png) |
 | **Batch Scoring** | **Retention Planner** | **Churn Copilot** |
 | ![Batch Scoring](docs/screenshots/batch.png) | ![Retention Planner](docs/screenshots/retention.png) | ![Churn Copilot](docs/screenshots/copilot.png) |
 | **Data Explorer** | **Model Evaluation** | **Fairness by region** |
@@ -111,7 +110,7 @@ Keys are only ever read from `st.secrets`; none are hard-coded.
 ### Exporting the evidence files (run once)
 
 The repository holds no raw customer data and no customer IDs. The evidence pages (Data Explorer, Model Evaluation's
-comparison, curves and fairness, Data Quality & Drift, richer Customer Check presets) read small files produced once
+comparison, curves and fairness, Data Quality & Drift, richer Customer Journey presets) read small files produced once
 from the Zindi `Train.csv`. The files in `artifacts/` were produced from the full file (2,154,048 rows) with:
 
 ```bash
